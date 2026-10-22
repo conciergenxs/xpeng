@@ -1,0 +1,269 @@
+/* Full-bleed carousel: the active slide is centred with a neighbour peeking in on each side.
+   Headline and text line up with the active slide's left edge. */
+
+.section {
+  --slide-w: min(86vw, 1320px);
+  --slide-h: clamp(420px, 70svh, 780px);
+  --gap: clamp(16px, 2vw, 28px);
+  --edge: calc((100vw - var(--slide-w)) / 2);
+  --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
+
+  position: relative;
+  background: #e9e5df;
+  padding: clamp(80px, 9vw, 128px) 0; /* same at top and bottom */
+  overflow: hidden;
+}
+
+.title {
+  margin: 0 var(--edge) clamp(28px, 3.4vw, 48px);
+}
+
+/* ---------- Carousel ---------- */
+
+.viewport {
+  position: relative;
+  height: var(--slide-h);
+  touch-action: pan-y;
+  outline: none;
+}
+
+.slide {
+  position: absolute;
+  top: 0;
+  left: var(--edge);
+  width: var(--slide-w);
+  height: 100%;
+  border-radius: 28px;
+  overflow: hidden;
+  background: #dcd7ce;
+  transform: translateX(calc(var(--pos) * (var(--slide-w) + var(--gap))));
+  transition:
+    transform 0.8s var(--ease-premium),
+    opacity 0.6s var(--ease);
+  cursor: pointer;
+}
+.slideOn {
+  cursor: default;
+}
+/* Wrapping from one end to the other: no slide across the screen, just a soft appearance. */
+.noMotion {
+  transition: opacity 0.6s var(--ease);
+  animation: peekIn 0.6s var(--ease) both;
+}
+.offstage {
+  opacity: 0;
+  pointer-events: none;
+}
+@keyframes peekIn {
+  from {
+    opacity: 0;
+  }
+}
+
+.media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* Only the active slide shows the film's pause control. */
+.slide:not(.slideOn) button {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---------- Active feature text ---------- */
+
+.text {
+  display: grid;
+  margin: clamp(24px, 2.8vw, 36px) var(--edge) 0;
+}
+/* Desktop: the text column ends before the centred floating control (~300 px wide), so it never covers copy. */
+@media (min-width: 1000px) {
+  .text {
+    max-width: calc(50vw - var(--edge) - 180px);
+  }
+}
+.textInner {
+  grid-area: 1 / 1;
+  visibility: hidden;
+}
+.textOn {
+  visibility: visible;
+  animation: textIn 0.6s var(--ease-premium) both;
+}
+@keyframes textIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+.name {
+  font-size: clamp(1.5rem, 1rem + 1vw, 2rem);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+.copy {
+  margin-top: 10px;
+  max-width: 34em;
+  font-size: var(--t-md);
+  line-height: 1.45;
+  color: var(--graphite);
+}
+
+/* ---------- Floating feature control ---------- */
+
+/* Fixed to the viewport, independent of the carousel; it only exists visually while the section is in view. */
+.control {
+  position: fixed;
+  z-index: 40;
+  left: 50%;
+  bottom: clamp(20px, 4vh, 40px);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+.controlOn {
+  pointer-events: auto;
+}
+
+.glass {
+  height: 52px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 999px;
+  background: rgba(250, 249, 246, 0.62);
+  color: var(--ink);
+  box-shadow:
+    0 0 0 0.5px rgba(26, 29, 33, 0.1),
+    0 12px 32px rgba(40, 32, 20, 0.14);
+  /* Prefixed first: the minifier drops the standard property if the prefixed one follows it. */
+  -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  backdrop-filter: blur(20px) saturate(1.6);
+}
+
+.pill {
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: 0 26px;
+  overflow: hidden;
+  font-size: var(--t-sm);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  box-sizing: content-box;
+  transition: width 0.5s var(--ease-premium);
+}
+.pillText {
+  grid-area: 1 / 1;
+  animation: labelIn 0.45s var(--ease-premium) both;
+}
+@keyframes labelIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+    filter: blur(4px);
+  }
+}
+/* Invisible copy used to measure the label's width. */
+.measure {
+  position: absolute;
+  visibility: hidden;
+  white-space: nowrap;
+}
+
+.chev {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  padding: 0;
+  transition:
+    background-color 0.2s var(--ease),
+    transform 0.2s var(--ease);
+}
+.chev:hover {
+  background: rgba(255, 255, 255, 0.85);
+}
+.chev:active {
+  transform: scale(0.94);
+}
+.glass:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+/* Entrance: rise, settle in scale and come into focus, chevrons a beat behind the pill.
+   Exit: the reverse, quicker. Each part animates opacity, transform and blur together. */
+.pill,
+.chev {
+  opacity: 0;
+  filter: blur(10px);
+  transform: translateY(18px) scale(0.86);
+  transition:
+    opacity 0.32s var(--ease),
+    filter 0.32s var(--ease),
+    transform 0.36s var(--ease),
+    width 0.5s var(--ease-premium),
+    background-color 0.2s var(--ease);
+}
+.chevPrev {
+  transform: translate(14px, 18px) scale(0.7);
+}
+.chevNext {
+  transform: translate(-14px, 18px) scale(0.7);
+}
+.controlOn .pill,
+.controlOn .chev {
+  opacity: 1;
+  filter: blur(0);
+  transform: none;
+  transition:
+    opacity 0.55s var(--ease-premium),
+    filter 0.7s var(--ease-premium),
+    transform 0.8s var(--ease-premium),
+    width 0.5s var(--ease-premium),
+    background-color 0.2s var(--ease);
+}
+.controlOn .chev {
+  transition-delay: 0.08s, 0.08s, 0.08s, 0s, 0s;
+}
+.controlOn .chev:active {
+  transform: scale(0.94);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pill,
+  .chev,
+  .chevPrev,
+  .chevNext {
+    filter: none;
+    transform: none;
+  }
+}
+
+/* ---------- Phones ---------- */
+
+@media (max-width: 760px) {
+  .section {
+    --slide-w: 86vw;
+    --slide-h: min(92vw, 62svh);
+    --gap: 12px;
+  }
+  .slide {
+    border-radius: 20px;
+  }
+  .copy {
+    font-size: var(--t-base);
+  }
+  .glass {
+    height: 46px;
+  }
+  .chev {
+    width: 46px;
+  }
+  .pill {
+    padding: 0 20px;
+    font-size: var(--t-xs);
+  }
+}

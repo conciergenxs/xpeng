@@ -1,0 +1,323 @@
+/* The variant card's link: quiet, underlined, with the arrow outside the underline. */
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 4px 0;
+  border: 0;
+  background: none;
+  color: var(--graphite);
+  font: inherit;
+  font-size: var(--t-sm);
+  cursor: pointer;
+  transition: color 0.2s var(--ease);
+}
+.trigger > span:first-child {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+  text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+}
+.trigger svg {
+  transition: transform 0.25s var(--ease);
+}
+.trigger:hover {
+  color: var(--ink);
+}
+.trigger:hover svg {
+  transform: translateX(3px);
+}
+.trigger:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* ---------- Dialog: the order flow's modal shell, wider ---------- */
+
+dialog.dialog {
+  width: min(1120px, calc(100% - 32px));
+  max-height: min(920px, calc(100svh - 32px));
+}
+.sub {
+  margin-top: 4px;
+  font-size: var(--t-sm);
+  color: var(--graphite);
+}
+.body {
+  display: grid;
+  gap: clamp(24px, 3vw, 32px);
+  padding-top: clamp(20px, 2.4vw, 28px);
+}
+
+/* One soft panel: the plan switch across the full width, a hairline, then that plan's settings in equal
+   columns. Every control has its label above it, all labels on one line and all tracks (sliders and pills)
+   on one centre line beneath them. */
+.planBar {
+  display: grid;
+  padding: clamp(18px, 2.2vw, 28px);
+  border-radius: 20px;
+  background: var(--arctic);
+}
+.kinds {
+  width: 100%;
+}
+.settings {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px clamp(24px, 3vw, 40px);
+  align-items: start;
+  margin-top: 22px;
+  padding-top: 22px;
+  border-top: 1px solid rgba(26, 29, 33, 0.08);
+}
+/* Labels: the sliders' label rows set the height; pill labels match it. */
+.planBar legend {
+  min-height: 26px;
+  margin-bottom: 10px;
+  line-height: 26px;
+}
+/* Slider hit areas as tall as a pill track, so their lines share its centre. */
+.settings input[type="range"] {
+  height: 48px;
+}
+/* A plain row on the panel: text left, switch right. Not the order flow's bordered insurance card, so none
+   of that card's hover or selected outlines apply here. */
+.toggle {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  cursor: pointer;
+}
+
+/* ---------- Columns ---------- */
+
+.columns {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  gap: 16px;
+  align-items: stretch;
+}
+.column {
+  container: plan-col / inline-size;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 20px clamp(16px, 1.8vw, 24px) 8px;
+  border: 1px solid var(--hairline);
+  border-radius: 20px;
+  background: var(--paper);
+}
+
+.colHead {
+  position: relative;
+  display: grid;
+  gap: 20px;
+}
+/* The car's own box: a fixed height, the image fitted inside it (never larger) and standing on its floor,
+   kept clear of the remove button in the corner. */
+.car {
+  position: relative;
+  height: clamp(64px, 6vw, 84px);
+}
+.car img {
+  position: absolute;
+  inset: 0 36px;
+  width: calc(100% - 72px);
+  height: 100%;
+  max-width: none;
+  object-fit: contain;
+  object-position: 50% 100%;
+}
+.remove {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--hairline);
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--graphite);
+  cursor: pointer;
+  transition:
+    color 0.2s var(--ease),
+    border-color 0.2s var(--ease);
+}
+.remove:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+.pickers {
+  display: grid;
+  gap: 8px;
+}
+
+.lead {
+  margin-top: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--hairline);
+}
+.leadLabel {
+  font-size: var(--t-xs);
+  color: var(--graphite);
+}
+/* The figure never breaks; "/month" moves under it when the card is narrow. */
+.leadFigure {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  margin-top: 4px;
+  font-size: clamp(1.375rem, 1.1rem + 0.8vw, 1.75rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+.leadFigure > :first-child {
+  white-space: nowrap;
+}
+.per {
+  margin-left: 4px;
+  font-size: var(--t-sm);
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--graphite);
+}
+.delta {
+  margin-top: 6px;
+  min-height: 1.4em;
+  font-size: var(--t-xs);
+  color: var(--graphite);
+}
+
+.rows {
+  margin: 0;
+}
+.rows > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(26, 29, 33, 0.07);
+  font-size: var(--t-sm);
+}
+.rows > div:last-child {
+  border-bottom: 0;
+}
+.rows dt {
+  color: var(--graphite);
+}
+.rows dd {
+  margin: 0;
+  font-weight: 500;
+  text-align: right;
+  white-space: nowrap;
+}
+.hint {
+  display: block;
+  margin-top: 2px;
+  font-size: var(--t-xs);
+  color: var(--graphite);
+  opacity: 0.85;
+}
+.none {
+  color: var(--graphite);
+  font-weight: 400 !important;
+}
+.total dt {
+  color: var(--ink);
+  font-weight: 500;
+}
+.total dd {
+  font-weight: 600;
+}
+
+/* An empty column inviting another vehicle; it takes every track not used by a vehicle. */
+.add {
+  grid-column: span var(--rest, 1);
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 10px;
+  min-height: 240px;
+  padding: 24px;
+  border: 1px dashed var(--frost);
+  border-radius: 20px;
+  background: none;
+  color: var(--graphite);
+  font: inherit;
+  font-size: var(--t-sm);
+  cursor: pointer;
+  transition:
+    color 0.2s var(--ease),
+    border-color 0.2s var(--ease),
+    background-color 0.2s var(--ease);
+}
+.add:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+  background: color-mix(in srgb, var(--arctic) 50%, transparent);
+}
+.add:focus-visible,
+.remove:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.note {
+  font-size: var(--t-xs);
+  color: var(--graphite);
+  max-width: 64em;
+}
+
+/* ---------- Smaller screens ---------- */
+
+/* Narrow cards (three side by side on a tablet): each row's label above its figure. */
+@container plan-col (max-width: 260px) {
+  .rows > div {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+  .rows dd {
+    text-align: left;
+  }
+  .leadFigure {
+    font-size: var(--t-md);
+  }
+  .car img {
+    inset: 0 28px;
+    width: calc(100% - 56px);
+  }
+}
+
+/* Tablets: two settings per row, a third across the full width, so no label wraps and no row is half empty. */
+@media (max-width: 960px) {
+  .settings {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .settings > :nth-child(3) {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Phones: one vehicle per row, the add button full width. */
+@media (max-width: 680px) {
+  .settings {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .columns {
+    grid-template-columns: 1fr;
+  }
+  .add {
+    grid-column: auto;
+    min-height: 0;
+    grid-auto-flow: column;
+  }
+}

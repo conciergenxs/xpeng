@@ -1,0 +1,302 @@
+/* Natural height with homepage-style padding. The floating header overlaps the top, so the top padding
+   reserves its height plus breathing room; the bottom padding keeps a clear gap before the next section. */
+.section {
+  --ivory: #f2f0eb;
+  --label-tint: #e0dbd1; /* about 1.2:1 on ivory: readable, still far quieter than the car */
+  --area-ratio: 2.44; /* car area shape, shared with AREA_RATIO in the component */
+  --hint-h: 24px;
+  /* Everything in the first screen except the car: header, heading, 360° cue, details row, a little air. */
+  --chrome-h: 390px;
+  --car-scale: 0.83;
+  /* Vertical rhythm: a tight pair for title and subtitle, then even steps between the blocks. */
+  --gap-pair: clamp(10px, 1.2vh, 14px);
+  --gap-block: clamp(24px, 3vh, 32px);
+  --gap-major: clamp(36px, 4.6vh, 52px);
+
+  background: var(--ivory);
+  display: flex;
+  flex-direction: column;
+  padding: calc(var(--header-h) + var(--gap-major)) 0 clamp(104px, 11vw, 152px);
+  overflow: hidden;
+}
+
+.inner {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- Heading and switch ---------- */
+
+/* Sits above the stage, whose transparent frame top can overlap this block. */
+.head {
+  position: relative;
+  z-index: 2;
+  flex: none;
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+
+.title {
+  font-size: var(--t-headline);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+
+/* One line on desktop to save height. */
+.sub {
+  margin-top: var(--gap-pair);
+  max-width: 48em;
+  font-size: clamp(0.9375rem, 0.85rem + 0.25vw, 1.0625rem);
+  line-height: 1.45;
+  color: var(--graphite);
+  text-wrap: balance;
+}
+
+/* Compact switch: same pill, white active state and shadow as the shared Segmented control. */
+.toggle {
+  width: 188px;
+  margin-top: var(--gap-block);
+}
+.toggle label {
+  min-height: 36px;
+  padding: 4px 8px;
+  font-size: var(--t-sm);
+}
+
+/* ---------- Stage: fills the remaining height ---------- */
+
+.stage {
+  margin-top: var(--gap-major);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Identical box for both models, shaped around the car. Sized from the viewport height so the car and its
+   details share one screen when there's room, never below a comfortable minimum, never above 900px.
+   --car-scale trims every limit together, leaving more space around the car. */
+.carArea {
+  position: relative;
+  width: clamp(min(520px, 100%), min(88% * var(--car-scale), (100svh - var(--chrome-h)) * var(--area-ratio) * var(--car-scale)), 900px);
+  aspect-ratio: 2.44;
+  flex: none;
+  container-type: inline-size;
+}
+
+/* Oversized model name behind the car, scaled with the car area. */
+/* Shifted up and out past the car's nose so more of each letter sits in open space. */
+.bigLabel {
+  position: absolute;
+  top: -20%;
+  left: -9%;
+  font-size: 26cqw;
+  font-stretch: 125%;
+  font-weight: 650;
+  letter-spacing: -0.04em;
+  line-height: 0.8;
+  color: var(--label-tint);
+  pointer-events: none;
+  user-select: none;
+  animation: fadeIn 0.7s var(--ease) both;
+}
+
+/* A thin turntable ring centred on the shared ground line. */
+.floor {
+  position: absolute;
+  left: 1%;
+  width: 98%;
+  top: 76%;
+  height: 23%;
+  border-radius: 50%;
+  border: 1px solid rgba(26, 29, 33, 0.13);
+  pointer-events: none;
+}
+
+.placeholder {
+  position: absolute;
+  left: 5%;
+  width: 90%;
+  bottom: 10%;
+  height: auto;
+  opacity: 0.6;
+}
+
+/* Frame switching on the official sprite: background-position steps through the 36 frames.
+   Size and position come from the measured car outline (see placement() in the component). */
+.car {
+  position: absolute;
+  background-image: var(--sprite);
+  background-repeat: no-repeat;
+  background-size: 3600% 100%;
+  background-position: calc(var(--frame, 0) * 100% / 35) 0;
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  opacity: 0;
+  transition: opacity 0.5s var(--ease);
+}
+.carReady {
+  opacity: 1;
+  animation: fadeIn 0.6s var(--ease) both;
+}
+.car:active {
+  cursor: grabbing;
+}
+.car:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: -8px;
+  border-radius: var(--r-panel);
+}
+
+.hint {
+  flex: none;
+  height: var(--hint-h);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--t-sm);
+  color: var(--graphite);
+}
+
+/* ---------- Details and actions ---------- */
+
+/* One compact row: identity, specs, actions. Layered above the car's transparent frame edge. */
+.foot {
+  position: relative;
+  z-index: 2;
+  flex: none;
+  display: grid;
+  /* Fixed identity column: "5-seat electric coupe SUV" is wider than the X9's line, and specs must not move. */
+  grid-template-columns: 14rem 1fr auto;
+  align-items: center;
+  gap: 16px clamp(24px, 3vw, 48px);
+  margin-top: var(--gap-major);
+  animation: fadeIn 0.6s var(--ease) both;
+}
+
+.name {
+  font-size: clamp(1.5rem, 1.1rem + 0.8vw, 2rem);
+  font-stretch: 112%;
+  font-weight: 650;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+.type {
+  margin-top: 2px;
+  font-size: var(--t-sm);
+  color: var(--graphite);
+}
+
+.specs {
+  display: flex;
+  margin: 0;
+}
+.specs > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 clamp(18px, 2.4vw, 36px);
+  border-left: 1px solid rgba(26, 29, 33, 0.14);
+}
+.specs dd {
+  margin: 0;
+}
+.value {
+  order: 1;
+  font-size: var(--t-md);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+.pre {
+  display: block;
+  font-size: var(--t-xs);
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--graphite);
+}
+.label {
+  order: 2;
+  margin-top: 2px;
+  font-size: var(--t-sm);
+  color: var(--graphite);
+}
+
+.ctas {
+  display: flex;
+  gap: 14px;
+}
+.cta {
+  min-height: 48px;
+  min-width: 168px;
+  padding: 0 24px;
+  font-size: var(--t-sm);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ---------- Smaller screens ---------- */
+
+@media (max-width: 1100px) {
+  .foot {
+    grid-template-columns: 14rem 1fr;
+  }
+  .ctas {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Phones scroll naturally: the section sizes to its content and the car area to the width. */
+@media (max-width: 760px) {
+  .section {
+    padding: calc(var(--header-h) + 12px) 0 64px;
+  }
+  .stage {
+    margin-top: 8px;
+  }
+  .carArea {
+    width: 100%;
+  }
+  /* Full-width car area: keep the label inside the screen. */
+  .bigLabel {
+    left: 0;
+    top: -14%;
+  }
+  .car {
+    background-image: var(--sprite-m);
+  }
+  .foot {
+    grid-template-columns: 1fr;
+  }
+  .specs > div {
+    padding: 0 14px;
+  }
+  .specs > div:first-child {
+    padding-left: 0;
+    border-left: 0;
+  }
+  .value {
+    font-size: var(--t-base);
+  }
+  .ctas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .cta {
+    min-width: 0;
+    min-height: 50px;
+    padding: 0 16px;
+  }
+}

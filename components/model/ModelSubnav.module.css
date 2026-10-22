@@ -1,0 +1,191 @@
+/* Fixed to the bottom centre of the viewport. The glass and the entrance and exit follow the Why Choose XPENG
+   floating control; the theme variables follow the header's light and dark glass. */
+
+.dock {
+  --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
+  --theme-t: 0.5s;
+
+  /* Light glass */
+  --fg: var(--ink);
+  --fg-muted: var(--graphite);
+  --glass-bg: rgba(250, 249, 246, 0.62);
+  --glass-line: rgba(255, 255, 255, 0.6);
+  --glass-ring: rgba(26, 29, 33, 0.1);
+  --glass-shadow: rgba(40, 32, 20, 0.14);
+
+  position: fixed;
+  z-index: 40;
+  left: 50%;
+  bottom: clamp(20px, 4vh, 40px);
+  max-width: calc(100vw - 24px);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+.dockOn {
+  pointer-events: auto;
+}
+
+/* Over a dark section: the same glass, frosted white, with white content. */
+.onDark {
+  --fg: var(--on-dark);
+  --fg-muted: rgba(242, 243, 245, 0.72);
+  --glass-bg: rgba(255, 255, 255, 0.14);
+  --glass-line: rgba(255, 255, 255, 0.28);
+  --glass-ring: rgba(0, 0, 0, 0.12);
+  --glass-shadow: rgba(0, 0, 0, 0.22);
+}
+
+/* Width hugs the content; only the tabs give way when the screen is too narrow. */
+.pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 52px;
+  padding: 0 7px 0 22px;
+  border: 1px solid var(--glass-line);
+  border-radius: 999px;
+  background: var(--glass-bg);
+  color: var(--fg);
+  box-shadow:
+    0 0 0 0.5px var(--glass-ring),
+    0 12px 32px var(--glass-shadow);
+  /* Prefixed first: the minifier drops the standard property if the prefixed one follows it. */
+  -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  backdrop-filter: blur(20px) saturate(1.6);
+
+  /* Entrance: rise, settle in scale and come into focus. Exit: the reverse, quicker. */
+  opacity: 0;
+  filter: blur(10px);
+  transform: translateY(18px) scale(0.86);
+  transition:
+    opacity 0.32s var(--ease),
+    filter 0.32s var(--ease),
+    transform 0.36s var(--ease),
+    background-color var(--theme-t) var(--ease),
+    border-color var(--theme-t) var(--ease),
+    color var(--theme-t) var(--ease),
+    box-shadow var(--theme-t) var(--ease);
+}
+.dockOn .pill {
+  opacity: 1;
+  filter: blur(0);
+  transform: none;
+  transition:
+    opacity 0.55s var(--ease-premium),
+    filter 0.7s var(--ease-premium),
+    transform 0.8s var(--ease-premium),
+    background-color var(--theme-t) var(--ease),
+    border-color var(--theme-t) var(--ease),
+    color var(--theme-t) var(--ease),
+    box-shadow var(--theme-t) var(--ease);
+}
+
+.name {
+  flex: none;
+  font-size: var(--t-sm);
+  font-stretch: 120%;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.divider {
+  flex: none;
+  width: 1px;
+  height: 20px;
+  margin: 0 8px;
+  background: currentColor;
+  opacity: 0.18;
+}
+
+.links {
+  flex: 0 1 auto;
+  min-width: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 2px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.links::-webkit-scrollbar {
+  display: none;
+}
+.links a {
+  display: block;
+  padding: 8px 12px;
+  font-size: var(--t-sm);
+  color: var(--fg-muted);
+  text-decoration: none;
+  white-space: nowrap;
+  border-radius: 999px;
+  transition:
+    color 0.2s var(--ease),
+    background-color 0.2s var(--ease);
+}
+.links a:hover {
+  color: var(--fg);
+}
+.links a[aria-current] {
+  color: var(--fg);
+  background: color-mix(in srgb, var(--fg) 9%, transparent);
+}
+
+/* Order now: ink over light sections, light over dark ones, crossfading with the glass. */
+/* Scoped under .pill so it outranks the global .btn rules regardless of stylesheet order. */
+.pill .cta {
+  flex: none;
+  transition:
+    background-color var(--theme-t) var(--ease),
+    color var(--theme-t) var(--ease),
+    border-color var(--theme-t) var(--ease),
+    transform 0.2s var(--ease);
+}
+.dock.onDark .cta {
+  --btn-bg: var(--on-dark);
+  --btn-fg: var(--ink);
+  --btn-line: var(--on-dark);
+}
+.dock.onDark .cta:hover {
+  --btn-bg: #fff;
+}
+
+.pill a:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pill {
+    filter: none;
+    transform: none;
+  }
+}
+
+/* Phones: name and Order now stay; the tabs scroll sideways between them, fading out at the edges. */
+@media (max-width: 760px) {
+  .pill {
+    height: 46px;
+    padding: 0 5px 0 16px;
+    gap: 2px;
+  }
+  .name {
+    font-size: var(--t-xs);
+  }
+  .divider {
+    margin: 0 6px;
+  }
+  .links a {
+    padding: 7px 10px;
+    font-size: var(--t-xs);
+  }
+  .links {
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 12px, #000 calc(100% - 16px), transparent);
+    mask-image: linear-gradient(to right, transparent, #000 12px, #000 calc(100% - 16px), transparent);
+  }
+  .pill .cta {
+    padding: 0 14px;
+  }
+}

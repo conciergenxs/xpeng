@@ -1,0 +1,96 @@
+.root {
+  --inset: max(var(--gutter), calc((100vw - var(--max)) / 2 + var(--gutter)));
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 24px;
+  margin-bottom: clamp(28px, 4vw, 48px);
+}
+
+.controls {
+  display: flex;
+  gap: 8px;
+  flex: none;
+}
+.arrow {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--frost);
+  background: transparent;
+  font-size: 24px;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  padding-bottom: 3px;
+  transition: border-color 0.2s var(--ease), opacity 0.2s var(--ease);
+}
+.arrow:hover:not(:disabled) {
+  border-color: var(--ink);
+}
+.arrow:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.rail {
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0 var(--inset) 8px;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min(64vw, 920px);
+  gap: clamp(16px, 2vw, 24px);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--inset);
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+.rail::-webkit-scrollbar {
+  display: none;
+}
+.rail:focus-visible {
+  outline-offset: -2px;
+}
+
+.card {
+  scroll-snap-align: start;
+  display: grid;
+  gap: 20px;
+  align-content: start;
+}
+.img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: var(--r-media);
+  transition: opacity 0.5s var(--ease);
+}
+.card:not([aria-current]) .img {
+  opacity: 0.55;
+}
+.caption {
+  max-width: 34em;
+  display: grid;
+  gap: 4px;
+}
+.cardTitle {
+  font-size: var(--t-md);
+  font-stretch: 112%;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+@media (max-width: 760px) {
+  .rail {
+    grid-auto-columns: 86vw;
+  }
+  .card:not([aria-current]) .img {
+    opacity: 1;
+  }
+}

@@ -1,0 +1,164 @@
+/* Charcoal fading to near black, with a thin lit horizon curving across the top. The horizon sits in a compact
+   band above the content, so the logo and columns start close to the top. */
+
+.footer {
+  --arc-top: clamp(22px, 2.2vw, 32px); /* highest point of the curve */
+  --arc-r: clamp(200px, 23vw, 340px); /* vertical radius: how far the curve falls towards the edges */
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(96px, 7.8vw, 112px) 0 clamp(32px, 3.6vw, 52px);
+}
+/* Paired with .dark so this wins over its flat midnight fill; .dark still supplies the light text colours. */
+.footer:global(.dark) {
+  background: linear-gradient(180deg, #262b32 0%, #181a1f 22%, #111216 60%, #0b0c0e 100%);
+}
+
+/* Clips the ellipse to its upper half and ramps the light from dim on the left to bright on the right. */
+.horizon {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: -1;
+  height: calc(var(--arc-top) + var(--arc-r));
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(24% 34% at 96% 30%, rgba(196, 212, 238, 0.16), transparent 70%),
+    radial-gradient(60% 80% at 70% 0%, rgba(150, 168, 196, 0.1), transparent 70%);
+  -webkit-mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7) 45%, #000 88%);
+  mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7) 45%, #000 88%);
+}
+/* A wide ellipse centred at 40%: its top edge is the horizon, falling further on the right as in the reference. */
+.horizon span {
+  position: absolute;
+  top: var(--arc-top);
+  left: -75%;
+  width: 230%;
+  height: calc(var(--arc-r) * 2);
+  border-radius: 50%;
+  border-top: 1.5px solid rgba(228, 236, 248, 0.95);
+  box-shadow:
+    0 -1px 6px rgba(214, 226, 246, 0.55),
+    0 -20px 64px rgba(128, 148, 182, 0.22),
+    inset 0 10px 26px -10px rgba(170, 190, 222, 0.3);
+}
+
+/* ---------- Contact and columns ---------- */
+
+.top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: 48px;
+  padding-bottom: clamp(36px, 3.4vw, 48px);
+  border-bottom: 1px solid var(--on-dark-line);
+}
+
+.logo {
+  display: block;
+  height: 21px;
+  width: auto;
+}
+
+.contact ul {
+  list-style: none;
+  margin: 34px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+  font-size: var(--t-sm);
+  color: var(--on-dark-muted);
+}
+.contact li {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  gap: 16px;
+  align-items: center;
+}
+.contact svg {
+  color: var(--on-dark);
+}
+.contact li > span > a {
+  text-decoration: none;
+}
+
+/* Last column is narrower, so the XPENG links end short of the right edge as in the reference. */
+.cols {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, 0.55fr);
+  gap: 24px;
+}
+.cols ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+.cols a {
+  font-size: var(--t-sm);
+  text-decoration: none;
+  color: var(--on-dark-muted);
+  transition: color 0.2s var(--ease);
+}
+.cols a:hover {
+  color: var(--on-dark);
+}
+
+/* Optically centred on the logo. */
+.colTitle {
+  font-size: var(--t-xs);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  line-height: 21px;
+  margin-bottom: 18px;
+}
+
+/* ---------- Legal row ---------- */
+
+.legal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  padding-top: 24px;
+  font-size: var(--t-sm);
+  color: var(--on-dark-muted);
+}
+.legal a {
+  text-decoration: none;
+  transition: color 0.2s var(--ease);
+}
+.legal a:hover {
+  color: var(--on-dark);
+}
+.policies {
+  display: flex;
+  align-items: center;
+}
+.policies a + a {
+  margin-left: 18px;
+  padding-left: 18px;
+  border-left: 1px solid var(--on-dark-line);
+}
+
+/* ---------- Tablet and phone ---------- */
+
+@media (max-width: 1100px) {
+  .top {
+    grid-template-columns: 1fr;
+    row-gap: 40px;
+  }
+  .cols {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .cols {
+    grid-template-columns: 1fr 1fr;
+    row-gap: 36px;
+  }
+}

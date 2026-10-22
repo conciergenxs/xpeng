@@ -1,0 +1,191 @@
+.hero {
+  position: relative;
+  min-height: max(640px, 100svh);
+  display: flex;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--midnight);
+}
+
+/* ---------- Films ---------- */
+
+.media {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+.video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;
+  opacity: 0;
+  transform: scale(1.04);
+  transition:
+    opacity 1.2s var(--ease),
+    transform 2.4s var(--ease-out-expo);
+}
+.videoOn {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Contrast only: a light veil under the header and a deeper one under the copy and controls. */
+.scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, rgba(10, 12, 15, 0.42), rgba(10, 12, 15, 0) 24%),
+    linear-gradient(to top, rgba(10, 12, 15, 0.72), rgba(10, 12, 15, 0.28) 28%, rgba(10, 12, 15, 0) 52%);
+}
+
+/* ---------- Bottom row ---------- */
+
+.inner {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px 48px;
+  padding-top: var(--header-h);
+  padding-bottom: clamp(32px, 5.5vh, 64px);
+}
+
+.copy {
+  min-width: 0;
+  animation: rise 1s var(--ease-out-expo) both;
+}
+
+.eyebrow {
+  font-size: clamp(1rem, 0.85rem + 0.4vw, 1.3125rem);
+  font-weight: 400;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  line-height: 1;
+  color: rgba(242, 243, 245, 0.82);
+  margin-bottom: clamp(14px, 1.6vw, 22px);
+}
+
+.headline {
+  font-size: clamp(2.25rem, 0.6rem + 3.6vw, 4.5rem);
+  font-weight: 420;
+  font-stretch: 100%;
+  letter-spacing: -0.035em;
+  line-height: 1.04;
+  white-space: nowrap;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: none;
+}
+
+.indicator {
+  display: flex;
+  align-items: center;
+  height: 56px;
+  padding: 0 18px;
+  border-radius: 999px;
+  /* Same frosted glass as the header over dark sections. */
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  box-shadow:
+    0 0 0 0.5px rgba(0, 0, 0, 0.12),
+    0 12px 32px rgba(0, 0, 0, 0.22);
+  -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  backdrop-filter: blur(20px) saturate(1.6);
+}
+
+.step {
+  display: grid;
+  place-items: center;
+  height: 44px;
+  padding: 0 6px;
+  border: 0;
+  background: none;
+  border-radius: 999px;
+}
+.step:focus-visible {
+  outline: 2px solid var(--on-dark);
+  outline-offset: -4px;
+}
+
+.track {
+  position: relative;
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(242, 243, 245, 0.45);
+  transition:
+    width 0.6s cubic-bezier(0.5, 0, 0.12, 1),
+    background-color 0.6s var(--ease);
+}
+.step:hover .track {
+  background: rgba(242, 243, 245, 0.75);
+}
+.stepOn .track,
+.stepOn:hover .track {
+  width: 64px;
+  background: rgba(242, 243, 245, 0.32);
+}
+
+.fill {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--on-dark);
+  transform: scaleX(var(--p, 0));
+  transform-origin: left center;
+  opacity: 0;
+}
+.stepOn .fill {
+  opacity: 1;
+}
+
+.explore {
+  min-height: 56px;
+  padding: 0 34px;
+  font-size: var(--t-base);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+
+/* ---------- Narrower screens: controls move under the copy ---------- */
+
+@media (max-width: 1180px) {
+  .inner {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 640px) {
+  .headline {
+    white-space: normal;
+    text-wrap: balance;
+  }
+  .scrim {
+    background:
+      linear-gradient(to bottom, rgba(10, 12, 15, 0.45), rgba(10, 12, 15, 0) 22%),
+      linear-gradient(to top, rgba(10, 12, 15, 0.8), rgba(10, 12, 15, 0.3) 36%, rgba(10, 12, 15, 0) 60%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .video {
+    transform: none;
+  }
+}

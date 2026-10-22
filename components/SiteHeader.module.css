@@ -1,0 +1,373 @@
+/* Floating glass header.
+   One .glass layer changes shape: collapsed it hugs the nav links, expanded it spans logo to CTA.
+   Logo, links and CTA stay where they are, so the bar reads as one object growing around them. */
+
+.header {
+  --morph: cubic-bezier(0.5, 0, 0.12, 1);
+  --morph-t: 0.8s;
+  --shell-h: 56px;
+  /* Gap between the viewport edge and the bar. --header-h (globals) reserves top + bar + 8px below. */
+  --header-top: 16px;
+  /* How far the bar reaches past the page gutter, leaving a 28px outer margin (16px on phones). */
+  --bleed: clamp(0px, calc(var(--gutter) - 28px), 28px);
+  --theme-t: 0.5s;
+
+  /* Light glass, the same recipe as the Why Choose XPENG floating control. */
+  --fg: var(--ink);
+  --glass-bg: rgba(250, 249, 246, 0.62);
+  --glass-bg-collapsed: rgba(250, 249, 246, 0.5);
+  --glass-line: rgba(255, 255, 255, 0.6);
+  --glass-ring: rgba(26, 29, 33, 0.1);
+  --glass-shadow: rgba(40, 32, 20, 0.14);
+  --link-hover: rgba(26, 29, 33, 0.06);
+
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 50;
+  height: var(--header-h);
+  padding-top: var(--header-top);
+  color: var(--fg);
+  pointer-events: none;
+  transition: color var(--theme-t) var(--ease);
+}
+
+/* Over a dark section (heroes, dark story sections, footer): the same glass, frosted white, with white content. */
+.onDark {
+  --fg: var(--on-dark);
+  --glass-bg: rgba(255, 255, 255, 0.14);
+  --glass-bg-collapsed: rgba(255, 255, 255, 0.12);
+  --glass-line: rgba(255, 255, 255, 0.28);
+  --glass-ring: rgba(0, 0, 0, 0.12);
+  --glass-shadow: rgba(0, 0, 0, 0.22);
+  --link-hover: rgba(255, 255, 255, 0.12);
+}
+
+/* The order page is white throughout, so its bar is solid white too: same shape, a hairline edge and a soft
+   neutral shadow, no tinted glass. */
+.ordering {
+  --glass-bg: var(--paper);
+  --glass-line: var(--hairline);
+  --glass-ring: rgba(26, 29, 33, 0.04);
+  --glass-shadow: rgba(26, 29, 33, 0.08);
+}
+
+.shell {
+  position: relative;
+  z-index: 2;
+  height: var(--shell-h);
+  margin-inline: calc(-1 * var(--bleed));
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.shell > :not(.glass) {
+  position: relative;
+  pointer-events: auto;
+}
+
+.glass {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  /* Fallback until measured: roughly the nav's width around the centre. */
+  left: var(--l, calc(50% - 190px));
+  right: var(--r, calc(50% - 190px));
+  border-radius: 999px;
+  background: var(--glass-bg-collapsed);
+  border: 1px solid var(--glass-line);
+  box-shadow: 0 0 0 0.5px var(--glass-ring);
+  /* Prefixed first: the minifier drops the standard property if the prefixed one follows it. */
+  -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  backdrop-filter: blur(20px) saturate(1.6);
+  pointer-events: none;
+}
+.expanded .glass {
+  left: 0;
+  right: 0;
+  background: var(--glass-bg);
+  box-shadow:
+    0 0 0 0.5px var(--glass-ring),
+    0 12px 32px var(--glass-shadow);
+}
+
+/* Transitions switch on after the first measurement, so the page never animates on load. */
+.animate .glass {
+  transition:
+    left var(--morph-t) var(--morph),
+    right var(--morph-t) var(--morph),
+    background-color var(--morph-t) var(--morph),
+    border-color var(--theme-t) var(--ease),
+    box-shadow var(--morph-t) var(--morph);
+}
+.animate .logo,
+.animate .actions {
+  transition: transform var(--morph-t) var(--morph);
+}
+
+/* ---------- Logo ---------- */
+
+.logo {
+  display: inline-flex;
+  flex: none;
+  padding: 8px 0;
+  margin-left: 28px;
+  border-radius: 4px;
+  transform: translateX(-6px);
+}
+/* The logo file is white; over light pages it is inverted to near-black, crossfading with the theme. */
+.logo img {
+  height: 15px;
+  width: auto;
+  filter: invert(1) brightness(0.12);
+  transition: filter var(--theme-t) var(--ease);
+}
+.onDark .logo img {
+  filter: none;
+}
+.expanded .logo {
+  transform: none;
+}
+
+/* ---------- Nav: centred, never moves ---------- */
+
+.nav {
+  position: absolute !important;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  gap: 2px;
+  padding: 0 8px;
+}
+.nav a {
+  padding: 9px 16px;
+  border-radius: 999px;
+  font-size: var(--t-sm);
+  font-weight: 500;
+  text-decoration: none;
+  opacity: 0.88;
+  transition:
+    opacity 0.2s var(--ease),
+    background-color 0.2s var(--ease);
+}
+.nav a:hover {
+  opacity: 1;
+  background: var(--link-hover);
+}
+
+/* ---------- Actions ---------- */
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+  margin-left: auto;
+  margin-right: 8px;
+  transform: translateX(6px);
+}
+.expanded .actions {
+  transform: none;
+}
+
+.cta {
+  min-height: 40px;
+  padding: 0 20px;
+  font-size: var(--t-sm);
+}
+/* Scoped under .header so it outranks the global .btn transition regardless of stylesheet order. */
+.header .cta {
+  transition:
+    background-color var(--theme-t) var(--ease),
+    color var(--theme-t) var(--ease),
+    border-color var(--theme-t) var(--ease),
+    transform 0.2s var(--ease);
+}
+/* Order now: light over dark sections (its existing style), ink with light text over light pages. */
+.header:not(.onDark) .ctaPrimary {
+  --btn-bg: var(--ink);
+  --btn-fg: var(--on-dark);
+  --btn-line: var(--ink);
+}
+.header:not(.onDark) .ctaPrimary:hover {
+  --btn-bg: #000;
+}
+/* Exit order (light order pages): an outline in ink rather than white. */
+.header:not(.onDark) .exit {
+  --btn-fg: var(--ink);
+  --btn-line: rgba(26, 29, 33, 0.25);
+}
+.header:not(.onDark) .exit:hover {
+  --btn-line: var(--ink);
+}
+
+.help {
+  margin-left: auto;
+  font-size: var(--t-sm);
+  color: var(--graphite);
+}
+.onDark .help {
+  color: rgba(242, 243, 245, 0.78);
+}
+.exit {
+  margin-right: 8px;
+}
+
+.burger {
+  display: none;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  padding: 0;
+  place-items: center;
+  color: inherit;
+}
+.burgerLines,
+.burgerLines::before {
+  display: block;
+  width: 20px;
+  height: 1.5px;
+  background: currentColor;
+  transition: transform 0.3s var(--ease);
+}
+.burgerLines {
+  position: relative;
+  transform: translateY(-3.5px);
+}
+.burgerLines::before {
+  content: "";
+  position: absolute;
+  top: 7px;
+}
+.isOpen .burgerLines {
+  transform: translateY(0) rotate(45deg);
+}
+.isOpen .burgerLines::before {
+  transform: translateY(-7px) rotate(-90deg);
+}
+
+/* ---------- Mobile menu sheet: sits under the floating bar ---------- */
+
+.sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  background: var(--arctic);
+  color: var(--ink);
+  overflow-y: auto;
+  padding: calc(var(--header-h) + 20px) 0 48px;
+  pointer-events: auto;
+  animation: sheetIn 0.35s var(--ease-out-expo);
+}
+@keyframes sheetIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+.sheetModels {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.sheetModel {
+  display: grid;
+  gap: 2px;
+  padding: 20px 16px 16px;
+  background: var(--paper);
+  border-radius: var(--r-panel);
+  text-decoration: none;
+}
+.sheetCarBox {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 12px;
+}
+.sheetCar {
+  height: auto;
+}
+.sheetName {
+  font-size: var(--t-md);
+  font-stretch: 115%;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.sheetLinks {
+  list-style: none;
+  margin: 28px 0 0;
+  padding: 0;
+}
+.sheetLinks a {
+  display: block;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--hairline);
+  font-size: var(--t-md);
+  font-stretch: 110%;
+  font-weight: 520;
+  text-decoration: none;
+}
+
+/* ---------- Small screens: the links live in the menu, so the glass starts as a circle around it ---------- */
+
+@media (max-width: 860px) {
+  .header {
+    --shell-h: 52px;
+    --header-top: 12px;
+  }
+  .nav,
+  .help {
+    display: none;
+  }
+  .glass {
+    left: var(--l, calc(100% - var(--shell-h)));
+    right: var(--r, 0px);
+  }
+  .logo {
+    margin-left: 16px;
+  }
+  .actions {
+    margin-right: 4px;
+    gap: 6px;
+  }
+  .cta {
+    min-height: 38px;
+    padding: 0 16px;
+    font-size: var(--t-xs);
+  }
+  .exit {
+    margin-left: auto;
+  }
+  .burger {
+    display: grid;
+  }
+}
+
+/* Phones: no separate top-of-page state. The bar always has its scrolled (.expanded) shape, so nothing
+   changes as the page scrolls. Tablets and desktops keep the collapsed glass over a dark hero. */
+@media (max-width: 760px) {
+  .glass {
+    left: 0;
+    right: 0;
+    background: var(--glass-bg);
+    box-shadow:
+      0 0 0 0.5px var(--glass-ring),
+      0 12px 32px var(--glass-shadow);
+  }
+  .logo,
+  .actions {
+    transform: none;
+  }
+}
+
+@media (min-width: 861px) {
+  .sheet {
+    display: none;
+  }
+}

@@ -1,0 +1,1190 @@
+.loading {
+  min-height: 100svh;
+}
+
+/* ---------- Layout: stage left, panel right ---------- */
+
+/* White throughout, including the band under the floating header. */
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(440px, 540px);
+  padding-top: var(--header-h);
+  min-height: 100svh;
+  background: var(--paper);
+}
+
+/* The stage itself lives in OrderStage.module.css. */
+
+/* A hairline between the car and the panel. */
+.panel {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  min-height: calc(100svh - var(--header-h));
+  border-left: 1px solid var(--hairline);
+}
+.panelInner {
+  flex: 1;
+  padding: 28px clamp(20px, 3vw, 40px) clamp(40px, 6vh, 64px);
+}
+/* Fields reached by keyboard scroll into view above the floating bar, not under it. */
+:global(html):has(.panel) {
+  scroll-padding-bottom: 128px;
+}
+
+/* ---------- Stepper ----------
+   Four bars with a number and label beneath; done steps show a tick and stay clickable. */
+
+.stepper {
+  list-style: none;
+  margin: 0 0 40px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.stepper li > * {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 0 0;
+  border: 0;
+  border-top: 3px solid var(--hairline);
+  border-radius: 0;
+  background: none;
+  text-align: left;
+  font-size: var(--t-xs);
+  color: var(--graphite);
+  transition:
+    border-color 0.3s var(--ease),
+    color 0.2s var(--ease);
+}
+.stepper button {
+  cursor: pointer;
+}
+.stepper button:hover {
+  color: var(--ink);
+}
+.stepper button:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+.done > *,
+.current > * {
+  border-top-color: var(--ink) !important;
+  color: var(--ink) !important;
+}
+.current > * {
+  font-weight: 600;
+}
+.stepNum {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid var(--frost);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--graphite);
+}
+/* Upcoming: outlined number. Current: filled number. Done: filled, with a tick in place of the number. */
+.current .stepNum,
+.done .stepNum {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+}
+.stepNum svg {
+  display: block;
+}
+
+.stepBody:focus {
+  outline: none;
+}
+.stepBody {
+  animation: stepIn 0.5s var(--ease-out-expo);
+}
+@keyframes stepIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+.stepIntro {
+  margin: 12px 0 0;
+  color: var(--graphite);
+  font-size: var(--t-sm);
+  max-width: 40em;
+}
+
+/* ---------- Choice groups ----------
+   One card language for every choice: hairline border, 16px radius, ink border when selected. */
+
+.group {
+  border: 0;
+  margin: 36px 0 0;
+  padding: 0;
+  min-width: 0;
+}
+.groupLabel {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  width: 100%;
+  padding: 0;
+  margin-bottom: 14px;
+  font-size: var(--t-sm);
+  font-weight: 600;
+  line-height: 1.4;
+}
+.groupValue {
+  font-weight: 400;
+  color: var(--graphite);
+}
+/* A group label with a text action on the same line, e.g. "Compare models". */
+.groupHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.groupHead .groupLabel {
+  width: auto;
+  margin: 0;
+}
+.groupAction {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: var(--t-sm);
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.modelCard,
+.option,
+.plan {
+  position: relative;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-panel);
+  background: var(--paper);
+  cursor: pointer;
+  transition:
+    border-color 0.2s var(--ease),
+    box-shadow 0.2s var(--ease);
+}
+.modelCard:hover,
+.option:hover,
+.plan:hover {
+  border-color: var(--frost);
+}
+.selected,
+.selected:hover {
+  border-color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--ink);
+}
+.modelCard:has(input:focus-visible),
+.option:has(input:focus-visible),
+.plan:has(input:focus-visible),
+.swatch:has(input:focus-visible) {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.modelCards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.modelCard {
+  display: grid;
+  overflow: hidden;
+}
+/* The car on a soft panel, cars to scale with each other. */
+.modelCardStage {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  height: 104px;
+  padding: 16px 14px 10px;
+  background: var(--arctic);
+}
+.modelCardCar {
+  display: block;
+}
+.modelCardCar img {
+  width: 100%;
+  height: auto;
+}
+.modelCardText {
+  position: relative;
+  display: grid;
+  gap: 2px;
+  padding: 14px 16px 16px;
+}
+.modelCardName {
+  font-size: var(--t-md);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+.modelCardMeta {
+  font-size: var(--t-xs);
+  color: var(--graphite);
+}
+.modelCardPrice {
+  margin-top: 6px;
+  font-size: var(--t-sm);
+  font-weight: 560;
+  white-space: nowrap;
+}
+/* A small ink tick beside the chosen model's name. */
+.tick {
+  position: absolute;
+  top: 16px;
+  right: 14px;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--ink);
+  opacity: 0;
+  transform: scale(0.6);
+  transition:
+    opacity 0.2s var(--ease),
+    transform 0.3s var(--ease-out-expo);
+}
+.tick::before {
+  content: "";
+  width: 9px;
+  height: 5px;
+  border-left: 1.5px solid var(--paper);
+  border-bottom: 1.5px solid var(--paper);
+  transform: translateY(-1px) rotate(-45deg);
+}
+.selected .tick {
+  opacity: 1;
+  transform: none;
+}
+
+/* Variant: name and price on one line, the figures beneath. */
+.options {
+  display: grid;
+  gap: 10px;
+}
+.option {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 4px 16px;
+  padding: 16px 18px;
+}
+.optionName {
+  font-weight: 600;
+}
+.optionPrice {
+  font-weight: 600;
+  white-space: nowrap;
+}
+.optionMeta {
+  grid-column: 1 / -1;
+  font-size: var(--t-sm);
+  color: var(--graphite);
+}
+.optionNote {
+  grid-column: 1 / -1;
+  font-size: var(--t-xs);
+  color: var(--graphite);
+}
+
+/* Colour: round swatches with a ring when chosen, as on the stage. */
+.swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.swatch {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.swatch::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid transparent;
+  transition: border-color 0.2s var(--ease);
+}
+.swatch:hover::after {
+  border-color: var(--hairline);
+}
+.swatch:has(input:checked)::after {
+  border-color: var(--ink);
+}
+.swatch:has(input:focus-visible) {
+  outline-offset: 0;
+  border-radius: 50%;
+}
+.swatchDot {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(26, 29, 33, 0.14), inset 0 -6px 10px rgba(0, 0, 0, 0.12), inset 0 6px 10px rgba(255, 255, 255, 0.22);
+}
+
+.hint {
+  margin-top: 14px;
+  font-size: var(--t-xs);
+  line-height: 1.55;
+  color: var(--graphite);
+}
+
+/* ---------- Payment ---------- */
+
+/* Plan: three cards, the live figure under each name. */
+.plans {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.plan {
+  display: grid;
+  gap: 4px;
+  padding: 14px 16px;
+}
+.planName {
+  font-weight: 600;
+}
+.planFigure {
+  font-size: var(--t-xs);
+  color: var(--graphite);
+  white-space: nowrap;
+}
+
+.planBody {
+  margin-top: 24px;
+  animation: stepIn 0.45s var(--ease-out-expo);
+}
+/* The plan's headline figure on a soft panel. */
+.figureBlock {
+  padding: 20px 22px 18px;
+  border-radius: var(--r-panel);
+  background: var(--arctic);
+}
+.bigEyebrow {
+  font-size: var(--t-xs);
+  font-weight: 600;
+  color: var(--graphite);
+}
+.bigFigure {
+  margin-top: 6px;
+  font-size: clamp(1.875rem, 1.4rem + 1.4vw, 2.5rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+.bigLabel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 14px;
+  margin-top: 8px;
+  font-size: var(--t-sm);
+  color: var(--graphite);
+}
+
+.controls {
+  display: grid;
+  gap: 28px;
+  margin: 32px 0 4px;
+}
+.valueSub {
+  margin-left: 6px;
+  font-size: var(--t-sm);
+  font-weight: 400;
+  color: var(--graphite);
+}
+
+/* Insurance: a bordered row with its switch. */
+.toggleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-top: 16px;
+  padding: 16px 18px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-panel);
+  cursor: pointer;
+  transition: border-color 0.2s var(--ease);
+}
+.toggleRow:hover {
+  border-color: var(--frost);
+}
+.toggleRow:has(input:checked) {
+  border-color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--ink);
+}
+.toggleTitle {
+  display: block;
+  font-weight: 600;
+  font-size: var(--t-sm);
+}
+.toggleHint {
+  display: block;
+  margin-top: 2px;
+  font-size: var(--t-xs);
+  line-height: 1.5;
+  color: var(--graphite);
+}
+.switch {
+  -webkit-appearance: none;
+  appearance: none;
+  flex: none;
+  position: relative;
+  width: 48px;
+  height: 28px;
+  margin: 0;
+  border-radius: 999px;
+  background: var(--hairline);
+  cursor: pointer;
+  transition: background-color 0.25s var(--ease);
+}
+.switch::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--paper);
+  box-shadow: 0 1px 3px rgba(26, 29, 33, 0.25);
+  transition: transform 0.3s var(--ease-out-expo);
+}
+.switch:checked {
+  background: var(--ink);
+}
+.switch:checked::before {
+  transform: translateX(20px);
+}
+.switch:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+/* Breakdown: label left, figure right, hairlines between; the total set off above and below in ink. */
+.breakdownHead {
+  margin: 32px 0 4px;
+}
+.breakdown {
+  margin: 0;
+}
+.breakdown > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--hairline);
+}
+.breakdown dt {
+  font-size: var(--t-sm);
+  color: var(--graphite);
+}
+.breakdown dd {
+  margin: 0;
+  font-size: var(--t-sm);
+  font-weight: 560;
+  white-space: nowrap;
+  text-align: right;
+}
+.breakdown .total {
+  border-top: 1px solid var(--ink);
+  border-bottom-color: var(--ink);
+  margin-top: -1px;
+  padding: 14px 0;
+}
+.breakdown .total dt {
+  color: var(--ink);
+  font-weight: 600;
+}
+.breakdown .total dd {
+  font-size: var(--t-base);
+  font-weight: 650;
+}
+.dtHint {
+  display: block;
+  margin-top: 2px;
+  font-size: var(--t-xs);
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--graphite);
+  max-width: 26em;
+}
+
+.includes {
+  margin-top: 32px;
+  padding: 18px 20px 12px;
+  border-radius: var(--r-panel);
+  background: var(--arctic);
+}
+.includes .groupLabel {
+  margin-bottom: 6px;
+}
+.includes ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: var(--t-sm);
+}
+.includes li {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  padding: 6px 0;
+}
+.includes li::before {
+  content: "";
+  flex: none;
+  width: 10px;
+  height: 6px;
+  border-left: 1.5px solid var(--ink);
+  border-bottom: 1.5px solid var(--ink);
+  transform: translateY(-3px) rotate(-45deg);
+}
+
+/* Plans side by side: the chosen column on a soft panel, its heading in ink. */
+.compareWrap {
+  margin-top: 44px;
+  padding-top: 28px;
+  border-top: 1px solid var(--hairline);
+}
+.compareScroll {
+  overflow-x: auto;
+}
+.compareTable {
+  width: 100%;
+  min-width: 400px;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: var(--t-sm);
+}
+.compareTable th,
+.compareTable td {
+  padding: 12px 12px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--hairline);
+}
+.compareTable tbody th {
+  padding-left: 0;
+  font-weight: 400;
+  color: var(--graphite);
+  width: 28%;
+}
+.compareTable td {
+  font-weight: 500;
+}
+/* Money and terms stay on one line; only the descriptive rows wrap. */
+.compareTable tbody tr:nth-child(-n + 4) td {
+  white-space: nowrap;
+}
+.compareTable tbody tr:last-child > * {
+  border-bottom: 0;
+}
+.compareTable thead th {
+  padding: 0;
+  border-bottom-color: var(--ink);
+}
+.compareTable thead button {
+  width: 100%;
+  padding: 12px;
+  border: 0;
+  background: none;
+  text-align: left;
+  font-weight: 600;
+  color: var(--graphite);
+  cursor: pointer;
+  transition: color 0.2s var(--ease);
+}
+.compareTable thead button[aria-pressed="true"],
+.compareTable thead button:hover {
+  color: var(--ink);
+}
+.compareTable thead button:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: -2px;
+  border-radius: 8px;
+}
+.colOn {
+  background: var(--arctic);
+}
+.compareTable thead .colOn {
+  border-radius: 12px 12px 0 0;
+}
+.compareTable tbody tr:last-child .colOn {
+  border-radius: 0 0 12px 12px;
+}
+
+/* ---------- Form ---------- */
+
+.form {
+  display: grid;
+  gap: 22px;
+}
+.fieldRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.field {
+  display: grid;
+  gap: 6px;
+  align-content: start;
+}
+.field > label {
+  font-size: var(--t-sm);
+  font-weight: 560;
+}
+.optional {
+  font-weight: 400;
+  color: var(--graphite);
+}
+.field input,
+.field select,
+.field textarea,
+.phone {
+  width: 100%;
+  min-height: 50px;
+  padding: 0 14px;
+  border: 1px solid var(--frost);
+  border-radius: var(--r-control);
+  background: var(--paper);
+  font-size: var(--t-base);
+  transition:
+    border-color 0.2s var(--ease),
+    box-shadow 0.2s var(--ease);
+}
+.field textarea {
+  padding: 12px 14px;
+  resize: vertical;
+}
+.field select {
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--ink) 50%), linear-gradient(135deg, var(--ink) 50%, transparent 50%);
+  background-position: calc(100% - 20px) 50%, calc(100% - 15px) 50%;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+  padding-right: 40px;
+}
+.field input:hover,
+.field select:hover,
+.field textarea:hover,
+.phone:hover {
+  border-color: var(--graphite);
+}
+.field input:focus,
+.field select:focus,
+.field textarea:focus,
+.phone:focus-within {
+  outline: none;
+  border-color: var(--ink);
+  box-shadow: 0 0 0 1px var(--ink);
+}
+.field [aria-invalid="true"],
+.phone:has([aria-invalid="true"]) {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 1px var(--danger);
+}
+.phone {
+  display: flex;
+  align-items: stretch;
+  padding: 0;
+}
+.phone span {
+  display: grid;
+  place-items: center;
+  padding: 0 12px 0 14px;
+  border-right: 1px solid var(--hairline);
+  color: var(--graphite);
+}
+.phone input {
+  border: 0 !important;
+  box-shadow: none !important;
+  background: transparent;
+  min-height: 48px;
+}
+.fieldHint {
+  font-size: var(--t-xs);
+  color: var(--graphite);
+}
+.error {
+  font-size: var(--t-xs);
+  color: var(--danger);
+  font-weight: 500;
+}
+
+.check {
+  display: flex;
+  gap: 12px;
+  align-items: start;
+  font-size: var(--t-sm);
+  cursor: pointer;
+}
+.check input {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 1px 0 0;
+  accent-color: var(--ink);
+}
+.check input[aria-invalid="true"] {
+  outline: 2px solid var(--danger);
+  outline-offset: 2px;
+}
+.check .link {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: inherit;
+}
+
+/* ---------- Review ---------- */
+
+.review {
+  padding: 20px 0;
+  border-bottom: 1px solid var(--hairline);
+}
+.review:first-of-type {
+  border-top: 1px solid var(--ink);
+}
+.reviewHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 10px;
+}
+.reviewHead h3 {
+  font-size: var(--t-base);
+  font-weight: 600;
+}
+.reviewHead button {
+  border: 0;
+  background: none;
+  padding: 0;
+}
+
+.summaryList {
+  margin: 0;
+  display: grid;
+  gap: 6px;
+}
+.summaryList > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+.summaryList dt {
+  font-size: var(--t-sm);
+  color: var(--graphite);
+}
+.summaryList dd {
+  margin: 0;
+  font-size: var(--t-sm);
+  font-weight: 500;
+  text-align: right;
+}
+
+.deposit {
+  display: grid;
+  gap: 4px;
+  margin: 28px 0;
+  padding: 20px;
+  border-radius: var(--r-panel);
+  background: var(--arctic);
+}
+.depositLabel {
+  font-size: var(--t-sm);
+  font-weight: 600;
+}
+.depositValue {
+  font-size: var(--t-lg);
+  font-stretch: 112%;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.deposit .hint {
+  margin-top: 4px;
+}
+
+.consents {
+  display: grid;
+  gap: 14px;
+}
+
+.dialog {
+  width: min(560px, calc(100% - 32px));
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-media);
+  color: var(--ink);
+  background: var(--paper);
+}
+.dialog::backdrop {
+  background: rgba(26, 29, 33, 0.5);
+}
+.dialogBody {
+  display: grid;
+  gap: 16px;
+  padding: 28px;
+}
+.dialogBody h3 {
+  font-size: var(--t-md);
+  font-stretch: 112%;
+  font-weight: 600;
+}
+.dialogBody ol {
+  margin: 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 8px;
+  font-size: var(--t-sm);
+}
+.dialogBody form {
+  justify-self: start;
+}
+
+/* ---------- Compare models modal ---------- */
+
+.modal {
+  width: min(960px, calc(100% - 32px));
+  max-height: min(880px, calc(100svh - 48px));
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-media);
+  color: var(--ink);
+  background: var(--paper);
+  box-shadow: 0 30px 80px rgba(16, 18, 21, 0.25);
+  overflow: hidden;
+}
+.modal[open] {
+  display: flex;
+  flex-direction: column;
+  animation: modalIn 0.45s var(--ease-out-expo);
+}
+.modal::backdrop {
+  background: rgba(16, 18, 21, 0.5);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.3s var(--ease);
+}
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+}
+/* The page behind stays put while the modal is open. */
+:global(html:has(dialog[open])) {
+  overflow: hidden;
+}
+.modalHead {
+  flex: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 20px clamp(20px, 3vw, 32px);
+  border-bottom: 1px solid var(--hairline);
+}
+.modalTitle {
+  font-size: var(--t-md);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+.modalClose {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--hairline);
+  border-radius: 50%;
+  background: var(--paper);
+  cursor: pointer;
+  transition: border-color 0.2s var(--ease);
+}
+.modalClose:hover {
+  border-color: var(--ink);
+}
+.modalBody {
+  overflow-y: auto;
+  padding: 8px clamp(20px, 3vw, 32px) clamp(20px, 3vw, 32px);
+}
+
+/* Label column, then one column per model; the model on order is set on a soft panel. */
+.cmp {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+  font-size: var(--t-sm);
+}
+.cmp th,
+.cmp td {
+  padding: 12px 16px;
+  text-align: left;
+  vertical-align: top;
+}
+.cmp tbody th,
+.cmp tbody td {
+  border-bottom: 1px solid var(--hairline);
+}
+.cmp tbody th {
+  width: 26%;
+  padding-left: 0;
+  font-weight: 400;
+  color: var(--graphite);
+}
+.cmp tbody td {
+  font-weight: 560;
+}
+.cmp thead th {
+  padding-top: 20px;
+  padding-bottom: 16px;
+  vertical-align: bottom;
+}
+.cmp thead td {
+  width: 26%;
+}
+.cmpCar {
+  display: flex;
+  align-items: flex-end;
+  height: clamp(80px, 12vw, 132px);
+  margin-bottom: 14px;
+}
+.cmpCar img {
+  width: 100%;
+  height: auto;
+}
+.cmpName {
+  display: block;
+  font-size: var(--t-md);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+.cmpType {
+  display: block;
+  margin-top: 2px;
+  font-size: var(--t-xs);
+  font-weight: 400;
+  color: var(--graphite);
+}
+/* The variant picker, just above the price row. */
+.cmpSelect {
+  margin-top: 14px;
+  font-weight: 400;
+}
+.cmpOn {
+  background: var(--arctic);
+}
+.cmp thead .cmpOn {
+  border-radius: var(--r-panel) var(--r-panel) 0 0;
+}
+.cmp tbody tr:last-child .cmpOn {
+  border-radius: 0 0 var(--r-panel) var(--r-panel);
+}
+.cmp tbody tr:last-child > * {
+  border-bottom: 0;
+}
+
+/* ---------- Action bar ----------
+   Anchored across the foot of the panel, the panel's width only. The same on every step: the figure and its
+   plan on the left, a round back button and a fixed-width action on the right, aligned with the panel's
+   content edges. Sticky, so it stays in reach; the panel's bottom padding keeps the last content clear of it. */
+
+.bar {
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  min-height: 80px;
+  padding: 14px clamp(20px, 3vw, 40px);
+  padding-bottom: max(14px, env(safe-area-inset-bottom));
+  background: color-mix(in srgb, var(--paper) 94%, transparent);
+  -webkit-backdrop-filter: saturate(1.4) blur(16px);
+  backdrop-filter: saturate(1.4) blur(16px);
+  border-top: 1px solid var(--hairline);
+}
+.barFigure {
+  min-width: 0;
+}
+.barValue {
+  font-size: var(--t-md);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.barSuffix {
+  margin-left: 2px;
+  font-size: var(--t-sm);
+  font-weight: 500;
+  color: var(--graphite);
+}
+/* One line on every step, so the bar never changes height. */
+.barLabel {
+  margin-top: 2px;
+  font-size: var(--t-xs);
+  line-height: 1.4;
+  color: var(--graphite);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.barActions {
+  flex: none;
+  display: flex;
+  gap: 8px;
+}
+.barBack {
+  width: 48px;
+  padding: 0;
+}
+.barCta {
+  min-width: 220px;
+}
+.ctaShort {
+  display: none;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 960px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  /* Stacked: the hairline runs across instead, between the car and the panel. */
+  .panel {
+    min-height: 0;
+    border-left: 0;
+    border-top: 1px solid var(--hairline);
+  }
+}
+
+@media (max-width: 640px) {
+  /* Model comparison: each row's label above the two values. */
+  .cmp thead td {
+    display: none;
+  }
+  /* Two equal columns whatever the variant names; long ones shorten inside their pills. */
+  .cmp tr {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .cmp tbody th {
+    grid-column: 1 / -1;
+    width: auto;
+    padding: 12px 0 2px;
+    border-bottom: 0;
+    font-size: var(--t-xs);
+  }
+  .cmp th,
+  .cmp td {
+    padding-inline: 10px;
+  }
+  /* Pills on one line even when a body type wraps. */
+  .cmp thead th {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-top: 14px;
+  }
+}
+
+@media (max-width: 520px) {
+  /* Numbers for every step, the label only for the current one. */
+  .stepper li > * {
+    gap: 0;
+    font-size: 0;
+  }
+  .stepper .current > * {
+    gap: 8px;
+    font-size: var(--t-xs);
+  }
+  .stepper .stepNum {
+    font-size: 11px;
+  }
+  .fieldRow {
+    grid-template-columns: 1fr;
+  }
+  .plan {
+    padding: 12px 14px;
+  }
+  .modelCardText {
+    padding: 12px 12px 14px;
+  }
+  .modelCardPrice {
+    font-size: var(--t-xs);
+  }
+  .tick {
+    top: 14px;
+    right: 12px;
+  }
+  /* One compact row: the figure, then "Continue" (or "Reserve") beside the back button. */
+  .bar {
+    gap: 10px;
+    min-height: 68px;
+    padding: 10px 20px;
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
+  }
+  .barValue {
+    font-size: var(--t-base);
+  }
+  .barBack {
+    width: 44px;
+    min-height: 44px;
+  }
+  .barCta {
+    min-width: 0;
+    min-height: 44px;
+    padding: 0 20px;
+  }
+  .ctaLong {
+    display: none;
+  }
+  .ctaShort {
+    display: inline;
+  }
+}
+
+@media print {
+  .layout {
+    display: none;
+  }
+}

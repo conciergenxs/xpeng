@@ -1,0 +1,378 @@
+.root {
+  padding-top: calc(var(--header-h) + clamp(40px, 6vw, 88px));
+  padding-bottom: clamp(80px, 10vw, 136px);
+  --label-w: 22%;
+}
+
+.intro {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 24px 48px;
+  flex-wrap: wrap;
+  margin-bottom: clamp(32px, 5vw, 56px);
+}
+.intro > div {
+  display: grid;
+  gap: 16px;
+}
+
+.diffToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: var(--t-sm);
+  font-weight: 560;
+  cursor: pointer;
+}
+.diffToggle input {
+  -webkit-appearance: none;
+  appearance: none;
+  position: relative;
+  width: 48px;
+  height: 28px;
+  margin: 0;
+  border-radius: 999px;
+  background: var(--hairline);
+  cursor: pointer;
+  transition: background-color 0.25s var(--ease);
+}
+.diffToggle input::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--paper);
+  box-shadow: 0 1px 3px rgba(26, 29, 33, 0.25);
+  transition: transform 0.3s var(--ease-out-expo);
+}
+.diffToggle input:checked {
+  background: var(--ink);
+}
+.diffToggle input:checked::before {
+  transform: translateX(20px);
+}
+.diffToggle input:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+/* ---------- Sticky column heads ---------- */
+
+.head {
+  position: sticky;
+  top: var(--header-h);
+  z-index: 20;
+  background: color-mix(in srgb, var(--arctic) 94%, transparent);
+  backdrop-filter: saturate(1.4) blur(16px);
+  -webkit-backdrop-filter: saturate(1.4) blur(16px);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s var(--ease);
+}
+.compact {
+  border-bottom-color: var(--hairline);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: var(--label-w) repeat(var(--cols), minmax(0, 1fr));
+  align-items: end;
+}
+
+.slot {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+  padding: 16px 20px 18px 0;
+  min-width: 0;
+}
+
+.slotCar {
+  display: flex;
+  align-items: flex-end;
+  height: clamp(64px, 9vw, 120px);
+  overflow: hidden;
+  transition:
+    height 0.45s var(--ease-out-expo),
+    opacity 0.3s var(--ease);
+}
+.slotCar span {
+  display: block;
+}
+.slotCar img {
+  width: 100%;
+  height: auto;
+}
+.compact .slotCar {
+  height: 0;
+  opacity: 0;
+}
+.compact .slotCtas,
+.compact .slotPrice {
+  display: none;
+}
+
+.slotModel {
+  margin-bottom: -6px;
+  font-size: var(--t-base);
+  font-stretch: 118%;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.compact .slotModel {
+  margin-bottom: -8px;
+  font-size: var(--t-xs);
+}
+
+.selectWrap {
+  display: flex;
+}
+.selectWrap select {
+  flex: 1;
+  min-width: 0;
+  min-height: 46px;
+  padding: 0 36px 0 14px;
+  border: 1px solid var(--frost);
+  border-radius: var(--r-control);
+  background-color: var(--paper);
+  font-weight: 600;
+  font-size: var(--t-sm);
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--ink) 50%), linear-gradient(135deg, var(--ink) 50%, transparent 50%);
+  background-position: calc(100% - 20px) 50%, calc(100% - 15px) 50%;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+.selectWrap select:hover {
+  border-color: var(--graphite);
+}
+.selectWrap select:focus-visible {
+  outline: none;
+  border-color: var(--ink);
+  box-shadow: 0 0 0 1px var(--ink);
+}
+.remove {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--hairline);
+  background: var(--paper);
+  font-size: 18px;
+  line-height: 1;
+  transition: border-color 0.2s var(--ease);
+}
+.remove:hover {
+  border-color: var(--ink);
+}
+.compact .remove {
+  display: none;
+}
+
+.slotPrice {
+  font-size: var(--t-md);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.slotCtas {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.addSlot {
+  align-self: stretch;
+}
+.add {
+  width: 100%;
+  height: 100%;
+  min-height: 160px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 8px;
+  border: 1px dashed var(--frost);
+  border-radius: var(--r-panel);
+  background: transparent;
+  font-size: var(--t-sm);
+  font-weight: 560;
+  color: var(--graphite);
+  transition:
+    border-color 0.2s var(--ease),
+    color 0.2s var(--ease);
+}
+.add:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+.compact .add {
+  min-height: 46px;
+  grid-auto-flow: column;
+}
+.plus {
+  font-size: 22px;
+  line-height: 1;
+  font-weight: 400;
+}
+
+/* ---------- Rows ---------- */
+
+.body {
+  display: grid;
+}
+
+.section {
+  padding-top: clamp(40px, 5vw, 64px);
+}
+.sectionTitle {
+  font-size: var(--t-md);
+  font-stretch: 115%;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--ink);
+}
+
+/* Rows share the head's grid so values always sit under their car. */
+.table,
+.table tbody {
+  display: block;
+  width: 100%;
+}
+.row {
+  display: grid;
+  grid-template-columns: var(--label-w) repeat(var(--cols), minmax(0, 1fr));
+  border-bottom: 1px solid var(--hairline);
+}
+.row th,
+.row td {
+  display: block;
+  padding: 16px 20px 16px 0;
+  text-align: left;
+}
+.row th {
+  font-size: var(--t-sm);
+  font-weight: 400;
+  color: var(--graphite);
+}
+.row td {
+  font-weight: 500;
+}
+.best {
+  font-weight: 650 !important;
+}
+
+.bar {
+  display: block;
+  height: 3px;
+  margin-top: 10px;
+  border-radius: 3px;
+  background: var(--hairline);
+  overflow: hidden;
+}
+.bar span {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+  background: var(--frost);
+  transition: width 0.6s var(--ease-out-expo);
+}
+.best .bar span {
+  background: var(--ink);
+}
+
+.hiddenNote {
+  margin-top: 20px;
+  font-size: var(--t-sm);
+  color: var(--graphite);
+}
+.hiddenNote button {
+  border: 0;
+  background: none;
+  padding: 0;
+}
+
+.featureGrid {
+  display: grid;
+  grid-template-columns: var(--label-w) repeat(var(--cols), minmax(0, 1fr));
+  padding-top: 16px;
+}
+.features {
+  list-style: none;
+  margin: 0;
+  padding: 0 20px 0 0;
+  font-size: var(--t-sm);
+}
+.features li {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--hairline);
+}
+.fit {
+  padding-right: 20px;
+  font-size: var(--t-sm);
+}
+.body > :global(.fine) {
+  margin-top: 40px;
+  max-width: 72ch;
+}
+
+/* ---------- Narrow screens: labels move above values ---------- */
+
+@media (max-width: 760px) {
+  .grid,
+  .featureGrid {
+    grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+    column-gap: 12px;
+  }
+  .grid > .labelCol,
+  .featureGrid > span:first-child,
+  .addSlot {
+    display: none;
+  }
+  .slot {
+    padding-right: 0;
+  }
+  .slotPrice {
+    font-size: var(--t-base);
+  }
+  .selectWrap select {
+    font-size: var(--t-xs);
+    padding-left: 10px;
+    padding-right: 28px;
+    background-position: calc(100% - 16px) 50%, calc(100% - 11px) 50%;
+  }
+  .remove {
+    right: 0;
+  }
+  .row {
+    display: grid;
+    grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+    column-gap: 12px;
+    border-bottom: 1px solid var(--hairline);
+    padding: 12px 0;
+  }
+  .row th {
+    grid-column: 1 / -1;
+    padding: 0 0 6px;
+  }
+  .row td {
+    padding: 0;
+    font-size: var(--t-sm);
+  }
+  .features,
+  .fit {
+    padding-right: 0;
+    font-size: var(--t-xs);
+  }
+}

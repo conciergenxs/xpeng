@@ -1,0 +1,141 @@
+.section {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: max(680px, 100svh);
+  display: grid;
+  grid-template-rows: 1fr auto;
+  background: #e9ebef;
+  color: var(--ink);
+}
+
+.bg {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Keep the mountains and the terrace floor in frame on wide and tall viewports. */
+  object-position: 50% 70%;
+}
+
+/* One soft light wash behind the copy, so dark type sits calmly on the sky. */
+.veil {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(ellipse 60% 48% at 50% 34%, rgba(242, 243, 245, 0.62), rgba(242, 243, 245, 0) 100%);
+}
+
+.content {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  text-align: center;
+  padding-top: clamp(112px, 22vh, 220px);
+}
+
+.title span {
+  display: block;
+}
+
+.section .copy {
+  margin-top: clamp(20px, 2.6vw, 32px);
+  max-width: 31em;
+  color: #4a4e55;
+  text-wrap: balance;
+}
+
+.content :global(.btn) {
+  margin-top: clamp(24px, 3vw, 36px);
+}
+/* White on the sky with dark text; on hover it lifts slightly with a soft shadow. */
+.content .story {
+  --btn-bg: var(--paper);
+  --btn-fg: var(--ink);
+  --btn-line: var(--paper);
+  box-shadow: 0 1px 2px rgba(26, 29, 33, 0.06);
+  transition:
+    background-color 0.2s var(--ease),
+    box-shadow 0.25s var(--ease),
+    transform 0.25s var(--ease);
+}
+.content .story:hover {
+  --btn-bg: var(--paper);
+  box-shadow: 0 8px 24px rgba(26, 29, 33, 0.14);
+  transform: translateY(-1px);
+}
+.content .story:active {
+  transform: scale(0.98);
+}
+
+/* ---------- Highlights: one quiet row on the terrace floor ---------- */
+
+.highlights {
+  list-style: none;
+  margin: 0 auto;
+  padding-bottom: clamp(36px, 7vh, 72px);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  max-width: 880px;
+}
+.highlights li {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 2px;
+  padding: 0 16px;
+  text-align: center;
+}
+.highlights li + li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 18%;
+  bottom: 4%;
+  border-left: 1px solid rgba(26, 29, 33, 0.18);
+}
+.highlights svg {
+  margin-bottom: 12px;
+  color: var(--ink);
+}
+
+.hTitle {
+  font-size: var(--t-md);
+  font-stretch: 105%;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+.hText {
+  font-size: var(--t-sm);
+  color: #4a4e55;
+}
+
+/* ---------- Smaller screens ---------- */
+
+@media (max-width: 640px) {
+  .veil {
+    background: radial-gradient(ellipse 90% 42% at 50% 30%, rgba(242, 243, 245, 0.7), rgba(242, 243, 245, 0) 100%);
+  }
+  .title span {
+    display: inline;
+  }
+  .highlights li {
+    padding: 0 8px;
+  }
+  .highlights svg {
+    width: 26px;
+    height: 26px;
+    margin-bottom: 8px;
+  }
+  .hTitle {
+    font-size: var(--t-base);
+  }
+  .hText {
+    font-size: var(--t-xs);
+    text-wrap: balance;
+  }
+}

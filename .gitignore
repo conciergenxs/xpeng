@@ -1,0 +1,28 @@
+node_modules
+.next
+out
+next-env.d.ts
+*.tsbuildinfo
+.DS_Store
+
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+*.pem
+
+# Logs, tooling and deployment output
+*.log
+npm-debug.log*
+coverage
+.vercel
+
+# Copied from assets/original by scripts/sync-original-media.mjs
+public/media/x9/hero.mp4
+public/media/g6/hero.mp4
+public/media/home/about.png
+public/media/x9/360-sprite.png
+public/media/g6/360-sprite.png
+public/media/g6/360-sprite-m.png
+public/media/home/why/xpilot.mp4
+public/media/home/cta.png

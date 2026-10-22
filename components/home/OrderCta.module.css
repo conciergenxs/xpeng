@@ -1,0 +1,99 @@
+/* The photo (1881 × 836) is shown full width at its own ratio, anchored to the bottom, never zoomed to fill.
+   The car roofs sit at ~52% of its height, so the bottom padding reserves the lower half of the photo and the
+   copy is centred in the sky above. The section is at least the photo's height; when the copy needs more room
+   (narrower screens), the extra height above the photo is the sky's own colour and the photo fades into it. */
+
+.section {
+  --img-ratio: calc(836 / 1881); /* photo height per unit of width */
+  --roof: 0.56; /* share of the photo height kept clear for the cars, plus a little air above their roofs */
+
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  align-content: center;
+  aspect-ratio: 1881 / 836;
+  padding: clamp(32px, 3.4vw, 56px) 0 calc(100% * var(--img-ratio) * var(--roof));
+  /* Matches the photo's top edge: darker on the left, warmer towards the sunset on the right. */
+  background: linear-gradient(90deg, rgb(21, 41, 72), rgb(39, 60, 96) 50%, rgb(78, 79, 105));
+}
+
+.bg {
+  position: absolute;
+  inset: auto 0 0;
+  z-index: -2;
+  width: 100%;
+  height: auto;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 12%);
+  mask-image: linear-gradient(to bottom, transparent, #000 12%);
+}
+
+/* A light veil only behind the copy; the dusk sky is already dark enough for white type. */
+.veil {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(ellipse 55% 45% at 50% 30%, rgba(16, 18, 21, 0.32), rgba(16, 18, 21, 0) 100%);
+}
+
+.content {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+
+.title span {
+  display: block;
+}
+
+.section .copy {
+  margin-top: clamp(20px, 2.6vw, 32px);
+  max-width: 28em;
+  color: rgba(242, 243, 245, 0.82);
+  text-wrap: balance;
+}
+
+/* Primary and secondary side by side, the same size, centred under the copy. */
+.ctas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: clamp(24px, 3vw, 36px);
+}
+.cta {
+  min-width: 200px;
+}
+/* Outlined on the dusk sky; on hover the outline firms up and a faint frost fills it. */
+.section .ctaSecondary {
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+.section .ctaSecondary:hover {
+  --btn-bg: rgba(255, 255, 255, 0.1);
+}
+
+/* At phone width the full photo would leave the cars tiny, so it is shown at 3:2: both cars stay whole,
+   cropped only at the empty sky and city edges. */
+@media (max-width: 760px) {
+  .section {
+    --img-ratio: calc(2 / 3);
+    aspect-ratio: auto;
+  }
+  .bg {
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    object-position: 50% 100%;
+  }
+  .title span {
+    display: inline;
+  }
+}
+
+/* Small phones: stacked, equal width. */
+@media (max-width: 480px) {
+  .ctas {
+    flex-direction: column;
+    align-items: stretch;
+    width: min(100%, 320px);
+  }
+}

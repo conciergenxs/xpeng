@@ -1,0 +1,464 @@
+/* Beside the order panel on wide screens: media fills the height, the tabs and their row sit beneath it.
+   On narrow screens the stage sits above the panel with a fixed-ratio media area. */
+.stage {
+  position: sticky;
+  top: var(--header-h);
+  height: calc(100svh - var(--header-h));
+  display: flex;
+  flex-direction: column;
+  padding: clamp(12px, 2.4vh, 32px) 0 clamp(20px, 3vh, 32px);
+  /* White, like the panel: the car and its media sit straight on the page. */
+  background: var(--paper);
+  overflow: hidden;
+  /* The compact controls follow the stage's own width, which is narrow beside the panel on small laptops too. */
+  container: stage / inline-size;
+}
+
+/* A size container, so the car and the gallery frame can each take the largest size that fits. */
+.media {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  container-type: size;
+}
+
+/* Views crossfade with a slight settle; the outgoing one stays laid out until it has faded. */
+.view {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  --side: clamp(16px, 2.4vw, 40px);
+  padding-inline: var(--side);
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.985);
+  transition:
+    opacity 0.45s var(--ease),
+    transform 0.6s var(--ease-out-expo),
+    visibility 0s linear 0.45s;
+}
+.viewOn {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition:
+    opacity 0.45s var(--ease),
+    transform 0.6s var(--ease-out-expo),
+    visibility 0s;
+}
+
+/* ---------- 360° view ---------- */
+
+/* The car stands just above the tabs, the free height above it left to its name. */
+.view360 {
+  justify-content: flex-end;
+  padding-bottom: clamp(4px, 1.5vh, 16px);
+}
+.carWrap {
+  position: relative;
+}
+
+/* The model name, very large and faint, rising behind the car's roof. */
+.bigLabel {
+  position: absolute;
+  bottom: 40%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: min(30cqw, 40cqh);
+  font-stretch: 125%;
+  font-weight: 650;
+  letter-spacing: -0.04em;
+  line-height: 0.8;
+  color: color-mix(in srgb, var(--ink) 5%, transparent);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* As large as the area allows, leaving room for the cue beneath. */
+.car {
+  width: min(100cqw - 2 * var(--side), (100cqh - 64px) * 2.44, 1040px);
+}
+
+.cue {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 24px;
+  margin-top: 8px;
+  font-size: var(--t-sm);
+  color: var(--graphite);
+}
+/* Kept in place, so nothing moves when the car appears. */
+.cueHidden {
+  visibility: hidden;
+}
+/* Set off from the cue by a hairline. */
+.simulated {
+  padding-left: 8px;
+  border-left: 1px solid color-mix(in srgb, currentColor 35%, transparent);
+  line-height: 1.1;
+}
+
+/* ---------- Gallery ---------- */
+
+.frame {
+  position: relative;
+  width: min(100cqw - 2 * var(--side), (100cqh - 8px) * 16 / 9);
+  aspect-ratio: 16 / 9;
+  border-radius: var(--r-media);
+  overflow: hidden;
+  isolation: isolate;
+  background: color-mix(in srgb, var(--ink) 8%, transparent);
+  touch-action: pan-y;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.6s var(--ease);
+}
+.slideOn {
+  z-index: 1;
+  opacity: 1;
+}
+
+.fill {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* Photos settle in from a touch larger. */
+img.fill {
+  transform: scale(1.04);
+  transition: transform 1.4s var(--ease-out-expo);
+}
+.slideOn img.fill {
+  transform: none;
+}
+
+/* Bottom-left, clear of the film's pause button. */
+.caption {
+  position: absolute;
+  inset: auto 0 0;
+  padding: 64px 80px 22px 24px;
+  background: linear-gradient(to top, rgba(16, 18, 21, 0.68), rgba(16, 18, 21, 0));
+  color: #fff;
+  pointer-events: none;
+}
+.caption > * {
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 0.5s var(--ease) 0.15s,
+    transform 0.7s var(--ease-out-expo) 0.15s;
+}
+.slideOn .caption > * {
+  opacity: 1;
+  transform: none;
+}
+.capTitle {
+  font-size: var(--t-md);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+.capText {
+  margin-top: 4px;
+  max-width: 36em;
+  font-size: var(--t-sm);
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.84);
+}
+
+/* Glass arrows, shown on hover or focus; touch screens swipe instead. */
+.arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.74);
+  color: var(--ink);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  opacity: 0;
+  transform: translateY(-50%);
+  transition:
+    opacity 0.25s var(--ease),
+    background-color 0.2s var(--ease);
+}
+.frame:hover .arrow,
+.arrow:focus-visible {
+  opacity: 1;
+}
+.arrow:hover {
+  background: #fff;
+}
+.arrow:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+.prev {
+  left: 16px;
+}
+.next {
+  right: 16px;
+}
+@media (hover: none) {
+  .arrow {
+    display: none;
+  }
+}
+
+/* ---------- Tabs and the row beneath ---------- */
+
+.controls {
+  flex: none;
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+  padding: clamp(12px, 2vh, 20px) var(--gutter) 0;
+}
+
+.tabs {
+  position: relative;
+  display: flex;
+  gap: 4px;
+  max-width: 100%;
+  padding: 4px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ink) 6%, transparent);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+.thumb {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 0;
+  border-radius: 999px;
+  background: var(--paper);
+  box-shadow:
+    0 1px 2px rgba(26, 29, 33, 0.12),
+    0 0 0 0.5px rgba(26, 29, 33, 0.06);
+  transition:
+    transform 0.45s var(--ease-out-expo),
+    width 0.45s var(--ease-out-expo);
+}
+.tab {
+  position: relative;
+  flex: none;
+  min-height: 40px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  font-size: var(--t-sm);
+  font-weight: 500;
+  color: var(--graphite);
+  white-space: nowrap;
+  transition: color 0.2s var(--ease);
+}
+.tab:hover,
+.tabOn {
+  color: var(--ink);
+}
+.tabOn {
+  font-weight: 600;
+}
+.tab:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: -2px;
+}
+
+/* Facts, swatches or slide dots: one row of the same height under a hairline. */
+.sub {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: min(100%, 720px);
+  min-height: 61px;
+  padding-top: 16px;
+  border-top: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+}
+.sub > * {
+  animation: subIn 0.4s var(--ease) both;
+}
+@keyframes subIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 40px;
+  margin: 0;
+  text-align: center;
+}
+.facts dt {
+  font-size: var(--t-xs);
+  color: var(--graphite);
+}
+.facts dd {
+  margin: 0;
+  font-size: var(--t-sm);
+  font-weight: 560;
+}
+
+/* Same swatches as the model pages' colour stage. */
+.swatches {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.swatch {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.swatch::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid transparent;
+  transition: border-color 0.25s var(--ease);
+}
+.swatch:has(input:checked)::after {
+  border-color: var(--ink);
+}
+.swatch:has(input:focus-visible)::after {
+  border-color: var(--ink);
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  box-shadow:
+    inset 0 0 0 1px rgba(26, 29, 33, 0.14),
+    inset 0 -6px 10px rgba(0, 0, 0, 0.12),
+    inset 0 6px 10px rgba(255, 255, 255, 0.22);
+}
+
+/* Slide dots; the current one stretches into a short bar. */
+.pager {
+  display: flex;
+  align-items: center;
+}
+.page {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+.page::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ink) 22%, transparent);
+  transition:
+    width 0.45s var(--ease-out-expo),
+    background-color 0.25s var(--ease);
+}
+.page:hover::before {
+  background: color-mix(in srgb, var(--ink) 45%, transparent);
+}
+.pageOn::before,
+.pageOn:hover::before {
+  width: 24px;
+  background: var(--ink);
+}
+.page:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: -6px;
+  border-radius: 8px;
+}
+
+/* ---------- Narrow screens: above the panel ---------- */
+
+@media (max-width: 960px) {
+  .stage {
+    position: relative;
+    top: 0;
+    height: auto;
+    padding: 8px 0 24px;
+  }
+  .media {
+    flex: none;
+    aspect-ratio: 16 / 9;
+  }
+}
+
+@media (max-width: 560px) {
+  .media {
+    aspect-ratio: 16 / 11;
+  }
+  .car {
+    width: min(100cqw - 2 * var(--side), (100cqh - 40px) * 2.44);
+  }
+}
+
+@container stage (max-width: 600px) {
+  .tab {
+    padding: 0 14px;
+  }
+  /* The variant is named in the panel just below. */
+  .facts {
+    gap: 8px 28px;
+  }
+  .factVariant {
+    display: none;
+  }
+  .swatches {
+    gap: 4px;
+  }
+  /* Title only on a small frame, clear of the pause button. */
+  .caption {
+    padding: 36px 72px 16px 16px;
+  }
+  .capTitle {
+    font-size: var(--t-base);
+  }
+  .capText {
+    display: none;
+  }
+}
+
+@media print {
+  .stage {
+    position: static;
+    height: auto;
+  }
+}

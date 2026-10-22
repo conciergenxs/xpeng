@@ -1,0 +1,391 @@
+/* Copy and tabs on the left, a static map in the middle, the showroom card on the right.
+   The card spans both rows, so the tabs' bottom edge lines up with the card's. */
+
+.section {
+  --ivory: #f2f0eb;
+  --card-w: 380px;
+  --copy-w: 380px;
+
+  background: var(--ivory);
+  padding: clamp(88px, 10vw, 144px) 0;
+  overflow: hidden;
+}
+
+.grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--copy-w) minmax(0, 1fr) var(--card-w);
+  grid-template-areas:
+    "copy . card"
+    "tabs tabs card";
+  grid-template-rows: 1fr auto;
+  column-gap: 40px;
+  row-gap: 32px;
+}
+
+/* ---------- Map ---------- */
+
+/* Behind everything, starting after the copy and running under the card like the reference. The width is the
+   smaller of: reaching 20% under the card, or keeping Surabaya (56.2% across the map) and its ~70 px label at
+   least 12 px clear of the card. Only Sulawesi, which has no showroom, ever sits behind the card. */
+.map {
+  --map-left: calc(var(--gutter) + var(--copy-w) - 8px);
+  --clear: calc(100% - var(--map-left) - var(--gutter) - var(--card-w)); /* map left edge to card left edge */
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  bottom: 0;
+  left: var(--map-left);
+  width: min(calc(var(--clear) + var(--card-w) * 0.8), calc((var(--clear) - 82px) / 0.562));
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+.mapBox {
+  position: relative;
+  width: 100%;
+  max-height: 100%;
+  aspect-ratio: 3220 / 1769;
+}
+.mapImg {
+  width: 100%;
+  height: 100%;
+  user-select: none;
+  /* Soft relief against the ivory, in screen space. */
+  filter: drop-shadow(0 12px 18px rgba(84, 70, 44, 0.07));
+}
+
+/* Each marker is its dot, centred on the spot; the label hangs off a side chosen to clear neighbours. */
+.marker {
+  position: absolute;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink);
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  pointer-events: auto;
+}
+.marker:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--ink);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.85);
+  transition:
+    width 0.35s var(--ease-out-expo),
+    height 0.35s var(--ease-out-expo),
+    box-shadow 0.35s var(--ease);
+}
+.marker:hover .dot {
+  box-shadow: 0 0 0 3px #fff, 0 0 0 7px rgba(26, 29, 33, 0.08);
+}
+
+.markerLabel {
+  position: absolute;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: var(--t-sm);
+  font-weight: 500;
+  white-space: nowrap;
+  text-shadow:
+    0 0 6px var(--ivory),
+    0 0 2px var(--ivory);
+  transition:
+    background-color 0.3s var(--ease),
+    box-shadow 0.3s var(--ease);
+}
+.right .markerLabel {
+  left: calc(100% - 2px);
+  top: 50%;
+  transform: translateY(-50%);
+}
+.left .markerLabel {
+  right: calc(100% - 2px);
+  top: 50%;
+  transform: translateY(-50%);
+}
+.above .markerLabel {
+  bottom: calc(100% - 4px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+.below .markerLabel {
+  top: calc(100% - 4px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Selected area: a larger dot with a warm halo, and its name in a white pill, as in the reference.
+   It sits beneath its neighbours so the halo never hides another area's dot. */
+.markerOn {
+  z-index: 0;
+}
+.markerOn .dot {
+  width: 22px;
+  height: 22px;
+  box-shadow:
+    0 0 0 5px rgba(214, 160, 92, 0.24),
+    0 0 0 11px rgba(214, 160, 92, 0.1);
+}
+.markerOn .markerLabel {
+  padding: 8px 16px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(54, 44, 28, 0.12);
+  font-weight: 600;
+  text-shadow: none;
+}
+.markerOn.right .markerLabel {
+  left: calc(100% + 10px);
+}
+.markerOn.left .markerLabel {
+  right: calc(100% + 10px);
+}
+.markerOn.above .markerLabel {
+  bottom: calc(100% + 10px);
+}
+.markerOn.below .markerLabel {
+  top: calc(100% + 10px);
+}
+
+/* ---------- Copy and tabs ---------- */
+
+.copy {
+  grid-area: copy;
+  position: relative;
+  z-index: 1;
+  align-self: center;
+}
+.sub {
+  margin-top: clamp(20px, 2vw, 28px);
+  max-width: 22em;
+  font-size: var(--t-md);
+  line-height: 1.4;
+  color: var(--graphite);
+}
+
+/* Reserves the tab bar's height even when it's hidden, so switching areas never moves the copy. */
+.tabsSlot {
+  grid-area: tabs;
+  position: relative;
+  z-index: 1;
+  align-self: end;
+  min-height: 60px;
+  min-width: 0;
+}
+.tabsScroll {
+  max-width: 100%;
+  width: fit-content;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-radius: 999px;
+}
+.tabsScroll::-webkit-scrollbar {
+  display: none;
+}
+.tabs {
+  position: relative;
+  display: inline-flex;
+  padding: 6px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ink) 6%, transparent);
+  animation: fadeIn 0.4s var(--ease) both;
+}
+.thumb {
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  left: 0;
+  border-radius: 999px;
+  background: var(--paper);
+  box-shadow: 0 1px 2px rgba(26, 29, 33, 0.12), 0 0 0 0.5px rgba(26, 29, 33, 0.06);
+  transition:
+    transform 0.45s var(--ease-out-expo),
+    width 0.45s var(--ease-out-expo);
+}
+.tab {
+  position: relative;
+  min-height: 48px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  font-size: var(--t-sm);
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--graphite);
+  transition: color 0.2s var(--ease);
+}
+.tab:hover,
+.tabOn {
+  color: var(--ink);
+}
+.tabOn {
+  font-weight: 600;
+}
+.tab:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: -3px;
+}
+
+/* ---------- Card ---------- */
+
+.card {
+  grid-area: card;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 14px 14px 16px;
+  border-radius: 24px;
+  background: #fbfaf7;
+  box-shadow: 0 20px 60px rgba(54, 44, 28, 0.1), 0 0 0 1px rgba(26, 29, 33, 0.04);
+}
+.cardMedia {
+  aspect-ratio: 16 / 9;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--arctic);
+}
+.cardImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 40% 30%;
+}
+.cardBody {
+  flex: 1;
+  padding: 0 6px;
+  animation: fadeIn 0.35s var(--ease) both;
+}
+.cardName {
+  margin-top: 18px;
+  font-size: var(--t-md);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+.cardCity {
+  margin-top: 2px;
+  font-size: var(--t-sm);
+  color: var(--graphite);
+}
+.rows {
+  margin: 14px 0 0;
+}
+.rows > div {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  column-gap: 14px;
+  align-items: start;
+  padding: 14px 0;
+  border-top: 1px solid var(--hairline);
+}
+.rows svg {
+  grid-row: span 2;
+  margin-top: 1px;
+  color: var(--ink);
+}
+.rows dd,
+.rowLabel {
+  margin: 0;
+  font-size: var(--t-sm);
+  line-height: 1.45;
+  color: #4a4e55;
+}
+.rowLabel {
+  grid-column: 2;
+  color: var(--graphite);
+}
+.rows dd {
+  grid-column: 2;
+}
+/* Three lines reserved, so the card keeps its height across showrooms. */
+.address {
+  min-height: calc(3 * 1.45em);
+}
+.cta {
+  width: 100%;
+  min-height: 54px;
+  margin-top: 6px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Narrower desktops: slimmer side columns so the map keeps room for Java's four labels. */
+@media (min-width: 1181px) and (max-width: 1360px) {
+  .section {
+    --copy-w: 320px;
+    --card-w: 340px;
+  }
+}
+
+/* ---------- Tablet and phone: copy, map, tabs, card ---------- */
+
+@media (max-width: 1180px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "copy" "map" "tabs" "card";
+    grid-template-rows: auto;
+    row-gap: 24px;
+  }
+  .map {
+    grid-area: map;
+    position: relative;
+    inset: auto;
+    width: auto;
+    margin: 8px -8px 0;
+  }
+  .tabsSlot {
+    min-height: 0;
+  }
+  .tabsSlot:empty {
+    display: none;
+  }
+  .card {
+    width: min(100%, 520px);
+  }
+}
+
+@media (max-width: 560px) {
+  /* Phones: the same static map, framed on Batam to Java (about 103–114.5°E, 1.8°N–9.1°S) so Jakarta and
+     Bandung separate. Translate percentages are of the enlarged map itself. */
+  .map {
+    display: block;
+    place-items: normal; /* Chrome also applies justify-items to block layout, which would re-centre the map */
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: var(--r-media);
+  }
+  .mapBox {
+    width: 280%;
+    max-height: none;
+    transform: translate(-25.5%, -26%);
+  }
+  .markerLabel {
+    font-size: var(--t-xs);
+  }
+  /* A more compact pill, so Surabaya's still fits at 360 px. */
+  .markerOn .markerLabel {
+    padding: 6px 12px;
+  }
+
+  .tab {
+    min-height: 44px;
+    padding: 0 16px;
+  }
+}

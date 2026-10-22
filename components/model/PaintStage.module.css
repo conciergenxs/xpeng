@@ -1,0 +1,248 @@
+/* Headline, car, 360° cue and the colour panel, stacked on one centre line. The bottom padding leaves room for
+   the floating section nav, which sits over the end of this section. */
+.stage {
+  background: var(--stage);
+  padding: clamp(40px, 4vw, 64px) 0 clamp(96px, 8vw, 112px);
+  transition: background-color 0.8s var(--ease);
+  overflow: hidden;
+}
+
+.head {
+  text-align: center;
+  text-wrap: balance;
+}
+
+/* ---------- Car: same scale and turntable as the homepage showcase ---------- */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: clamp(16px, 2.2vw, 32px);
+}
+
+/* The shared turntable (components/CarTurntable), same box as the homepage's. Sized from the viewport height, so
+   the headline, car, cue, colour panel and the floating nav share one screen: --chrome-h is everything on that
+   screen but the car. Never below a comfortable minimum, never above 820px, where the car spans about three
+   quarters of the panel. */
+.carArea {
+  --area-ratio: 2.44;
+  --chrome-h: 480px;
+  width: clamp(min(520px, 100%), min(100%, (100svh - var(--chrome-h)) * var(--area-ratio)), 820px);
+}
+
+/* The 360° cue, at a fixed height so switching paints never moves the swatches. */
+.hint {
+  height: 24px;
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: var(--t-sm);
+  color: var(--graphite);
+}
+.hint p,
+.hintLink {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.hintText {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+  text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
+}
+/* Set off from the 360° cue by a hairline. */
+.simulated {
+  padding-left: 8px;
+  border-left: 1px solid color-mix(in srgb, currentColor 35%, transparent);
+  line-height: 1.1;
+}
+.hintLink {
+  border: 0;
+  padding: 4px 2px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+  text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+  transition:
+    color 0.2s var(--ease),
+    text-decoration-color 0.2s var(--ease);
+}
+.hintLink:hover {
+  color: var(--ink);
+  text-decoration-color: currentColor;
+}
+.hintLink:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ---------- Colour panel: selected colour | swatches | order link ---------- */
+
+/* Frosted over the section tint, like the site's glass, with a hairline edge and a soft lift. The two outer
+   columns share the leftover width equally, so the swatches sit on the page's centre line. */
+.picker {
+  --pad: clamp(24px, 3vw, 40px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-areas: "info swatches order";
+  align-items: center;
+  max-width: 960px;
+  margin: clamp(16px, 1.8vw, 24px) auto 0;
+  padding: clamp(20px, 2vw, 26px) var(--pad);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow:
+    0 0 0 0.5px rgba(26, 29, 33, 0.06),
+    0 16px 40px rgba(26, 29, 33, 0.07);
+  /* Prefixed first: the minifier drops the standard property if the prefixed one follows it. */
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  backdrop-filter: blur(20px) saturate(1.4);
+}
+
+.selected {
+  grid-area: info;
+  min-width: 0;
+}
+.selectedLabel {
+  font-size: var(--t-xs);
+  color: var(--graphite);
+}
+.selectedName {
+  margin-top: 4px;
+  font-size: var(--t-md);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+.selectedText {
+  margin-top: 4px;
+  font-size: var(--t-xs);
+  color: var(--graphite);
+}
+
+/* Hairline dividers either side of the swatches, a full gutter away from the text. */
+.swatches {
+  grid-area: swatches;
+  border: 0;
+  margin: 0;
+  padding: 0 var(--pad);
+  border-inline: 1px solid rgba(26, 29, 33, 0.1);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+}
+.swatch {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.swatch::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid transparent;
+  transition: border-color 0.25s var(--ease);
+}
+.swatch:has(input:checked)::after {
+  border-color: var(--ink);
+}
+.swatch:has(input:focus-visible)::after {
+  border-color: var(--ink);
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(26, 29, 33, 0.14), inset 0 -6px 10px rgba(0, 0, 0, 0.12), inset 0 6px 10px rgba(255, 255, 255, 0.22);
+}
+
+/* A text link, underlined, with the arrow outside the underline. */
+.order {
+  grid-area: order;
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  font-size: var(--t-sm);
+  text-decoration: none;
+}
+.order span {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+  text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+  transition: text-decoration-color 0.2s var(--ease);
+}
+.order svg {
+  flex: none;
+  transition: transform 0.25s var(--ease);
+}
+.order:hover span {
+  text-decoration-color: currentColor;
+}
+.order:hover svg {
+  transform: translateX(3px);
+}
+.order:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* Tablets: name and order link share the top row; the swatches take the row beneath, under a hairline. */
+@media (max-width: 900px) {
+  .picker {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "info order"
+      "swatches swatches";
+    row-gap: 20px;
+  }
+  .swatches {
+    padding: 20px 0 0;
+    border-inline: 0;
+    border-top: 1px solid rgba(26, 29, 33, 0.1);
+    justify-content: flex-start;
+  }
+}
+
+/* Phones: one column, the order link last. */
+@media (max-width: 560px) {
+  .picker {
+    grid-template-columns: 1fr;
+    grid-template-areas: "info" "swatches" "order";
+    --pad: 20px;
+    border-radius: 20px;
+  }
+  /* Tight enough that six swatches still share one row at 360 px. */
+  .swatches {
+    gap: 4px;
+  }
+  .order {
+    justify-self: start;
+  }
+}
+
+@media (max-width: 760px) {
+  .carArea {
+    width: 100%;
+  }
+}

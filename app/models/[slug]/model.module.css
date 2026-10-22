@@ -1,0 +1,575 @@
+/* ---------- Hero ---------- */
+
+.hero {
+  position: relative;
+  min-height: max(620px, 100svh);
+  display: flex;
+  overflow: hidden;
+  isolation: isolate;
+}
+.heroMedia,
+.heroImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+}
+.heroImg {
+  object-fit: cover;
+  animation: settle 2.4s var(--ease-out-expo) both;
+}
+.heroScrim {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(to bottom, rgba(16, 18, 21, 0.5), rgba(16, 18, 21, 0) 28%),
+    linear-gradient(to top, rgba(16, 18, 21, 0.8), rgba(16, 18, 21, 0) 50%);
+}
+.heroInner {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-top: calc(var(--header-h) + 40px);
+  padding-bottom: clamp(32px, 4vw, 64px);
+}
+/* Full-bleed like the image: the row spans the viewport within the page gutter rather than the 1440 px column. */
+.hero .heroInner {
+  max-width: none;
+}
+/* One row: the name on the left, the price on the right, sharing the name's baseline. When the row runs out
+   of room the price wraps beneath the name. */
+.heroBar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: last baseline;
+  gap: 12px 40px;
+}
+.heroName {
+  font-size: clamp(3.5rem, 1rem + 7.4vw, 9.5rem);
+  margin-left: -0.04em;
+  animation: rise 1.1s 0.05s var(--ease-out-expo) both;
+}
+.heroPrice {
+  font-size: var(--t-md);
+  font-weight: 500;
+  animation: rise 1s 0.2s var(--ease-out-expo) both;
+}
+
+@keyframes settle {
+  from {
+    transform: scale(1.07);
+  }
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+
+/* ---------- Intro ---------- */
+
+.intro {
+  padding: clamp(72px, 10vw, 136px) 0 clamp(56px, 7vw, 96px);
+}
+/* Copy on the left, the metrics on the right sized to their own content, with a wide channel between them. */
+.introGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: clamp(40px, 5vw, 64px) clamp(64px, 8vw, 144px);
+  align-items: end;
+}
+.introText {
+  font-size: var(--t-lg);
+  font-stretch: 108%;
+  font-weight: 450;
+  line-height: 1.28;
+  letter-spacing: -0.012em;
+  max-width: 24em;
+  text-wrap: pretty;
+}
+/* Columns hug their figures and are spaced by one even gap; each divider is drawn in the middle of its gap. */
+.readouts {
+  --gap: clamp(32px, 3.6vw, 56px);
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  gap: 32px var(--gap);
+  margin: 0;
+}
+.readouts div {
+  position: relative;
+  padding: 2px 0;
+}
+.readouts div + div::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--gap) / -2);
+  border-left: 1px solid var(--hairline);
+}
+.readouts dt {
+  font-size: var(--t-xs);
+  color: var(--graphite);
+  white-space: nowrap;
+  margin-bottom: clamp(10px, 1vw, 14px);
+}
+.readouts dd {
+  margin: 0;
+  font-size: clamp(2rem, 1.2rem + 2.4vw, 3.25rem);
+  font-stretch: 125%;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  white-space: nowrap;
+}
+.readouts dd span {
+  font-size: 0.36em;
+  font-stretch: 100%;
+  font-weight: 500;
+  letter-spacing: 0;
+  margin-left: 0.45em;
+}
+
+/* Tablets: the copy takes the full measure and the metrics share the row beneath it in equal columns. */
+@media (max-width: 1180px) {
+  .introGrid {
+    grid-template-columns: 1fr;
+  }
+  .readouts {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* ---------- Highlights ---------- */
+
+.highlights {
+  padding-bottom: clamp(80px, 11vw, 152px);
+}
+
+/* ---------- Chapters ---------- */
+
+.chapterDark {
+  position: relative;
+  min-height: max(560px, 92svh);
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  isolation: isolate;
+}
+.chapterMedia {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+}
+.chapterMedia video {
+  height: 100%;
+}
+.chapterScrim {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(16, 18, 21, 0.9), rgba(16, 18, 21, 0.55) 35%, rgba(16, 18, 21, 0) 65%);
+}
+.chapterCopy {
+  display: grid;
+  gap: 16px;
+  padding-bottom: clamp(48px, 7vw, 96px);
+  pointer-events: none;
+}
+.chapterCopy > * {
+  max-width: 15em;
+}
+.chapterCopy :global(.lede) {
+  max-width: 32em;
+}
+
+.chapterLight {
+  padding: clamp(80px, 11vw, 152px) 0;
+}
+.chapterLight + .chapterLight {
+  padding-top: 0;
+}
+.chapterGrid {
+  display: grid;
+  grid-template-columns: 4fr 7fr;
+  gap: 40px clamp(40px, 5vw, 80px);
+  align-items: center;
+}
+.chapterText {
+  display: grid;
+  gap: 18px;
+}
+.flip {
+  grid-template-columns: 7fr 4fr;
+}
+.flip .chapterText {
+  order: 2;
+}
+.flip .points {
+  grid-column: 1;
+}
+.chapterFigure {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: var(--r-media);
+}
+.points {
+  grid-column: 2;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 0;
+}
+.points div {
+  padding-left: 18px;
+  border-left: 1px solid var(--hairline);
+}
+.points dt {
+  font-size: var(--t-lg);
+  font-stretch: 122%;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+.points dd {
+  margin: 0;
+  font-size: var(--t-sm);
+  color: var(--graphite);
+}
+
+/* ---------- Prices ---------- */
+
+.sectionHead {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px clamp(40px, 6vw, 96px);
+  align-items: end;
+  margin-bottom: clamp(36px, 5vw, 64px);
+}
+
+/* Centred heading and intro, then one card per variant on a light grey ground. */
+.prices {
+  padding: clamp(80px, 11vw, 152px) 0 clamp(56px, 7vw, 96px);
+  background: var(--arctic);
+}
+.pricesHead {
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  gap: 16px;
+  text-align: center;
+  margin-bottom: clamp(32px, 4vw, 48px);
+}
+
+.variantList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 16px;
+}
+
+/* Name | range | 0–100 | drive | price. The metrics share the card's columns through a subgrid, so every card
+   lines up; each metric and the price sit behind a short divider as tall as their own label and value. */
+.variant {
+  --divide: clamp(24px, 3.6vw, 64px);
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.2fr)
+    minmax(0, 1.75fr);
+  align-items: center;
+  min-height: 132px;
+  padding: 28px clamp(24px, 3vw, 48px);
+  background: var(--paper);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-media);
+  box-shadow:
+    0 1px 2px rgba(26, 29, 33, 0.04),
+    0 14px 32px -18px rgba(26, 29, 33, 0.14);
+}
+.vName {
+  padding-right: 16px;
+}
+.vName h3 {
+  font-size: var(--t-lg);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+.vName p {
+  margin-top: 6px;
+  max-width: 24em;
+}
+.vSpecs {
+  grid-column: 2 / 5;
+  display: grid;
+  grid-template-columns: subgrid;
+  margin: 0;
+}
+.vSpecs > div,
+.vPrice {
+  padding-left: var(--divide);
+  border-left: 1px solid var(--hairline);
+}
+.vSpecs dt {
+  font-size: var(--t-sm);
+  color: var(--graphite);
+}
+.vSpecs dd {
+  margin: 4px 0 0;
+  font-size: var(--t-base);
+  font-weight: 600;
+}
+.vOtr {
+  font-size: var(--t-lg);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+/* Tablet: name and price on top, the three metrics in a row beneath. */
+@media (max-width: 1240px) {
+  .variant {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    row-gap: 24px;
+  }
+  .vName {
+    grid-column: 1 / 3;
+  }
+  .vPrice {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: end;
+    text-align: right;
+    padding-left: 0;
+    border-left: 0;
+  }
+  .vSpecs {
+    grid-column: 1 / -1;
+    padding-top: 20px;
+    border-top: 1px solid var(--hairline);
+  }
+  .vSpecs > div:first-child {
+    padding-left: 0;
+    border-left: 0;
+  }
+}
+
+/* Phone: name, price, then the metrics as label and value rows. */
+@media (max-width: 640px) {
+  .variant {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 16px;
+    padding: 24px 20px 12px;
+  }
+  .vName,
+  .vPrice,
+  .vSpecs {
+    grid-column: 1;
+    grid-row: auto;
+  }
+  .vPrice {
+    justify-self: start;
+    text-align: left;
+  }
+  .vSpecs {
+    order: 1;
+    grid-template-columns: minmax(0, 1fr);
+    padding-top: 0;
+    border-top: 0;
+  }
+  .vSpecs > div,
+  .vSpecs > div:first-child {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    padding: 12px 0;
+    border-left: 0;
+    border-top: 1px solid var(--hairline);
+  }
+  .vSpecs dd {
+    margin: 0;
+    text-align: right;
+  }
+}
+
+
+/* ---------- Specs ---------- */
+
+/* Heading and line on the left, then every figure in one white card. Variant columns alternate a faint tint,
+   so each one reads as a column; dividers are hairlines. */
+.specs {
+  padding: clamp(56px, 7vw, 96px) 0 clamp(96px, 11vw, 152px);
+  background: color-mix(in srgb, var(--arctic) 45%, var(--paper));
+}
+.specHead {
+  display: grid;
+  gap: 10px;
+  margin-bottom: clamp(28px, 3.4vw, 44px);
+}
+.specHead .lede {
+  color: var(--graphite);
+  max-width: 40em;
+}
+.specCard {
+  --row-pad: clamp(16px, 2vw, 28px);
+  padding: 8px clamp(8px, 1.2vw, 16px);
+  background: var(--paper);
+  border: 1px solid rgba(26, 29, 33, 0.08);
+  border-radius: 24px;
+  box-shadow: 0 12px 32px rgba(26, 29, 33, 0.04);
+}
+.specTable {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.specTable th,
+.specTable td {
+  padding: 14px var(--row-pad);
+  text-align: left;
+  vertical-align: top;
+  font-size: var(--t-sm);
+  line-height: 1.45;
+  border-bottom: 1px solid rgba(26, 29, 33, 0.07);
+}
+.specTable tbody tr:last-child > * {
+  border-bottom: 0;
+}
+.specTable thead th {
+  padding-block: 22px;
+  font-weight: 600;
+  font-size: var(--t-base);
+  color: var(--ink);
+}
+.specTable thead th:first-child {
+  width: 30%;
+  font-size: var(--t-sm);
+  font-weight: 500;
+  color: var(--graphite);
+}
+.specTable tbody th {
+  font-weight: 400;
+  color: var(--graphite);
+}
+.specTable td {
+  font-weight: 500;
+  color: var(--ink);
+}
+/* Every other variant column, starting with the first. */
+.specTable tr > :nth-child(2n) {
+  background: rgba(26, 29, 33, 0.022);
+}
+
+/* ---------- Close ---------- */
+
+.close {
+  padding: clamp(80px, 11vw, 152px) 0;
+  text-align: center;
+}
+.closeInner {
+  display: grid;
+  justify-items: center;
+  gap: 28px;
+}
+.closeCar {
+  width: min(720px, 90%);
+  height: auto;
+}
+.closeCtas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 900px) {
+  .sectionHead,
+  .chapterGrid,
+  .flip {
+    grid-template-columns: 1fr;
+  }
+  .flip .chapterText {
+    order: 0;
+  }
+  .points {
+    grid-column: 1;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Spec table restacks: label on its own line, variants side by side beneath. */
+  /* Phones: each specification is a block, its label on top and one column per variant beneath. */
+  .specCard {
+    --row-pad: 12px;
+    padding: 4px 8px;
+    border-radius: 20px;
+  }
+  .specTable thead tr,
+  .specTable tbody tr {
+    display: grid;
+    grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+    column-gap: 6px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(26, 29, 33, 0.07);
+  }
+  .specTable tbody tr:last-child {
+    border-bottom: 0;
+  }
+  .specTable thead th:first-child {
+    display: none;
+  }
+  .specTable th,
+  .specTable td {
+    display: block;
+    width: auto !important;
+    border: 0;
+    padding: 0 var(--row-pad);
+  }
+  .specTable thead th {
+    padding-block: 4px;
+    font-size: var(--t-sm);
+  }
+  .specTable tbody th {
+    grid-column: 1 / -1;
+    padding-bottom: 6px;
+    font-size: var(--t-xs);
+  }
+  .specTable td {
+    padding-block: 2px;
+  }
+  /* Columns are narrow here: the grid alone separates them, without the tint. */
+  .specTable tr > :nth-child(2n) {
+    background: none;
+  }
+  .shared {
+    grid-column: 1 / -1;
+  }
+  .repeat {
+    display: none !important;
+  }
+  .readouts {
+    grid-template-columns: 1fr 1fr;
+    row-gap: 36px;
+  }
+  /* Two by two: dividers only between the columns of each row. */
+  .readouts div:nth-child(odd)::before {
+    display: none;
+  }
+  .points {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .points dt {
+    font-size: var(--t-md);
+  }
+}

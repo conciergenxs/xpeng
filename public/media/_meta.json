@@ -1,0 +1,170 @@
+{
+ "home/bento-cover": {
+  "w": 627,
+  "h": 753
+ },
+ "home/hero-carousel": {
+  "w": 1848,
+  "h": 1020
+ },
+ "home/about": {
+  "w": 2880,
+  "h": 1500
+ },
+ "home/sustain": {
+  "w": 2880,
+  "h": 1500
+ },
+ "g6/skylight": {
+  "w": 1260,
+  "h": 680
+ },
+ "g6/color-arctic-white": {
+  "w": 1800,
+  "h": 840
+ },
+ "g6/featured": {
+  "w": 995,
+  "h": 344
+ },
+ "g6/hero": {
+  "w": 1126,
+  "h": 2436
+ },
+ "g6/xpilot-sense": {
+  "w": 1920,
+  "h": 1036
+ },
+ "g6/color-graphite-gray": {
+  "w": 1800,
+  "h": 840
+ },
+ "g6/hl-exterior": {
+  "w": 1920,
+  "h": 1036
+ },
+ "g6/exterior": {
+  "w": 2880,
+  "h": 1500
+ },
+ "g6/spec-black-edition": {
+  "w": 2487,
+  "h": 980
+ },
+ "g6/platform": {
+  "w": 1920,
+  "h": 1036
+ },
+ "g6/color-black-edition": {
+  "w": 1396,
+  "h": 651
+ },
+ "g6/color-silver-frost": {
+  "w": 1800,
+  "h": 840
+ },
+ "g6/interior-front": {
+  "w": 1260,
+  "h": 680
+ },
+ "g6/interior-rear": {
+  "w": 1260,
+  "h": 680
+ },
+ "g6/performance": {
+  "w": 2880,
+  "h": 1500
+ },
+ "g6/black-edition": {
+  "w": 2880,
+  "h": 1500
+ },
+ "g6/cabin-family": {
+  "w": 1920,
+  "h": 1036
+ },
+ "g6/color-midnight-black": {
+  "w": 1800,
+  "h": 840
+ },
+ "g6/color-stellar-purple": {
+  "w": 1800,
+  "h": 840
+ },
+ "g6/cockpit": {
+  "w": 2880,
+  "h": 1500
+ },
+ "x9/color-arctic-white": {
+  "w": 2880,
+  "h": 1345
+ },
+ "x9/featured": {
+  "w": 1104,
+  "h": 364
+ },
+ "x9/lounge": {
+  "w": 2880,
+  "h": 1500
+ },
+ "x9/hero": {
+  "w": 2880,
+  "h": 1500
+ },
+ "x9/space": {
+  "w": 2880,
+  "h": 1500
+ },
+ "x9/color-matte-grey": {
+  "w": 2880,
+  "h": 1345
+ },
+ "x9/hl-design": {
+  "w": 2880,
+  "h": 1500
+ },
+ "x9/hl-comfort": {
+  "w": 2880,
+  "h": 1500
+ },
+ "x9/spec": {
+  "w": 2880,
+  "h": 1500
+ },
+ "x9/exterior": {
+  "w": 2880,
+  "h": 1500
+ },
+ "x9/safety": {
+  "w": 2880,
+  "h": 1500
+ },
+ "x9/color-silver-frost": {
+  "w": 2880,
+  "h": 1345
+ },
+ "x9/xpilot": {
+  "w": 2880,
+  "h": 1500
+ },
+ "x9/color-midnight-black": {
+  "w": 2880,
+  "h": 1345
+ },
+ "x9/hl-space": {
+  "w": 2880,
+  "h": 1500
+ },
+ "x9/cockpit": {
+  "w": 2880,
+  "h": 1500
+ },
+ "x9/hl-steering": {
+  "w": 2880,
+  "h": 1500
+ },
+ "x9/cabin": {
+  "w": 2880,
+  "h": 1500
+ }
+}
