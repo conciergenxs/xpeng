@@ -110,7 +110,7 @@ export default function HomeHero() {
   return (
     <section ref={section} className={`${s.hero} dark`} aria-labelledby="hero-title">
       <h1 id="hero-title" className="sr-only">
-        XPENG Indonesia: explore, compare and order your XPENG online
+        XPENG Indonesia: kenali, bandingkan, dan pesan mobil listrik XPENG secara online
       </h1>
 
       <div className={s.media} aria-hidden>
@@ -144,7 +144,7 @@ export default function HomeHero() {
         </div>
 
         <div className={s.controls}>
-          <div className={s.indicator} role="group" aria-label="Hero films">
+          <div className={s.indicator} role="group" aria-label="Pilih film">
             {slides.map((sl, i) => {
               const on = i === active;
               return (
@@ -152,7 +152,7 @@ export default function HomeHero() {
                   key={sl.slug}
                   type="button"
                   className={`${s.step} ${on ? s.stepOn : ""}`}
-                  aria-label={`Show the New ${models[sl.slug].shortName}`}
+                  aria-label={`Tampilkan ${models[sl.slug].name}`}
                   aria-current={on ? "true" : undefined}
                   onClick={() => setActive(i)}
                 >
@@ -164,7 +164,7 @@ export default function HomeHero() {
             })}
           </div>
           <Link href={`/models/${target.slug}/`} className={`btn btn-light ${s.explore}`}>
-            Explore<span className="sr-only"> the New {models[target.slug].shortName}</span>
+            Jelajahi<span className="sr-only"> {models[target.slug].name}</span>
           </Link>
         </div>
       </div>

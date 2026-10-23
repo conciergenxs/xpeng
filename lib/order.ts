@@ -1,7 +1,7 @@
 import { defaultPlan, type PlanKind, type PlanState } from "./payment";
 import { getVariant, models, variantsFor, type ModelSlug, type VariantId } from "./vehicles";
 
-export const STEPS = ["Vehicle", "Payment", "Your details", "Review"] as const;
+export const STEPS = ["Mobil", "Pembayaran", "Data diri", "Tinjau"] as const;
 export const CONFIRMED = STEPS.length;
 
 export type Customer = {
@@ -86,13 +86,13 @@ export type Errors = Partial<Record<keyof Customer | "terms", string>>;
 
 export function validateCustomer(c: Customer): Errors {
   const e: Errors = {};
-  if (c.buyerType === "company" && !c.company.trim()) e.company = "Enter the company name as registered.";
-  if (!c.firstName.trim()) e.firstName = "Enter your first name.";
-  if (!c.lastName.trim()) e.lastName = "Enter your last name.";
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(c.email.trim())) e.email = "Enter an email address like nama@contoh.com.";
+  if (c.buyerType === "company" && !c.company.trim()) e.company = "Isi nama perusahaan sesuai akta pendirian.";
+  if (!c.firstName.trim()) e.firstName = "Isi nama depan Anda.";
+  if (!c.lastName.trim()) e.lastName = "Isi nama belakang Anda.";
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(c.email.trim())) e.email = "Alamat email belum lengkap. Contoh: nama@contoh.com.";
   const digits = c.phone.replace(/\D/g, "").replace(/^0/, "").replace(/^62/, "");
-  if (!/^8\d{8,11}$/.test(digits)) e.phone = "Enter an Indonesian mobile number starting with 8, for example 812 3456 7890.";
-  if (!c.showroomId) e.showroomId = "Choose the showroom you'd like to work with.";
+  if (!/^8\d{8,11}$/.test(digits)) e.phone = "Masukkan nomor ponsel yang diawali angka 8, misalnya 812 3456 7890.";
+  if (!c.showroomId) e.showroomId = "Pilih showroom yang akan melayani Anda.";
   return e;
 }
 

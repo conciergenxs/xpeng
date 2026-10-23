@@ -40,7 +40,7 @@ export default function SiteFooter() {
                   <path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2" />
                 </svg>
                 <span>
-                  Hotline, 24 hours: <a href={`tel:${HOTLINE}`}>{HOTLINE}</a>
+                  Hotline 24 jam: <a href={`tel:${HOTLINE}`}>{HOTLINE}</a>
                 </span>
               </li>
               <li>
@@ -55,45 +55,45 @@ export default function SiteFooter() {
                   <path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z" />
                   <circle cx="12" cy="9.5" r="2.5" />
                 </svg>
-                <span>Showrooms open daily, 09.00–18.00</span>
+                <span>Showroom buka setiap hari, 09.00–18.00</span>
               </li>
             </ul>
           </div>
 
-          <nav className={s.cols} aria-label="Footer">
+          <nav className={s.cols} aria-label="Tautan situs">
             <div>
-              <h2 className={s.colTitle}>Models</h2>
+              <h2 className={s.colTitle}>Model</h2>
               <ul>
                 <li><Link href="/models/x9/">New X9</Link></li>
                 <li><Link href="/models/g6/">G6</Link></li>
-                <li><Link href="/compare/">Compare</Link></li>
+                <li><Link href="/compare/">Bandingkan model</Link></li>
               </ul>
             </div>
             <div>
-              <h2 className={s.colTitle}>Buy</h2>
+              <h2 className={s.colTitle}>Pembelian</h2>
               <ul>
-                <li><Link href="/order/">Order online</Link></li>
-                <li><Link href="/order/?plan=finance">Finance estimate</Link></li>
-                <li><Link href="/#showrooms">Showrooms</Link></li>
-                <li><a href={`${OFFICIAL}/book-now`}>Book a test drive</a></li>
+                <li><Link href="/order/">Pesan online</Link></li>
+                <li><Link href="/order/?plan=finance">Simulasi kredit</Link></li>
+                <li><Link href="/#showrooms">Showroom</Link></li>
+                <li><a href={`${OFFICIAL}/book-now`}>Jadwalkan test drive</a></li>
               </ul>
             </div>
             <div>
-              <h2 className={s.colTitle}>Ownership</h2>
+              <h2 className={s.colTitle}>Untuk pemilik</h2>
               <ul>
-                <li><a href={`${OFFICIAL}/charging`}>Charging</a></li>
-                <li><a href={`${OFFICIAL}/service`}>Service</a></li>
-                <li><a href={`${OFFICIAL}/roadside-assistance`}>Roadside assistance</a></li>
-                <li><a href={`${OFFICIAL}/xpeng-app`}>XPENG app</a></li>
+                <li><a href={`${OFFICIAL}/charging`}>Pengisian daya</a></li>
+                <li><a href={`${OFFICIAL}/service`}>Servis</a></li>
+                <li><a href={`${OFFICIAL}/roadside-assistance`}>Bantuan di jalan</a></li>
+                <li><a href={`${OFFICIAL}/xpeng-app`}>Aplikasi XPENG</a></li>
               </ul>
             </div>
             <div>
               <h2 className={s.colTitle}>XPENG</h2>
               <ul>
-                <li><a href={`${OFFICIAL}/about-xpeng`}>About</a></li>
-                <li><a href={`${OFFICIAL}/ai-mobility`}>AI mobility</a></li>
-                <li><a href={`${OFFICIAL}/news`}>News</a></li>
-                <li><a href={`${OFFICIAL}/events`}>Events</a></li>
+                <li><a href={`${OFFICIAL}/about-xpeng`}>Tentang XPENG</a></li>
+                <li><a href={`${OFFICIAL}/ai-mobility`}>Mobilitas AI</a></li>
+                <li><a href={`${OFFICIAL}/news`}>Berita</a></li>
+                <li><a href={`${OFFICIAL}/events`}>Acara</a></li>
               </ul>
             </div>
           </nav>
@@ -101,8 +101,8 @@ export default function SiteFooter() {
 
         <div className={s.legal}>
           <p className={s.policies}>
-            <a href={`${OFFICIAL}/privacy-policy`}>Privacy policy</a>
-            <a href={`${OFFICIAL}/cookie-policy`}>Cookie policy</a>
+            <a href={`${OFFICIAL}/privacy-policy`}>Kebijakan privasi</a>
+            <a href={`${OFFICIAL}/cookie-policy`}>Kebijakan cookie</a>
           </p>
           <p>© XPENG Inc.</p>
         </div>

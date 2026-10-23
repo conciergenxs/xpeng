@@ -32,8 +32,6 @@ export default function SiteHeader() {
 
   const overlayRoute = OVERLAY_ROUTES.some((r) => r.test(pathname));
   const ordering = pathname.startsWith("/order");
-  // Pages with a dark hero start over it; the probe below then follows whatever is actually behind the bar.
-  const [onDark, setOnDark] = useState(overlayRoute);
 
   // Only the dark hero at the top of a page gets the separated layout; everywhere else the bar is one piece.
   const expanded = ordering || !overlayRoute || scrolled || open;
@@ -46,32 +44,6 @@ export default function SiteHeader() {
   }, []);
 
   useEffect(() => setOpen(false), [pathname]);
-
-  // Theme follows the background behind the bar: any section marked `.dark` (heroes, dark story sections,
-  // the footer) gets the white-on-frosted variant; everything else the light glass. Sampled at the bar's
-  // height just inside the left edge, where nothing of the header itself sits.
-  useEffect(() => {
-    let raf = 0;
-    const probe = () => {
-      raf = 0;
-      const sh = shell.current;
-      if (!sh) return;
-      const r = sh.getBoundingClientRect();
-      const under = document.elementsFromPoint(2, r.top + r.height / 2).find((el) => !el.closest("header"));
-      setOnDark(!!under?.closest(".dark"));
-    };
-    const onScroll = () => {
-      if (!raf) raf = requestAnimationFrame(probe);
-    };
-    probe();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      cancelAnimationFrame(raf);
-    };
-  }, [pathname]);
 
   useEffect(() => {
     document.documentElement.style.overflow = open ? "hidden" : "";
@@ -110,14 +82,13 @@ export default function SiteHeader() {
   const longest = Math.max(...modelList.map((m) => m.lengthMm));
   const isActive = (href: string) => pathname.startsWith(href);
 
-  const dark = onDark && !open; // the open menu sheet is light
-  const headerClass = [s.header, expanded && s.expanded, dark && s.onDark, ordering && s.ordering, open && s.isOpen, animate && s.animate, "no-print"]
+  const headerClass = [s.header, expanded && s.expanded, open && s.isOpen, animate && s.animate, "no-print"]
     .filter(Boolean)
     .join(" ");
   const shellStyle = pill ? ({ "--l": `${pill.l}px`, "--r": `${pill.r}px` } as React.CSSProperties) : undefined;
 
   const logo = (
-    <Link href="/" className={s.logo} aria-label="XPENG Indonesia home">
+    <Link href="/" className={s.logo} aria-label="XPENG Indonesia, ke beranda">
       <img src="/media/brand/xpeng-logo-white.svg" alt="XPENG" width={154} height={20} />
     </Link>
   );
@@ -130,10 +101,10 @@ export default function SiteHeader() {
             <span className={s.glass} aria-hidden />
             {logo}
             <p className={s.help}>
-              Questions? Call <a className="link" href={`tel:${HOTLINE}`}>{HOTLINE}</a>, open 24 hours
+              Ada pertanyaan? Telepon <a className="link" href={`tel:${HOTLINE}`}>{HOTLINE}</a>, kami siaga 24 jam
             </p>
             <Link href="/" className={`btn btn-ghost-light btn-sm ${s.cta} ${s.exit}`}>
-              Exit order
+              Keluar
             </Link>
           </div>
         </div>
@@ -148,18 +119,18 @@ export default function SiteHeader() {
           <span className={s.glass} aria-hidden />
           {logo}
 
-          <nav ref={nav} className={s.nav} aria-label="Main">
+          <nav ref={nav} className={s.nav} aria-label="Menu utama">
             <Link href="/models/x9/" aria-current={isActive("/models/x9") ? "page" : undefined}>X9</Link>
             <Link href="/models/g6/" aria-current={isActive("/models/g6") ? "page" : undefined}>G6</Link>
             {/* Official xpeng.com pages, in a new tab. Discover is a menu there; "About XPENG" is its page. */}
-            <a href={DISCOVER_URL} target="_blank" rel="noopener">Discover</a>
-            <a href={SERVICE_URL} target="_blank" rel="noopener">Service</a>
-            <Link href="/#showrooms">Showrooms</Link>
+            <a href={DISCOVER_URL} target="_blank" rel="noopener">Tentang XPENG</a>
+            <a href={SERVICE_URL} target="_blank" rel="noopener">Servis</a>
+            <Link href="/#showrooms">Showroom</Link>
           </nav>
 
           <div className={s.actions}>
-            <Link href="/order/" className={`btn btn-light btn-sm ${s.cta} ${s.ctaPrimary}`}>
-              Order now
+            <Link href="/order/" className={`btn btn-light btn-sm ${s.cta}`}>
+              Pesan sekarang
             </Link>
             <button
               ref={burger}
@@ -169,7 +140,7 @@ export default function SiteHeader() {
               aria-controls="mobile-menu"
               onClick={() => setOpen((o) => !o)}
             >
-              <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
+              <span className="sr-only">{open ? "Tutup menu" : "Buka menu"}</span>
               <span aria-hidden className={s.burgerLines} />
             </button>
           </div>
@@ -197,17 +168,17 @@ export default function SiteHeader() {
                     />
                   </span>
                   <span className={s.sheetName}>{m.name}</span>
-                  <span className="fine">From {rupiahShort(fromPrice(m.slug))}</span>
+                  <span className="fine">Mulai {rupiahShort(fromPrice(m.slug))}</span>
                 </Link>
               </li>
             ))}
           </ul>
           <ul className={s.sheetLinks}>
-            <li><a href={DISCOVER_URL} target="_blank" rel="noopener">Discover</a></li>
-            <li><a href={SERVICE_URL} target="_blank" rel="noopener">Service</a></li>
-            <li><Link href="/order/">Order online</Link></li>
-            <li><Link href="/#showrooms">Find a showroom</Link></li>
-            <li><a href={`tel:${HOTLINE}`}>Call {HOTLINE}</a></li>
+            <li><a href={DISCOVER_URL} target="_blank" rel="noopener">Tentang XPENG</a></li>
+            <li><a href={SERVICE_URL} target="_blank" rel="noopener">Servis</a></li>
+            <li><Link href="/order/">Pesan online</Link></li>
+            <li><Link href="/#showrooms">Cari showroom</Link></li>
+            <li><a href={`tel:${HOTLINE}`}>Telepon {HOTLINE}</a></li>
           </ul>
         </div>
       </div>

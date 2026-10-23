@@ -128,15 +128,14 @@
   pointer-events: auto;
 }
 
+/* The header's dark glass, so white text stays readable over the light slides and the page alike. */
 .glass {
   height: 52px;
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--glass-dark-line);
   border-radius: 999px;
-  background: rgba(250, 249, 246, 0.62);
-  color: var(--ink);
-  box-shadow:
-    0 0 0 0.5px rgba(26, 29, 33, 0.1),
-    0 12px 32px rgba(40, 32, 20, 0.14);
+  background: var(--glass-dark);
+  color: var(--on-dark);
+  box-shadow: var(--glass-dark-shadow);
   /* Prefixed first: the minifier drops the standard property if the prefixed one follows it. */
   -webkit-backdrop-filter: blur(20px) saturate(1.6);
   backdrop-filter: blur(20px) saturate(1.6);
@@ -183,7 +182,7 @@
     transform 0.2s var(--ease);
 }
 .chev:hover {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(22, 27, 36, 0.86);
 }
 .chev:active {
   transform: scale(0.94);

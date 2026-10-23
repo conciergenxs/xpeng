@@ -73,7 +73,7 @@ export default function InViewVideo({ mp4, webm, poster, label, className, activ
       </video>
       <button type="button" className={s.control} onClick={toggle} tabIndex={active ? undefined : -1}>
         <span aria-hidden className={playing ? s.pauseIcon : s.playIcon} />
-        <span className="sr-only">{playing ? "Pause video" : "Play video"}</span>
+        <span className="sr-only">{playing ? "Jeda video" : "Putar video"}</span>
       </button>
     </div>
   );

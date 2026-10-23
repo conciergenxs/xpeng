@@ -91,12 +91,10 @@
   height: 56px;
   padding: 0 18px;
   border-radius: 999px;
-  /* Same frosted glass as the header over dark sections. */
-  background: rgba(255, 255, 255, 0.14);
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  box-shadow:
-    0 0 0 0.5px rgba(0, 0, 0, 0.12),
-    0 12px 32px rgba(0, 0, 0, 0.22);
+  /* Glass matches the header pill. */
+  background: var(--glass-dark-soft);
+  border: 1px solid var(--glass-dark-line);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
   -webkit-backdrop-filter: blur(20px) saturate(1.6);
   backdrop-filter: blur(20px) saturate(1.6);
 }

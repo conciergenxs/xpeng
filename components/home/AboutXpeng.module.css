@@ -5,8 +5,10 @@
   min-height: max(680px, 100svh);
   display: grid;
   grid-template-rows: 1fr auto;
-  background: #e9ebef;
-  color: var(--ink);
+}
+/* Paired with .dark (white type); the dusk tone shows only until the photo loads. */
+.section:global(.dark) {
+  background: rgb(31, 41, 61);
 }
 
 .bg {
@@ -20,12 +22,14 @@
   object-position: 50% 70%;
 }
 
-/* One soft light wash behind the copy, so dark type sits calmly on the sky. */
+/* A soft dark wash behind the copy and along the floor, so white type stays clear over the bright sunset. */
 .veil {
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: radial-gradient(ellipse 60% 48% at 50% 34%, rgba(242, 243, 245, 0.62), rgba(242, 243, 245, 0) 100%);
+  background:
+    radial-gradient(ellipse 55% 45% at 50% 32%, rgba(16, 18, 21, 0.32), rgba(16, 18, 21, 0) 100%),
+    linear-gradient(to top, rgba(16, 18, 21, 0.4), rgba(16, 18, 21, 0) 34%);
 }
 
 .content {
@@ -40,10 +44,11 @@
   display: block;
 }
 
+/* Near-white, the same as the closing call to action's copy on its dusk photo. */
 .section .copy {
   margin-top: clamp(20px, 2.6vw, 32px);
   max-width: 31em;
-  color: #4a4e55;
+  color: rgba(242, 243, 245, 0.82);
   text-wrap: balance;
 }
 
@@ -95,11 +100,10 @@
   left: 0;
   top: 18%;
   bottom: 4%;
-  border-left: 1px solid rgba(26, 29, 33, 0.18);
+  border-left: 1px solid var(--on-dark-line);
 }
 .highlights svg {
   margin-bottom: 12px;
-  color: var(--ink);
 }
 
 .hTitle {
@@ -111,14 +115,16 @@
 }
 .hText {
   font-size: var(--t-sm);
-  color: #4a4e55;
+  color: rgba(242, 243, 245, 0.82);
 }
 
 /* ---------- Smaller screens ---------- */
 
 @media (max-width: 640px) {
   .veil {
-    background: radial-gradient(ellipse 90% 42% at 50% 30%, rgba(242, 243, 245, 0.7), rgba(242, 243, 245, 0) 100%);
+    background:
+      radial-gradient(ellipse 90% 42% at 50% 30%, rgba(16, 18, 21, 0.36), rgba(16, 18, 21, 0) 100%),
+      linear-gradient(to top, rgba(16, 18, 21, 0.4), rgba(16, 18, 21, 0) 34%);
   }
   .title span {
     display: inline;

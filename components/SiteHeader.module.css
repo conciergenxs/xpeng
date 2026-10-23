@@ -10,45 +10,14 @@
   --header-top: 16px;
   /* How far the bar reaches past the page gutter, leaving a 28px outer margin (16px on phones). */
   --bleed: clamp(0px, calc(var(--gutter) - 28px), 28px);
-  --theme-t: 0.5s;
-
-  /* Light glass, the same recipe as the Why Choose XPENG floating control. */
-  --fg: var(--ink);
-  --glass-bg: rgba(250, 249, 246, 0.62);
-  --glass-bg-collapsed: rgba(250, 249, 246, 0.5);
-  --glass-line: rgba(255, 255, 255, 0.6);
-  --glass-ring: rgba(26, 29, 33, 0.1);
-  --glass-shadow: rgba(40, 32, 20, 0.14);
-  --link-hover: rgba(26, 29, 33, 0.06);
 
   position: fixed;
   inset: 0 0 auto 0;
   z-index: 50;
   height: var(--header-h);
   padding-top: var(--header-top);
-  color: var(--fg);
+  color: var(--on-dark);
   pointer-events: none;
-  transition: color var(--theme-t) var(--ease);
-}
-
-/* Over a dark section (heroes, dark story sections, footer): the same glass, frosted white, with white content. */
-.onDark {
-  --fg: var(--on-dark);
-  --glass-bg: rgba(255, 255, 255, 0.14);
-  --glass-bg-collapsed: rgba(255, 255, 255, 0.12);
-  --glass-line: rgba(255, 255, 255, 0.28);
-  --glass-ring: rgba(0, 0, 0, 0.12);
-  --glass-shadow: rgba(0, 0, 0, 0.22);
-  --link-hover: rgba(255, 255, 255, 0.12);
-}
-
-/* The order page is white throughout, so its bar is solid white too: same shape, a hairline edge and a soft
-   neutral shadow, no tinted glass. */
-.ordering {
-  --glass-bg: var(--paper);
-  --glass-line: var(--hairline);
-  --glass-ring: rgba(26, 29, 33, 0.04);
-  --glass-shadow: rgba(26, 29, 33, 0.08);
 }
 
 .shell {
@@ -73,9 +42,12 @@
   left: var(--l, calc(50% - 190px));
   right: var(--r, calc(50% - 190px));
   border-radius: 999px;
-  background: var(--glass-bg-collapsed);
-  border: 1px solid var(--glass-line);
-  box-shadow: 0 0 0 0.5px var(--glass-ring);
+  /* Dark glass, lighter while it is the small pill over the hero film, denser once it is the full bar. */
+  background: var(--glass-dark-soft);
+  border: 1px solid var(--glass-dark-line);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 10px 30px -12px rgba(0, 0, 0, 0);
   /* Prefixed first: the minifier drops the standard property if the prefixed one follows it. */
   -webkit-backdrop-filter: blur(20px) saturate(1.6);
   backdrop-filter: blur(20px) saturate(1.6);
@@ -84,10 +56,8 @@
 .expanded .glass {
   left: 0;
   right: 0;
-  background: var(--glass-bg);
-  box-shadow:
-    0 0 0 0.5px var(--glass-ring),
-    0 12px 32px var(--glass-shadow);
+  background: var(--glass-dark);
+  box-shadow: var(--glass-dark-shadow);
 }
 
 /* Transitions switch on after the first measurement, so the page never animates on load. */
@@ -96,7 +66,6 @@
     left var(--morph-t) var(--morph),
     right var(--morph-t) var(--morph),
     background-color var(--morph-t) var(--morph),
-    border-color var(--theme-t) var(--ease),
     box-shadow var(--morph-t) var(--morph);
 }
 .animate .logo,
@@ -114,15 +83,9 @@
   border-radius: 4px;
   transform: translateX(-6px);
 }
-/* The logo file is white; over light pages it is inverted to near-black, crossfading with the theme. */
 .logo img {
   height: 15px;
   width: auto;
-  filter: invert(1) brightness(0.12);
-  transition: filter var(--theme-t) var(--ease);
-}
-.onDark .logo img {
-  filter: none;
 }
 .expanded .logo {
   transform: none;
@@ -145,6 +108,7 @@
   font-size: var(--t-sm);
   font-weight: 500;
   text-decoration: none;
+  white-space: nowrap;
   opacity: 0.88;
   transition:
     opacity 0.2s var(--ease),
@@ -152,7 +116,7 @@
 }
 .nav a:hover {
   opacity: 1;
-  background: var(--link-hover);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 /* ---------- Actions ---------- */
@@ -175,38 +139,9 @@
   padding: 0 20px;
   font-size: var(--t-sm);
 }
-/* Scoped under .header so it outranks the global .btn transition regardless of stylesheet order. */
-.header .cta {
-  transition:
-    background-color var(--theme-t) var(--ease),
-    color var(--theme-t) var(--ease),
-    border-color var(--theme-t) var(--ease),
-    transform 0.2s var(--ease);
-}
-/* Order now: light over dark sections (its existing style), ink with light text over light pages. */
-.header:not(.onDark) .ctaPrimary {
-  --btn-bg: var(--ink);
-  --btn-fg: var(--on-dark);
-  --btn-line: var(--ink);
-}
-.header:not(.onDark) .ctaPrimary:hover {
-  --btn-bg: #000;
-}
-/* Exit order (light order pages): an outline in ink rather than white. */
-.header:not(.onDark) .exit {
-  --btn-fg: var(--ink);
-  --btn-line: rgba(26, 29, 33, 0.25);
-}
-.header:not(.onDark) .exit:hover {
-  --btn-line: var(--ink);
-}
-
 .help {
   margin-left: auto;
   font-size: var(--t-sm);
-  color: var(--graphite);
-}
-.onDark .help {
   color: rgba(242, 243, 245, 0.78);
 }
 .exit {
@@ -355,10 +290,8 @@
   .glass {
     left: 0;
     right: 0;
-    background: var(--glass-bg);
-    box-shadow:
-      0 0 0 0.5px var(--glass-ring),
-      0 12px 32px var(--glass-shadow);
+    background: var(--glass-dark);
+    box-shadow: var(--glass-dark-shadow);
   }
   .logo,
   .actions {

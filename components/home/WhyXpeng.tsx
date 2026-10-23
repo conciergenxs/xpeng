@@ -17,31 +17,31 @@ const FEATURES: Feature[] = [
   {
     id: "xpilot",
     name: "XPILOT ASSIST",
-    copy: "Intelligent driver-assistance technology helps you stay aware of your surroundings and makes every journey more confident and comfortable.",
+    copy: "Bantuan mengemudi yang cerdas ikut memantau sekitar mobil, sehingga Anda melaju lebih tenang dan percaya diri. Kendali tetap di tangan Anda.",
     media: {
       kind: "video",
       mp4: "/media/home/why/xpilot.mp4",
       poster: "/media/home/why/xpilot-poster.jpg",
-      label: "An XPENG X9 reversing out of a narrow street with reverse track assist",
+      label: "XPENG X9 mundur keluar dari jalan sempit dengan bantuan reverse track assist",
     },
   },
   {
     id: "xmart",
     name: "XMART OS",
-    copy: "An intelligent digital cockpit brings navigation, entertainment, and essential vehicle controls together for a more intuitive in-car experience.",
-    media: { kind: "image", src: "/media/home/why/xmart-os", alt: "A driver using the central touchscreen in the XPENG X9 cockpit" },
+    copy: "Navigasi, hiburan, dan kontrol penting kendaraan berkumpul di satu kokpit digital. Semuanya mudah dijangkau, tanpa perlu mencari-cari.",
+    media: { kind: "image", src: "/media/home/why/xmart-os", alt: "Pengemudi menggunakan layar sentuh tengah di kokpit XPENG X9" },
   },
   {
     id: "ota",
-    name: "OTA UPDATES",
-    copy: "Over-the-air software updates can improve supported vehicle systems and experiences without requiring a traditional workshop visit.",
-    media: { kind: "image", src: "/media/home/why/ota", alt: "An XPENG G6 surrounded by a digital wireframe representing a software update" },
+    name: "PEMBARUAN OTA",
+    copy: "Sistem dan fitur yang didukung bisa terus disempurnakan lewat pembaruan perangkat lunak nirkabel, tanpa harus datang ke bengkel.",
+    media: { kind: "image", src: "/media/home/why/ota", alt: "XPENG G6 dikelilingi garis digital yang menggambarkan pembaruan perangkat lunak" },
   },
   {
     id: "safety",
-    name: "SAFETY",
-    copy: "Thoughtful vehicle engineering and integrated safety systems are designed to help protect occupants and support greater peace of mind.",
-    media: { kind: "image", src: "/media/home/why/safety", alt: "The layered protective structure of an XPENG battery pack" },
+    name: "KESELAMATAN",
+    copy: "Struktur kendaraan yang dirancang cermat dan sistem keselamatan terpadu bekerja bersama untuk membantu melindungi setiap penumpang.",
+    media: { kind: "image", src: "/media/home/why/safety", alt: "Lapisan pelindung pada baterai XPENG" },
   },
 ];
 
@@ -158,9 +158,9 @@ export default function WhyXpeng() {
   const current = FEATURES[active];
 
   return (
-    <section ref={section} className={s.section} aria-labelledby="why-title" aria-roledescription="carousel">
+    <section ref={section} className={s.section} aria-labelledby="why-title" aria-roledescription="korsel">
       <h2 id="why-title" className={`headline ${s.title}`}>
-        Why Choose XPENG
+        Yang membuat XPENG berbeda.
       </h2>
 
       <div
@@ -184,7 +184,7 @@ export default function WhyXpeng() {
               style={{ "--pos": p } as React.CSSProperties}
               role="group"
               aria-roledescription="slide"
-              aria-label={`${f.name}, ${i + 1} of ${N}`}
+              aria-label={`${f.name}, ${i + 1} dari ${N}`}
               aria-hidden={!on}
               onClick={() => !on && Math.abs(p) === 1 && go(p as 1 | -1)}
             >
@@ -228,7 +228,7 @@ function FeatureControl({ visible, label, onPrev, onNext }: { visible: boolean; 
 
   return (
     <div className={`${s.control} ${visible ? s.controlOn : ""}`} aria-hidden={!visible} inert={!visible}>
-      <button type="button" className={`${s.glass} ${s.chev} ${s.chevPrev}`} onClick={onPrev} aria-label="Previous feature">
+      <button type="button" className={`${s.glass} ${s.chev} ${s.chevPrev}`} onClick={onPrev} aria-label="Fitur sebelumnya">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
           <path d="M15 6l-6 6 6 6" />
         </svg>
@@ -241,7 +241,7 @@ function FeatureControl({ visible, label, onPrev, onNext }: { visible: boolean; 
           {label}
         </span>
       </div>
-      <button type="button" className={`${s.glass} ${s.chev} ${s.chevNext}`} onClick={onNext} aria-label="Next feature">
+      <button type="button" className={`${s.glass} ${s.chev} ${s.chevNext}`} onClick={onNext} aria-label="Fitur berikutnya">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
           <path d="M9 6l6 6-6 6" />
         </svg>

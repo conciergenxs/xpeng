@@ -37,17 +37,17 @@ export default function PaintStage({ id, title, modelName, slug, paints, body }:
           {current.turntable ? (
             <p>
               <RotateIcon />
-              <span className={s.hintText}>Drag to explore 360°</span>
+              <span className={s.hintText}>Geser untuk memutar 360°</span>
               {/* Recoloured from the official sequence: said plainly, so it is never taken for XPENG imagery. */}
               {current.turntable.simulated && (
-                <span className={s.simulated}>Simulated colour</span>
+                <span className={s.simulated}>Warna simulasi</span>
               )}
             </p>
           ) : (
             turnable && (
               <button type="button" className={s.hintLink} onClick={() => setCurrent(turnable)}>
                 <RotateIcon />
-                360° view in {turnable.name}
+                Putar 360° dalam warna {turnable.name}
               </button>
             )
           )}
@@ -58,12 +58,12 @@ export default function PaintStage({ id, title, modelName, slug, paints, body }:
       <div className="wrap">
         <div className={s.picker}>
           <div className={s.selected} aria-live="polite">
-            <p className={s.selectedLabel}>Selected colour</p>
+            <p className={s.selectedLabel}>Warna pilihan</p>
             <p className={s.selectedName}>{current.name}</p>
             <p className={s.selectedText}>{current.description}</p>
           </div>
           <fieldset className={s.swatches}>
-            <legend className="sr-only">Paint colour</legend>
+            <legend className="sr-only">Warna cat</legend>
             {paints.map((p) => (
               <label key={p.id} className={s.swatch} title={p.name} onPointerEnter={() => car.current?.warm(p.id)}>
                 <input
@@ -80,7 +80,7 @@ export default function PaintStage({ id, title, modelName, slug, paints, body }:
             ))}
           </fieldset>
           <Link className={s.order} href={`/order/?model=${slug}&paint=${current.id}`}>
-            <span>Order in {current.name}</span>
+            <span>Pesan {modelName} warna {current.name}</span>
             <ArrowIcon />
           </Link>
         </div>

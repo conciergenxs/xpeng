@@ -37,34 +37,35 @@ export default function StepDetails({ order, update, errors }: Props) {
   return (
     <>
       <h2 id="step-title" className="headline">
-        Your details
+        Siapa yang memesan?
       </h2>
       <p className={s.stepIntro}>
-        Your advisor uses these to prepare your order and contact you. Nothing is sent anywhere in this prototype.
+        Data ini dipakai konsultan kami untuk menyiapkan pesanan dan menghubungi Anda. Di prototipe ini, tidak ada data
+        yang dikirim.
       </p>
 
       <div className={s.form}>
         <Segmented
-          label="Buying as"
+          label="Dibeli atas nama"
           value={c.buyerType}
           onChange={(v) => set("buyerType", v)}
           options={[
-            { value: "individual", label: "Individual" },
-            { value: "company", label: "Company" },
+            { value: "individual", label: "Pribadi" },
+            { value: "company", label: "Perusahaan" },
           ]}
         />
 
-        {c.buyerType === "company" && field("company", "Company name (PT/CV)", { autoComplete: "organization" })}
+        {c.buyerType === "company" && field("company", "Nama perusahaan (PT/CV)", { autoComplete: "organization" })}
 
         <div className={s.fieldRow}>
-          {field("firstName", "First name", { autoComplete: "given-name" })}
-          {field("lastName", "Last name", { autoComplete: "family-name" })}
+          {field("firstName", "Nama depan", { autoComplete: "given-name" })}
+          {field("lastName", "Nama belakang", { autoComplete: "family-name" })}
         </div>
 
         {field("email", "Email", { type: "email", autoComplete: "email", inputMode: "email" })}
 
         <div className={s.field}>
-          <label htmlFor="f-phone">Mobile number</label>
+          <label htmlFor="f-phone">Nomor ponsel</label>
           <div className={s.phone}>
             <span aria-hidden>+62</span>
             <input
@@ -85,7 +86,7 @@ export default function StepDetails({ order, update, errors }: Props) {
             </p>
           ) : (
             <p id="h-phone" className={s.fieldHint}>
-              Indonesian mobile number, country code +62 added for you.
+              Kode +62 sudah terpasang, cukup isi nomor berikutnya.
             </p>
           )}
         </div>
@@ -100,7 +101,7 @@ export default function StepDetails({ order, update, errors }: Props) {
             aria-describedby={errors.showroomId ? "e-showroom" : "h-showroom"}
           >
             <option value="" disabled>
-              Choose a showroom
+              Pilih showroom
             </option>
             {showroomAreas.map((area) => (
               <optgroup key={area} label={area}>
@@ -120,37 +121,37 @@ export default function StepDetails({ order, update, errors }: Props) {
             </p>
           ) : (
             <p id="h-showroom" className={s.fieldHint}>
-              Your advisor works from here, and it&rsquo;s where you&rsquo;ll collect your car.
+              Konsultan Anda bertugas di sini, dan di sini pula mobil Anda diserahkan.
             </p>
           )}
         </div>
 
         <Segmented
-          label="Best way to reach you"
+          label="Hubungi saya lewat"
           value={c.contact}
           onChange={(v) => set("contact", v)}
           options={[
             { value: "whatsapp", label: "WhatsApp" },
-            { value: "phone", label: "Phone call" },
+            { value: "phone", label: "Telepon" },
             { value: "email", label: "Email" },
           ]}
         />
 
         <label className={s.check}>
           <input type="checkbox" checked={c.tradeIn} onChange={(e) => set("tradeIn", e.target.checked)} />
-          <span>I have a car to trade in</span>
+          <span>Saya punya mobil untuk tukar tambah</span>
         </label>
 
         <div className={s.field}>
           <label htmlFor="f-notes">
-            Anything we should know? <span className={s.optional}>Optional</span>
+            Ada yang perlu kami ketahui? <span className={s.optional}>Opsional</span>
           </label>
           <textarea
             id="f-notes"
             rows={3}
             value={c.notes}
             onChange={(e) => set("notes", e.target.value)}
-            placeholder="For example, preferred delivery month or home charger questions"
+            placeholder="Misalnya bulan pengiriman yang Anda inginkan, atau pertanyaan soal charger di rumah"
           />
         </div>
       </div>

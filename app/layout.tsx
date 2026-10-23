@@ -13,11 +13,11 @@ const archivo = Archivo({
 
 export const metadata: Metadata = {
   title: {
-    default: "XPENG Indonesia — Explore, compare and order online",
+    default: "XPENG Indonesia — Mobil listrik pintar, pesan secara online",
     template: "%s | XPENG Indonesia",
   },
   description:
-    "Explore the XPENG New X9 and G6, compare variants, estimate cash, finance and lease payments in rupiah, and reserve your car online.",
+    "Kenali New X9 dan G6, bandingkan setiap varian, hitung simulasi tunai, kredit, atau sewa dalam rupiah, lalu amankan unit Anda secara online.",
   icons: { icon: "/media/brand/xpeng-mark-white.svg" },
 };
 
@@ -27,10 +27,10 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={archivo.variable}>
+    <html lang="id" className={archivo.variable}>
       <body>
         <a href="#main" className="skip">
-          Skip to content
+          Langsung ke konten utama
         </a>
         <SiteHeader />
         <main id="main">{children}</main>

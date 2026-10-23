@@ -1,6 +1,6 @@
 import { getVariant } from "@/lib/vehicles";
 import { cashQuote, financeQuote, leaseQuote, type PlanState } from "@/lib/payment";
-import { rupiah } from "@/lib/format";
+import { num, rupiah } from "@/lib/format";
 import s from "./order.module.css";
 
 /** The chosen plan as definition rows; shared by review and confirmation. */
@@ -12,16 +12,16 @@ export default function PlanSummary({ variantId, plan }: { variantId: string; pl
     return (
       <dl className={s.summaryList}>
         <div>
-          <dt>Plan</dt>
-          <dd>Cash</dd>
+          <dt>Cara bayar</dt>
+          <dd>Tunai</dd>
         </div>
         <div>
-          <dt>Vehicle price, OTR Jakarta</dt>
+          <dt>Harga mobil, OTR Jakarta</dt>
           <dd>{rupiah(q.price)}</dd>
         </div>
         {plan.cash.insurance && (
           <div>
-            <dt>Insurance, year one</dt>
+            <dt>Asuransi, tahun pertama</dt>
             <dd className="est">{rupiah(q.insurance)}</dd>
           </div>
         )}
@@ -38,27 +38,27 @@ export default function PlanSummary({ variantId, plan }: { variantId: string; pl
     return (
       <dl className={s.summaryList}>
         <div>
-          <dt>Plan</dt>
-          <dd>Finance</dd>
+          <dt>Cara bayar</dt>
+          <dd>Kredit</dd>
         </div>
         <div>
-          <dt>Down payment</dt>
+          <dt>Uang muka</dt>
           <dd>
             {rupiah(q.dp)} ({plan.finance.dpPct}%)
           </dd>
         </div>
         <div>
-          <dt>Tenor and rate</dt>
+          <dt>Tenor dan bunga</dt>
           <dd>
-            {plan.finance.tenor} months, <span className="est">{plan.finance.rate.toFixed(2)}% flat</span>
+            {plan.finance.tenor} bulan, <span className="est">{num(plan.finance.rate, 2)}% flat</span>
           </dd>
         </div>
         <div>
-          <dt>Monthly instalment</dt>
+          <dt>Cicilan per bulan</dt>
           <dd className="est">{rupiah(q.monthly)}</dd>
         </div>
         <div>
-          <dt>Total first payment (TDP)</dt>
+          <dt>Total pembayaran pertama (TDP)</dt>
           <dd className="est">{rupiah(q.tdp)}</dd>
         </div>
       </dl>
@@ -69,21 +69,21 @@ export default function PlanSummary({ variantId, plan }: { variantId: string; pl
   return (
     <dl className={s.summaryList}>
       <div>
-        <dt>Plan</dt>
-        <dd>Lease (concept)</dd>
+        <dt>Cara bayar</dt>
+        <dd>Sewa (konsep)</dd>
       </div>
       <div>
-        <dt>Contract</dt>
+        <dt>Kontrak</dt>
         <dd>
-          {plan.lease.term} months, {(plan.lease.mileage / 1000).toFixed(0)}k km a year
+          {plan.lease.term} bulan, {num(plan.lease.mileage)} km per tahun
         </dd>
       </div>
       <div>
-        <dt>Monthly rent</dt>
+        <dt>Sewa per bulan</dt>
         <dd className="est">{rupiah(q.monthly)}</dd>
       </div>
       <div>
-        <dt>Initial payment</dt>
+        <dt>Pembayaran awal</dt>
         <dd className="est">{rupiah(q.initial)}</dd>
       </div>
     </dl>

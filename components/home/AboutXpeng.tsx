@@ -15,7 +15,7 @@ const icon = {
 const highlights = [
   {
     title: "AI",
-    text: "Driven innovation",
+    text: "Menggerakkan setiap inovasi",
     icon: (
       <svg {...icon}>
         <rect x="6" y="6" width="12" height="12" rx="1.5" />
@@ -26,7 +26,7 @@ const highlights = [
   },
   {
     title: "Global",
-    text: "Presence",
+    text: "Melaju di banyak negara",
     icon: (
       <svg {...icon}>
         <circle cx="12" cy="12" r="9" />
@@ -36,8 +36,8 @@ const highlights = [
     ),
   },
   {
-    title: "A cleaner",
-    text: "Smarter tomorrow",
+    title: "Lebih bersih",
+    text: "Mobilitas listrik yang lebih cerdas",
     icon: (
       <svg {...icon}>
         <path d="M5 19c0-8 5-13 15-14-1 10-6 15-14 15" />
@@ -49,7 +49,7 @@ const highlights = [
 
 export default function AboutXpeng() {
   return (
-    <section className={s.section} aria-labelledby="about-title">
+    <section className={`${s.section} dark`} aria-labelledby="about-title">
       {/* Background is used exactly as supplied in assets/original/home/about.png. */}
       <img
         src="/media/home/about.png"
@@ -64,15 +64,15 @@ export default function AboutXpeng() {
 
       <div className={`wrap ${s.content}`}>
         <h2 id="about-title" className={`headline ${s.title}`}>
-          <span>Technology</span> moves people further.
+          <span>Teknologi yang bekerja</span> untuk manusia.
         </h2>
         <p className={`lede ${s.copy}`}>
-          XPENG is a global smart electric vehicle company pioneering the future of mobility through AI, intelligent
-          driving, and human-centric design.
+          XPENG membuat kendaraan listrik pintar untuk pengendara di berbagai negara. AI, teknologi bantuan
+          berkendara, dan desain yang berpihak pada penggunanya kami padukan agar setiap perjalanan terasa lebih ringan.
         </p>
         <a href="https://www.xpeng.com/brand" className={`btn ${s.story}`} target="_blank" rel="noopener noreferrer">
-          Our story
-          <span className="sr-only"> (opens in a new tab)</span>
+          Kisah XPENG
+          <span className="sr-only"> (terbuka di tab baru)</span>
         </a>
       </div>
 

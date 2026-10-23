@@ -3,8 +3,8 @@ import { Suspense } from "react";
 import CompareTool from "@/components/compare/CompareTool";
 
 export const metadata: Metadata = {
-  title: "Compare models",
-  description: "Compare the XPENG New X9 and G6 variants side by side: price, range, performance, charging and space.",
+  title: "Bandingkan model",
+  description: "Bandingkan varian XPENG New X9 dan G6 berdampingan: harga, jarak tempuh, performa, pengisian daya, dan ruang.",
 };
 
 export default function ComparePage() {

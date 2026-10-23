@@ -11,9 +11,9 @@ import PlanSummary from "./PlanSummary";
 import s from "./confirmation.module.css";
 
 const DOCUMENTS = {
-  cash: ["KTP (identity card)", "NPWP (tax number)"],
-  finance: ["KTP for you and your spouse, if married", "KK (family card)", "NPWP", "Proof of income: payslips or 3 months of bank statements"],
-  lease: ["Company deed and NIB, or KTP for individuals", "NPWP", "Latest financial statements or 3 months of bank statements"],
+  cash: ["KTP", "NPWP"],
+  finance: ["KTP Anda, juga KTP pasangan bila sudah menikah", "Kartu Keluarga (KK)", "NPWP", "Bukti penghasilan: slip gaji atau rekening koran 3 bulan terakhir"],
+  lease: ["Akta perusahaan dan NIB, atau KTP untuk pelanggan pribadi", "NPWP", "Laporan keuangan terbaru atau rekening koran 3 bulan terakhir"],
 };
 
 export default function Confirmation({ order, onNew }: { order: OrderState; onNew: () => void }) {
@@ -24,24 +24,24 @@ export default function Confirmation({ order, onNew }: { order: OrderState; onNe
   const paint = model.paints.find((p) => p.id === order.paintId)!;
   const showroom = showrooms.find((r) => r.id === order.customer.showroomId);
   const when = order.submittedAt ? new Date(order.submittedAt) : new Date();
-  const channel = { whatsapp: "on WhatsApp", phone: "by phone", email: "by email" }[order.customer.contact];
+  const channel = { whatsapp: "lewat WhatsApp", phone: "lewat telepon", email: "lewat email" }[order.customer.contact];
 
   const next = [
     {
-      title: "Your advisor gets in touch",
-      text: `Someone from ${showroom?.name ?? "your showroom"} will contact you ${channel} within one working day to confirm availability and your city's OTR price.`,
+      title: "Konsultan kami menghubungi Anda",
+      text: `Tim ${showroom?.name ?? "showroom pilihan Anda"} akan menghubungi Anda ${channel} dalam satu hari kerja untuk memastikan ketersediaan mobil dan harga OTR di kota Anda.`,
     },
     {
-      title: "Pay the reservation deposit",
-      text: "You'll receive a virtual account number. Paying within 24 hours secures your car.",
+      title: "Bayar uang tanda jadi",
+      text: "Anda akan menerima nomor virtual account. Bayar dalam 24 jam untuk mengunci mobil pilihan Anda.",
     },
     order.plan.kind === "cash"
-      ? { title: "Settle the balance", text: "Pay the remaining balance by bank transfer before your delivery date." }
+      ? { title: "Lunasi sisanya", text: "Transfer sisa pembayaran sebelum tanggal serah terima." }
       : {
-          title: order.plan.kind === "finance" ? "Apply for financing" : "Apply for the lease",
-          text: "Your advisor sends the application to a partner and walks you through approval, usually within a few working days.",
+          title: order.plan.kind === "finance" ? "Ajukan kredit" : "Ajukan sewa",
+          text: "Konsultan meneruskan pengajuan Anda ke mitra dan mendampingi sampai disetujui, biasanya dalam beberapa hari kerja.",
         },
-    { title: "Sign and collect", text: `Sign your purchase agreement (SPK) and collect your ${model.name} at ${showroom?.name ?? "the showroom"}.` },
+    { title: "Tanda tangan, lalu bawa pulang", text: `Tandatangani SPK, lalu jemput ${model.name} Anda di ${showroom?.name ?? "showroom"}.` },
   ];
 
   return (
@@ -49,17 +49,17 @@ export default function Confirmation({ order, onNew }: { order: OrderState; onNe
       <div className={`wrap ${s.grid}`}>
         <div className={s.main}>
           <p className={s.ref}>
-            Reference <strong>{order.reference}</strong>
+            Nomor referensi <strong>{order.reference}</strong>
           </p>
           <h1 className={`headline ${s.title}`} tabIndex={-1} ref={title}>
-            Reservation received, {order.customer.firstName}.
+            {order.customer.firstName}, reservasi Anda sudah kami terima.
           </h1>
           <p className="lede">
-            Your {model.name} {variant.name} in {paint.name} is reserved. A summary would be sent to{" "}
-            {order.customer.email} in the live service.
+            {model.name} {variant.name} warna {paint.name} kini tertahan atas nama Anda. Pada layanan sebenarnya,
+            ringkasannya dikirim ke {order.customer.email}.
           </p>
 
-          <h2 className={s.sub}>What happens next</h2>
+          <h2 className={s.sub}>Langkah berikutnya</h2>
           <ol className={s.timeline}>
             {next.map((n, i) => (
               <li key={n.title}>
@@ -74,7 +74,7 @@ export default function Confirmation({ order, onNew }: { order: OrderState; onNe
             ))}
           </ol>
 
-          <h2 className={s.sub}>Documents to have ready</h2>
+          <h2 className={s.sub}>Dokumen yang perlu disiapkan</h2>
           <ul className={s.docs}>
             {DOCUMENTS[order.plan.kind].map((d) => (
               <li key={d}>{d}</li>
@@ -83,35 +83,35 @@ export default function Confirmation({ order, onNew }: { order: OrderState; onNe
 
           <div className={`${s.actions} no-print`}>
             <button type="button" className="btn" onClick={() => window.print()}>
-              Print or save as PDF
+              Cetak atau simpan PDF
             </button>
             <Link href="/" className="btn btn-ghost">
-              Back to home
+              Kembali ke beranda
             </Link>
             <button type="button" className="btn btn-ghost" onClick={onNew}>
-              Start another order
+              Buat pesanan baru
             </button>
           </div>
           <p className="fine">
-            Questions? Call {HOTLINE}, 24 hours. This is a prototype: no order has been placed and no data has left
-            your browser.
+            Ada pertanyaan? Hubungi {HOTLINE}, 24 jam. Ini prototipe: tidak ada pesanan yang benar-benar dibuat, dan
+            data Anda tidak keluar dari browser.
           </p>
         </div>
 
-        <aside className={s.card} aria-label="Order summary">
+        <aside className={s.card} aria-label="Ringkasan pesanan">
           <div className={s.cardCar} style={{ background: paint.stage }}>
-            <Img src={paint.image} alt={`${model.name} in ${paint.name}`} sizes="480px" />
+            <Img src={paint.image} alt={`${model.name} warna ${paint.name}`} sizes="480px" />
           </div>
           <div className={s.cardBody}>
             <p className={s.cardName}>
               {model.name} {variant.name}
             </p>
             <p className="muted small">
-              {paint.name}, {variant.rangeLabel} range
+              {paint.name}, jarak tempuh {variant.rangeLabel.charAt(0).toLowerCase() + variant.rangeLabel.slice(1)}
             </p>
             <dl className={s.cardList}>
               <div>
-                <dt>Price, OTR Jakarta</dt>
+                <dt>Harga OTR Jakarta</dt>
                 <dd>{rupiah(variant.price)}</dd>
               </div>
               <div>
@@ -119,9 +119,9 @@ export default function Confirmation({ order, onNew }: { order: OrderState; onNe
                 <dd>{showroom?.name}</dd>
               </div>
               <div>
-                <dt>Reserved on</dt>
+                <dt>Tanggal reservasi</dt>
                 <dd>
-                  {when.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}
+                  {when.toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })}
                 </dd>
               </div>
             </dl>

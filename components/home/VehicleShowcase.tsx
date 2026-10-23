@@ -138,10 +138,10 @@ export default function VehicleShowcase() {
       <div className={`wrap ${s.inner}`}>
         <div className={s.head}>
           <h2 id="showcase-title" className={s.title}>
-            Find Your Ideal XPENG
+            XPENG mana yang cocok untuk Anda?
           </h2>
           <p className={s.sub}>
-            A smarter way to move. Choose between the spacious X9 or the dynamic G6, and explore in detail.
+            X9 yang lega untuk tujuh orang, atau G6 yang sporty. Putar mobilnya, lalu lihat detailnya.
           </p>
           <div className={s.toggle}>
             <Segmented
@@ -183,11 +183,11 @@ export default function VehicleShowcase() {
               }
               role="slider"
               tabIndex={0}
-              aria-label={`Rotate the ${model.name}. Drag sideways or use the arrow keys.`}
+              aria-label={`Putar ${model.name}. Geser ke samping atau gunakan tombol panah.`}
               aria-valuemin={0}
               aria-valuemax={350}
               aria-valuenow={angle}
-              aria-valuetext={`Viewing angle ${angle} degrees`}
+              aria-valuetext={`Sudut pandang ${angle} derajat`}
               onPointerDown={onPointerDown}
               onPointerMove={onPointerMove}
               onPointerUp={onPointerUp}
@@ -212,27 +212,27 @@ export default function VehicleShowcase() {
           </div>
           <dl className={s.specs}>
             <div>
-              <dt className={s.label}>Range (NEDC)</dt>
+              <dt className={s.label}>Jarak tempuh (NEDC)</dt>
               <dd className={s.value}>
-                <span className={s.pre}>Up to</span>
+                <span className={s.pre}>Hingga</span>
                 {maxRange} km
               </dd>
             </div>
             <div>
-              <dt className={s.label}>Seats</dt>
+              <dt className={s.label}>Kursi</dt>
               <dd className={s.value}>{model.seats}</dd>
             </div>
             <div>
-              <dt className={s.label}>Charging</dt>
+              <dt className={s.label}>Pengisian daya</dt>
               <dd className={s.value}>{model.charge}</dd>
             </div>
           </dl>
           <div className={s.ctas}>
             <Link href={`/order/?model=${slug}`} className={`btn ${s.cta}`}>
-              Order now
+              Pesan sekarang
             </Link>
             <Link href={`/models/${slug}/`} className={`btn btn-ghost ${s.cta}`}>
-              Explore {model.shortName}
+              Jelajahi {model.shortName}
             </Link>
           </div>
         </div>

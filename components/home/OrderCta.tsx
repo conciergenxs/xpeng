@@ -11,18 +11,18 @@ export default function OrderCta() {
 
       <div className={`wrap ${s.content}`}>
         <h2 id="cta-title" className={`headline ${s.title}`}>
-          <span>Experience XPENG</span> on your terms.
+          <span>Pesan dari mana saja,</span> sesuai waktu Anda.
         </h2>
         <p className={`lede ${s.copy}`}>
-          Order your XPENG online and take the next step towards a smarter, more connected drive.
+          Pilih model, warna, dan cara bayar secara online. Ingin mencobanya dulu? Jadwalkan test drive.
         </p>
         <div className={s.ctas}>
           <Link href="/order/" className={`btn btn-light ${s.cta}`}>
-            Order now
+            Pesan sekarang
           </Link>
           {/* The official booking page, as used by the footer and the model pages. */}
           <a href="https://xpeng.co.id/en/book-now" className={`btn btn-ghost-light ${s.cta} ${s.ctaSecondary}`}>
-            Book a test drive
+            Jadwalkan test drive
           </a>
         </div>
       </div>

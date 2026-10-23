@@ -3,8 +3,8 @@ import { Suspense } from "react";
 import OrderFlow from "@/components/order/OrderFlow";
 
 export const metadata: Metadata = {
-  title: "Order online",
-  description: "Choose your XPENG, compare cash, finance and lease, and reserve online.",
+  title: "Pesan online",
+  description: "Pilih XPENG Anda, timbang tunai, kredit, atau sewa, lalu reservasi langsung dari rumah.",
 };
 
 export default function OrderPage() {

@@ -287,15 +287,15 @@ export default function CarTurntable({
       {!visible &&
         (failed ? (
           <span className={s.loading} role="status">
-            <span className={s.loadingText}>The 360° view of the {modelName} couldn&rsquo;t load.</span>
+            <span className={s.loadingText}>Tampilan 360° {modelName} gagal dimuat.</span>
             <button type="button" className="btn btn-ghost btn-sm" onClick={retry}>
-              Try again
+              Muat ulang
             </button>
           </span>
         ) : (
           <span className={s.loading} role="status">
             <span className={s.loadingBar} aria-hidden />
-            <span className={s.loadingText}>Loading the {modelName}</span>
+            <span className={s.loadingText}>Menyiapkan {modelName}</span>
           </span>
         ))}
       {/* The car layers: hidden at once, faded in together when ready; their own crossfades are untouched. */}
@@ -309,7 +309,7 @@ export default function CarTurntable({
                 key={p.id}
                 data-paint={p.id}
                 src={p.image}
-                alt={p.id === shown && !spinning ? `${modelName} in ${p.name}` : ""}
+                alt={p.id === shown && !spinning ? `${modelName} warna ${p.name}` : ""}
                 aria-hidden={p.id !== shown || !!spinning}
                 loading={p.id === first ? "lazy" : "eager"}
                 sizes={sizes}
@@ -340,11 +340,11 @@ export default function CarTurntable({
                   ? {
                       role: "slider",
                       tabIndex: 0,
-                      "aria-label": `Rotate the ${modelName} in ${p.name}. Drag sideways or use the arrow keys.`,
+                      "aria-label": `Putar ${modelName} warna ${p.name}. Geser ke samping atau gunakan tombol panah.`,
                       "aria-valuemin": 0,
                       "aria-valuemax": 350,
                       "aria-valuenow": angle,
-                      "aria-valuetext": `Viewing angle ${angle} degrees`,
+                      "aria-valuetext": `Sudut pandang ${angle} derajat`,
                       onPointerDown,
                       onPointerMove,
                       onPointerUp,

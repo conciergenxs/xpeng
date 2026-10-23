@@ -24,6 +24,10 @@ import StepReview from "./StepReview";
 import Confirmation from "./Confirmation";
 import s from "./order.module.css";
 
+/** What the main button does on each step, and where the back arrow returns to. */
+const NEXT_LABEL = ["Lanjut ke pembayaran", "Lanjut isi data diri", "Tinjau pesanan"];
+const BACK_LABEL = ["Kembali ke pilihan mobil", "Kembali ke pembayaran", "Kembali ke data diri"];
+
 function readStored(): OrderState | undefined {
   try {
     const raw = sessionStorage.getItem(STORAGE_KEY);
@@ -88,7 +92,7 @@ export default function OrderFlow() {
     }
     if (order.step === 3) {
       if (!order.consent.terms) {
-        setErrors({ terms: "Agree to the reservation terms to continue." });
+        setErrors({ terms: "Centang persetujuan syarat reservasi untuk melanjutkan." });
         requestAnimationFrame(() => document.getElementById("consent-terms")?.focus());
         return;
       }
@@ -116,16 +120,16 @@ export default function OrderFlow() {
     );
   }
 
-  // The bar always shows the figure that matters for the chosen plan; monthly figures carry "/mo".
+  // The bar always shows the figure that matters for the chosen plan; monthly figures carry "/bln".
   const p = order.plan;
   const bar =
     p.kind === "cash"
-      ? { value: cashQuote(variant.price, p.cash).total, label: "Total, OTR Jakarta", est: p.cash.insurance, perMonth: false }
+      ? { value: cashQuote(variant.price, p.cash).total, label: "total OTR Jakarta", est: p.cash.insurance, perMonth: false }
       : p.kind === "finance"
-        ? { value: financeQuote(variant.price, p.finance).monthly, label: `${p.finance.tenor} months`, est: true, perMonth: true }
-        : { value: leaseQuote(variant.price, p.lease).monthly, label: `${p.lease.term} months`, est: true, perMonth: true };
+        ? { value: financeQuote(variant.price, p.finance).monthly, label: `${p.finance.tenor} bulan`, est: true, perMonth: true }
+        : { value: leaseQuote(variant.price, p.lease).monthly, label: `${p.lease.term} bulan`, est: true, perMonth: true };
 
-  const ctaLabel = order.step === 3 ? `Reserve my ${model.name}` : `Continue to ${STEPS[order.step + 1].toLowerCase()}`;
+  const ctaLabel = order.step === 3 ? `Reservasi ${model.name}` : NEXT_LABEL[order.step];
 
   return (
     <div className={s.layout}>
@@ -135,7 +139,7 @@ export default function OrderFlow() {
       {/* Panel: one step at a time */}
       <section className={s.panel} aria-labelledby="step-title">
         <div className={s.panelInner}>
-          <ol className={s.stepper} aria-label="Order progress">
+          <ol className={s.stepper} aria-label="Langkah pemesanan">
             {STEPS.map((label, i) => {
               const state = i < order.step ? "done" : i === order.step ? "current" : "todo";
               return (
@@ -149,7 +153,7 @@ export default function OrderFlow() {
                         </svg>
                       </span>
                       <span>{label}</span>
-                      <span className="sr-only">, completed. Edit</span>
+                      <span className="sr-only">, selesai. Ubah</span>
                     </button>
                   ) : (
                     <span aria-current={i === order.step ? "step" : undefined}>
@@ -178,7 +182,7 @@ export default function OrderFlow() {
               <span className={bar.est ? "est" : undefined}>
                 <Tween value={bar.value} format={p.kind === "cash" ? rupiah : rupiahShort} />
               </span>
-              {bar.perMonth && <span className={s.barSuffix}>/mo</span>}
+              {bar.perMonth && <span className={s.barSuffix}>/bln</span>}
             </p>
             <p className={s.barLabel}>
               {planLabel[p.kind]}, {bar.label}
@@ -190,8 +194,8 @@ export default function OrderFlow() {
                 type="button"
                 className={`btn btn-ghost ${s.barBack}`}
                 onClick={() => goTo(order.step - 1)}
-                aria-label={`Back to ${STEPS[order.step - 1].toLowerCase()}`}
-                title="Back"
+                aria-label={BACK_LABEL[order.step - 1]}
+                title="Kembali"
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                   <path d="M19 12H5M11 6l-6 6 6 6" />
@@ -200,11 +204,11 @@ export default function OrderFlow() {
             )}
             <button type="button" className={`btn ${s.barCta}`} onClick={next} disabled={submitting} aria-busy={submitting} aria-label={submitting ? undefined : ctaLabel}>
               {submitting ? (
-                "Reserving…"
+                "Memproses…"
               ) : (
                 <>
                   <span className={s.ctaLong}>{ctaLabel}</span>
-                  <span className={s.ctaShort}>{order.step === 3 ? "Reserve" : "Continue"}</span>
+                  <span className={s.ctaShort}>{order.step === 3 ? "Reservasi" : "Lanjut"}</span>
                 </>
               )}
             </button>

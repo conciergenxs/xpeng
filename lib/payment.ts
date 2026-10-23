@@ -104,7 +104,7 @@ export function planSummary(price: number, plan: PlanState) {
 export const monthlyFrom = (price: number) => financeQuote(price, defaultPlan.finance).monthly;
 
 export const planLabel: Record<PlanKind, string> = {
-  cash: "Cash",
-  finance: "Finance",
-  lease: "Lease",
+  cash: "Tunai",
+  finance: "Kredit",
+  lease: "Sewa",
 };

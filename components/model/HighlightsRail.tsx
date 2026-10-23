@@ -38,7 +38,7 @@ export default function HighlightsRail({ items, title }: { items: Feature[]; tit
       <div className={`wrap ${s.head}`}>
         <h2 className="headline">{title}</h2>
         <div className={s.controls}>
-          <button type="button" className={s.arrow} onClick={() => go(Math.max(0, index - 1))} disabled={index === 0} aria-label="Previous highlight">
+          <button type="button" className={s.arrow} onClick={() => go(Math.max(0, index - 1))} disabled={index === 0} aria-label="Keunggulan sebelumnya">
             <span aria-hidden>‹</span>
           </button>
           <button
@@ -46,13 +46,13 @@ export default function HighlightsRail({ items, title }: { items: Feature[]; tit
             className={s.arrow}
             onClick={() => go(Math.min(items.length - 1, index + 1))}
             disabled={index === items.length - 1}
-            aria-label="Next highlight"
+            aria-label="Keunggulan berikutnya"
           >
             <span aria-hidden>›</span>
           </button>
         </div>
       </div>
-      <ul ref={rail} className={s.rail} tabIndex={0} aria-label="Highlights, scroll horizontally">
+      <ul ref={rail} className={s.rail} tabIndex={0} aria-label="Keunggulan, geser ke samping">
         {items.map((h, i) => (
           <li key={h.title} className={s.card} aria-current={i === index ? "true" : undefined}>
             <Img src={h.image} alt="" sizes="(max-width: 760px) 86vw, 64vw" className={s.img} />

@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { preloadTurntable } from "@/components/CarTurntable";
 import Img from "@/components/Img";
 import { modelList, models, variantsFor, fromPrice, type ModelSlug } from "@/lib/vehicles";
-import { rupiah } from "@/lib/format";
+import { num, rupiah } from "@/lib/format";
 import type { OrderState } from "@/lib/order";
 import CompareModal from "./CompareModal";
 import s from "./order.module.css";
@@ -22,7 +22,7 @@ export default function StepVehicle({ order, update }: Props) {
   return (
     <>
       <h2 id="step-title" className="headline">
-        Choose your car
+        Pertama, pilih mobilnya.
       </h2>
 
       <fieldset className={s.group}>
@@ -32,7 +32,7 @@ export default function StepVehicle({ order, update }: Props) {
             Model
           </span>
           <button type="button" className={`link ${s.groupAction}`} onClick={() => compare.current?.showModal()}>
-            Compare models
+            Bandingkan X9 dan G6
           </button>
         </div>
         <div className={s.modelCards}>
@@ -59,7 +59,7 @@ export default function StepVehicle({ order, update }: Props) {
                 <span className={s.tick} aria-hidden />
                 <span className={s.modelCardName}>{m.name}</span>
                 <span className={s.modelCardMeta}>{m.bodyType}</span>
-                <span className={s.modelCardPrice}>From {rupiah(fromPrice(m.slug))}</span>
+                <span className={s.modelCardPrice}>Mulai {rupiah(fromPrice(m.slug))}</span>
               </span>
             </label>
           ))}
@@ -67,7 +67,7 @@ export default function StepVehicle({ order, update }: Props) {
       </fieldset>
 
       <fieldset className={s.group}>
-        <legend className={s.groupLabel}>Variant</legend>
+        <legend className={s.groupLabel}>Varian</legend>
         <div className={s.options}>
           {variantsFor(order.model).map((v) => (
             <label key={v.id} className={`${s.option} ${v.id === order.variantId ? s.selected : ""}`}>
@@ -81,7 +81,8 @@ export default function StepVehicle({ order, update }: Props) {
               <span className={s.optionName}>{v.name}</span>
               <span className={s.optionPrice}>{rupiah(v.price)}</span>
               <span className={s.optionMeta}>
-                {v.rangeLabel} range <span aria-hidden>·</span> 0–100 km/h in {v.accel} s <span aria-hidden>·</span>{" "}
+                Jarak tempuh {v.rangeLabel.charAt(0).toLowerCase() + v.rangeLabel.slice(1)} <span aria-hidden>·</span> 0–100 km/jam {num(v.accel)} dtk{" "}
+                <span aria-hidden>·</span>{" "}
                 {v.drivetrain}
               </span>
               {v.note && <span className={s.optionNote}>{v.note}</span>}
@@ -92,7 +93,7 @@ export default function StepVehicle({ order, update }: Props) {
 
       <fieldset className={s.group}>
         <legend className={s.groupLabel}>
-          Colour <span className={s.groupValue}>{model.paints.find((p) => p.id === order.paintId)?.name}</span>
+          Warna <span className={s.groupValue}>{model.paints.find((p) => p.id === order.paintId)?.name}</span>
         </legend>
         <div className={s.swatches}>
           {model.paints.map((p) => (
@@ -109,7 +110,7 @@ export default function StepVehicle({ order, update }: Props) {
             </label>
           ))}
         </div>
-        <p className={s.hint}>Your advisor confirms colour availability and delivery timing for your showroom.</p>
+        <p className={s.hint}>Ketersediaan warna dan perkiraan waktu kirim akan dikonfirmasi konsultan di showroom Anda.</p>
       </fieldset>
 
       <CompareModal ref={compare} current={order.model} />

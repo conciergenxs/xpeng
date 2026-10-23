@@ -8,7 +8,7 @@ import Select from "@/components/Select";
 import Tween from "@/components/Tween";
 import { ASSUMPTIONS, defaultPlan, planLabel, planSummary, type PlanKind, type PlanState } from "@/lib/payment";
 import { getVariant, modelList, models, variantsFor, type ModelSlug, type VariantId } from "@/lib/vehicles";
-import { rupiah, rupiahShort } from "@/lib/format";
+import { num, rupiah, rupiahShort } from "@/lib/format";
 import o from "@/components/order/order.module.css";
 import s from "./PaymentPlans.module.css";
 
@@ -24,10 +24,10 @@ export function PaymentPlansButton({ variantId }: { variantId: VariantId }) {
   const v = getVariant(variantId)!;
   return (
     <button type="button" className={s.trigger} onClick={() => open(variantId)}>
-      <span>Explore payment plans</span>
+      <span>Lihat skema pembayaran</span>
       <span className="sr-only">
         {" "}
-        for the {models[v.model].name} {v.name}
+        untuk {models[v.model].name} {v.name}
       </span>
       <svg
         width="16"
@@ -86,11 +86,11 @@ export default function PaymentPlans({ children }: { children: React.ReactNode }
         <div className={o.modalHead}>
           <div>
             <h2 id="payment-plans-title" className={o.modalTitle}>
-              Payment plans
+              Skema pembayaran
             </h2>
-            <p className={s.sub}>See what each vehicle costs to pay for, and compare them side by side.</p>
+            <p className={s.sub}>Lihat pembayaran awal, cicilan per bulan, dan total biayanya, lalu bandingkan berdampingan.</p>
           </div>
-          <button type="button" className={o.modalClose} onClick={close} aria-label="Close payment plans">
+          <button type="button" className={o.modalClose} onClick={close} aria-label="Tutup skema pembayaran">
             <svg
               width="18"
               height="18"
@@ -111,7 +111,7 @@ export default function PaymentPlans({ children }: { children: React.ReactNode }
           <div className={s.planBar}>
             <div className={s.kinds}>
               <Segmented
-                label="Payment plan"
+                label="Cara bayar"
                 size="lg"
                 value={plan.kind}
                 onChange={(kind: PlanKind) => patch({ kind })}
@@ -123,9 +123,9 @@ export default function PaymentPlans({ children }: { children: React.ReactNode }
               {plan.kind === "cash" && (
                 <label className={s.toggle}>
                   <span>
-                    <span className={o.toggleTitle}>Add first-year comprehensive insurance</span>
+                    <span className={o.toggleTitle}>Sertakan asuransi all risk tahun pertama</span>
                     <span className={o.toggleHint}>
-                      Estimated at {(ASSUMPTIONS.insuranceRate * 100).toFixed(1)}% of the vehicle price.
+                      Diperkirakan {num(ASSUMPTIONS.insuranceRate * 100, 1)}% dari harga mobil.
                     </span>
                   </span>
                   <input
@@ -140,14 +140,14 @@ export default function PaymentPlans({ children }: { children: React.ReactNode }
               {plan.kind === "finance" && (
                 <>
                   <RangeField
-                    label="Down payment"
+                    label="Uang muka (DP)"
                     value={plan.finance.dpPct}
                     min={F.dpMin}
                     max={F.dpMax}
                     step={5}
                     onChange={(dpPct) => patch({ finance: { ...plan.finance, dpPct } })}
                     display={`${plan.finance.dpPct}%`}
-                    valueText={`${plan.finance.dpPct} percent`}
+                    valueText={`${plan.finance.dpPct} persen`}
                     minLabel={`${F.dpMin}%`}
                     maxLabel={`${F.dpMax}%`}
                   />
@@ -157,41 +157,41 @@ export default function PaymentPlans({ children }: { children: React.ReactNode }
                     onChange={(tenor: number) => patch({ finance: { ...plan.finance, tenor } })}
                     options={F.tenors.map((t) => ({
                       value: t,
-                      label: `${t / 12} yr`,
+                      label: `${t / 12} thn`,
                     }))}
                   />
                   <RangeField
-                    label="Interest rate, flat per year"
+                    label="Bunga flat per tahun"
                     value={plan.finance.rate}
                     min={F.rateMin}
                     max={F.rateMax}
                     step={0.25}
                     onChange={(rate) => patch({ finance: { ...plan.finance, rate } })}
-                    display={`${plan.finance.rate.toFixed(2)}%`}
-                    valueText={`${plan.finance.rate.toFixed(2)} percent flat per year`}
-                    minLabel={`${F.rateMin}%`}
-                    maxLabel={`${F.rateMax}%`}
+                    display={`${num(plan.finance.rate, 2)}%`}
+                    valueText={`${num(plan.finance.rate, 2)} persen flat per tahun`}
+                    minLabel={`${num(F.rateMin)}%`}
+                    maxLabel={`${num(F.rateMax)}%`}
                   />
                 </>
               )}
               {plan.kind === "lease" && (
                 <>
                   <Segmented
-                    label="Contract length"
+                    label="Masa kontrak"
                     value={plan.lease.term}
                     onChange={(term: number) => patch({ lease: { ...plan.lease, term } })}
                     options={L.terms.map((t) => ({
                       value: t,
-                      label: `${t} months`,
+                      label: `${t} bulan`,
                     }))}
                   />
                   <Segmented
-                    label="Distance per year"
+                    label="Jarak tempuh per tahun"
                     value={plan.lease.mileage}
                     onChange={(mileage: number) => patch({ lease: { ...plan.lease, mileage } })}
                     options={L.mileages.map((m) => ({
                       value: m,
-                      label: `${m / 1000}k km`,
+                      label: `${num(m)} km`,
                     }))}
                   />
                 </>
@@ -231,14 +231,14 @@ export default function PaymentPlans({ children }: { children: React.ReactNode }
                 >
                   <path d="M12 5v14M5 12h14" />
                 </svg>
-                Add a vehicle to compare
+                Tambah mobil untuk dibandingkan
               </button>
             )}
           </div>
 
           <p className={s.note}>
-            Prices are official on-the-road prices in Jakarta. Figures marked <span className="est">like this</span> are
-            simulations with illustrative rates, not an offer from XPENG, Erajaya or a financing partner.
+            Harga yang tercantum adalah harga OTR resmi untuk Jakarta. Angka bertanda <span className="est">seperti ini</span>{" "}
+            hanyalah simulasi dengan bunga ilustratif — bukan penawaran dari XPENG, Erajaya, maupun mitra pembiayaan.
           </p>
         </div>
       </dialog>
@@ -270,16 +270,19 @@ function Column({ id, base, plan, onChange, onRemove }: ColumnProps) {
     const bs = planSummary(b.price, plan)[kind];
     const diff = lead - (kind === "cash" ? bs.total : bs.monthly);
     const name = `${models[b.model].shortName} ${b.name}`;
+    const gap = rupiahShort(Math.abs(diff));
     delta =
       Math.abs(diff) < 1
-        ? `Same as the ${name}`
-        : `${rupiahShort(Math.abs(diff))} ${diff > 0 ? "more" : "less"} than the ${name}`;
+        ? `Sama dengan ${name}`
+        : kind === "cash"
+          ? `${gap} lebih ${diff > 0 ? "mahal" : "murah"} dari ${name}`
+          : `${gap}/bln lebih ${diff > 0 ? "tinggi" : "rendah"} dari ${name}`;
   }
 
   const upfrontHint = {
-    cash: "Paid in full before delivery",
-    finance: "Down payment, admin fee and first instalment",
-    lease: `${L.depositMonths} months’ refundable deposit and first month`,
+    cash: "Dibayar lunas sebelum serah terima",
+    finance: "Uang muka, biaya administrasi, dan cicilan pertama",
+    lease: `Deposit ${L.depositMonths} bulan (dikembalikan) dan sewa bulan pertama`,
   }[kind];
 
   return (
@@ -289,7 +292,7 @@ function Column({ id, base, plan, onChange, onRemove }: ColumnProps) {
           <Img src={m.silhouette} alt="" sizes="240px" />
         </span>
         {onRemove && (
-          <button type="button" className={s.remove} onClick={onRemove} aria-label={`Remove the ${m.name} ${v.name}`}>
+          <button type="button" className={s.remove} onClick={onRemove} aria-label={`Hapus ${m.name} ${v.name}`}>
             <svg
               width="14"
               height="14"
@@ -313,8 +316,8 @@ function Column({ id, base, plan, onChange, onRemove }: ColumnProps) {
             options={modelList.map((x) => ({ value: x.slug, label: x.name }))}
           />
           <Select<VariantId>
-            label={`${m.name} variant`}
-            placeholder="Variant"
+            label={`Varian ${m.name}`}
+            placeholder="Varian"
             value={id}
             onChange={onChange}
             options={variantsFor(v.model).map((x) => ({
@@ -328,42 +331,42 @@ function Column({ id, base, plan, onChange, onRemove }: ColumnProps) {
 
       <div className={s.lead}>
         <p className={s.leadLabel}>
-          {kind === "cash" ? "Total price" : kind === "finance" ? "Monthly instalment" : "Monthly rent"}
+          {kind === "cash" ? "Harga total" : kind === "finance" ? "Cicilan per bulan" : "Sewa per bulan"}
         </p>
         <p className={s.leadFigure}>
           <span className={sim ? "est" : undefined}>
             <Tween value={lead} format={rupiah} />
           </span>
-          {kind !== "cash" && <span className={s.per}>/month</span>}
+          {kind !== "cash" && <span className={s.per}>/bln</span>}
         </p>
         <p className={s.delta}>{delta}</p>
       </div>
 
       <dl className={s.rows}>
         <div>
-          <dt>Vehicle price, OTR Jakarta</dt>
+          <dt>Harga OTR Jakarta</dt>
           <dd>{rupiah(v.price)}</dd>
         </div>
         <div>
           <dt>
-            Upfront payment
+            Pembayaran awal
             <span className={s.hint}>{upfrontHint}</span>
           </dt>
           <dd className={sim ? "est" : undefined}>{rupiah(sum.upfront)}</dd>
         </div>
         <div>
-          <dt>Monthly payment</dt>
-          <dd className={kind === "cash" ? s.none : "est"}>{kind === "cash" ? "None" : rupiah(sum.monthly)}</dd>
+          <dt>Pembayaran bulanan</dt>
+          <dd className={kind === "cash" ? s.none : "est"}>{kind === "cash" ? "Tidak ada" : rupiah(sum.monthly)}</dd>
         </div>
         <div>
-          <dt>Duration</dt>
-          <dd>{kind === "cash" ? "One payment" : `${sum.months} months`}</dd>
+          <dt>Durasi</dt>
+          <dd>{kind === "cash" ? "Sekali bayar" : `${sum.months} bulan`}</dd>
         </div>
         <div className={s.total}>
           <dt>
-            Total cost
-            {kind === "lease" && <span className={s.hint}>Rent over the term; the car is returned at the end</span>}
-            {kind === "finance" && <span className={s.hint}>Everything paid over the loan</span>}
+            Total biaya
+            {kind === "lease" && <span className={s.hint}>Total sewa selama kontrak; mobil dikembalikan di akhir masa sewa</span>}
+            {kind === "finance" && <span className={s.hint}>Semua yang dibayar selama masa kredit</span>}
           </dt>
           <dd className={sim ? "est" : undefined}>{rupiah(sum.total)}</dd>
         </div>

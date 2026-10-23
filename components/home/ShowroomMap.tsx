@@ -57,7 +57,7 @@ export default function ShowroomMap() {
                   className={`${s.marker} ${on ? s.markerOn : ""} ${s[g.side]}`}
                   style={g.pos}
                   aria-pressed={on}
-                  aria-label={`${g.id}: ${g.rooms.length} showroom${g.rooms.length > 1 ? "s" : ""}`}
+                  aria-label={`${g.id}: ${g.rooms.length} showroom`}
                   onClick={() => setSelectedId(g.rooms[0].id)}
                 >
                   <span className={s.dot} aria-hidden />
@@ -72,9 +72,9 @@ export default function ShowroomMap() {
 
         <div className={s.copy}>
           <h2 id="showrooms-title" className="headline">
-            Experience XPENG in person.
+            Lihat langsung, lalu coba sendiri.
           </h2>
-          <p className={s.sub}>Visit our showrooms, take a test drive, or speak with our team.</p>
+          <p className={s.sub}>Datangi showroom XPENG untuk melihat mobilnya dari dekat, test drive, atau berbincang dengan tim kami.</p>
         </div>
 
         {/* The slot keeps its height when an area has one showroom, so nothing jumps. */}
@@ -82,7 +82,7 @@ export default function ShowroomMap() {
           {hasTabs && (
             <ShowroomTabs
               key={region.id}
-              label={`Showrooms in ${region.id}`}
+              label={`Showroom di ${region.id}`}
               rooms={region.rooms}
               value={selected.id}
               onChange={setSelectedId}
@@ -92,7 +92,7 @@ export default function ShowroomMap() {
 
         <aside className={s.card} aria-labelledby="showroom-card-title" aria-live="polite">
           <div className={s.cardMedia}>
-            <Img src="/media/home/bento-cover" alt="An XPENG team member showing a customer a car" sizes="400px" className={s.cardImg} />
+            <Img src="/media/home/bento-cover" alt="Staf XPENG menunjukkan mobil kepada pelanggan" sizes="400px" className={s.cardImg} />
           </div>
           <div className={s.cardBody} key={selected.id}>
             <h3 id="showroom-card-title" className={s.cardName}>
@@ -105,7 +105,7 @@ export default function ShowroomMap() {
                   <path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z" />
                   <circle cx="12" cy="9.5" r="2.5" />
                 </svg>
-                <dt className="sr-only">Address</dt>
+                <dt className="sr-only">Alamat</dt>
                 <dd className={s.address}>{selected.address}</dd>
               </div>
               <div>
@@ -113,17 +113,17 @@ export default function ShowroomMap() {
                   <circle cx="12" cy="12" r="9" />
                   <path d="M12 7v5l3 2" />
                 </svg>
-                <dt className={s.rowLabel}>Operating hours</dt>
+                <dt className={s.rowLabel}>Jam operasional</dt>
                 <dd>{selected.hours}</dd>
               </div>
             </dl>
           </div>
           <a className={`btn ${s.cta}`} href={FIND_US_URL} target="_blank" rel="noreferrer">
-            See details
+            Lihat detail
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
               <path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" />
             </svg>
-            <span className="sr-only"> (opens xpeng.co.id)</span>
+            <span className="sr-only"> (membuka xpeng.co.id)</span>
           </a>
         </aside>
       </div>

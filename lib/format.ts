@@ -12,6 +12,10 @@ export const rupiahShort = (n: number) => {
   return rupiah(n);
 };
 
-export const mm = (n: number) => `${new Intl.NumberFormat("en-US").format(n)} mm`;
+/** Indonesian number: 2.890 · 7,75 · 4,50 with `fixed` decimals. */
+export const num = (n: number, fixed?: number) =>
+  new Intl.NumberFormat("id-ID", fixed === undefined ? { maximumFractionDigits: 2 } : { minimumFractionDigits: fixed, maximumFractionDigits: fixed }).format(n);
 
-export const pct = (n: number, d = 0) => `${n.toFixed(d).replace(/\.0+$/, "")}%`;
+export const mm = (n: number) => `${num(n)} mm`;
+
+export const pct = (n: number, d = 0) => `${num(n, d)}%`;

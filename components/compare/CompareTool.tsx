@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import Img from "@/components/Img";
 import { getVariant, models, modelList, variants, type Model, type Variant, type VariantId } from "@/lib/vehicles";
 import { monthlyFrom } from "@/lib/payment";
-import { rupiah, rupiahShort, mm } from "@/lib/format";
+import { rupiah, rupiahShort, mm, num } from "@/lib/format";
 import s from "./CompareTool.module.css";
 
 type Row = {
@@ -17,43 +17,48 @@ type Row = {
   est?: boolean;
 };
 
-const SECTIONS: { title: string; rows: Row[] }[] = [
+const SECTIONS: { id: string; title: string; rows: Row[] }[] = [
   {
-    title: "Price",
+    id: "sec-price",
+    title: "Harga",
     rows: [
       { label: "OTR Jakarta", value: (v) => rupiah(v.price), num: (v) => v.price },
-      { label: "Finance from", value: (v) => `${rupiahShort(monthlyFrom(v.price))}/month`, est: true },
+      { label: "Cicilan mulai", value: (v) => `${rupiahShort(monthlyFrom(v.price))}/bulan`, est: true },
     ],
   },
   {
-    title: "Range and performance",
+    id: "sec-performance",
+    title: "Jarak dan performa",
     rows: [
-      { label: "Range (NEDC)", value: (v) => v.rangeLabel, num: (v) => v.rangeKm, better: "high" },
-      { label: "0–100 km/h", value: (v) => `${v.accel} s`, num: (v) => v.accel, better: "low" },
-      { label: "Drivetrain", value: (v) => v.drivetrain },
+      { label: "Jarak tempuh (NEDC)", value: (v) => v.rangeLabel, num: (v) => v.rangeKm, better: "high" },
+      { label: "0–100 km/jam", value: (v) => `${num(v.accel)} dtk`, num: (v) => v.accel, better: "low" },
+      { label: "Penggerak", value: (v) => v.drivetrain },
     ],
   },
   {
-    title: "Charging",
+    id: "sec-charging",
+    title: "Pengisian daya",
     rows: [
-      { label: "10–80% on DC", value: () => "12 min" },
-      { label: "DC fast charging, peak", value: (v) => `${v.dcKw} kW`, num: (v) => v.dcKw, better: "high" },
+      { label: "10–80% dengan DC", value: () => "12 mnt" },
+      { label: "Pengisian cepat DC (puncak)", value: (v) => `${num(v.dcKw)} kW`, num: (v) => v.dcKw, better: "high" },
     ],
   },
   {
-    title: "Size and space",
+    id: "sec-size",
+    title: "Dimensi dan ruang",
     rows: [
-      { label: "Seats", value: (_, m) => String(m.seats) },
-      { label: "Length", value: (_, m) => mm(m.lengthMm), num: (_, m) => m.lengthMm },
-      { label: "Width", value: (_, m) => mm(m.widthMm) },
-      { label: "Height", value: (_, m) => mm(m.heightMm) },
-      { label: "Wheelbase", value: (_, m) => mm(m.wheelbaseMm), num: (_, m) => m.wheelbaseMm },
-      { label: "Cargo, maximum", value: (_, m) => `${m.cargoMaxL.toLocaleString("en-US")} L`, num: (_, m) => m.cargoMaxL, better: "high" },
+      { label: "Kursi", value: (_, m) => String(m.seats) },
+      { label: "Panjang", value: (_, m) => mm(m.lengthMm), num: (_, m) => m.lengthMm },
+      { label: "Lebar", value: (_, m) => mm(m.widthMm) },
+      { label: "Tinggi", value: (_, m) => mm(m.heightMm) },
+      { label: "Jarak sumbu roda", value: (_, m) => mm(m.wheelbaseMm), num: (_, m) => m.wheelbaseMm },
+      { label: "Bagasi maksimum", value: (_, m) => `${num(m.cargoMaxL)} L`, num: (_, m) => m.cargoMaxL, better: "high" },
     ],
   },
   {
-    title: "Cabin and technology",
-    rows: [{ label: "Screens", value: (_, m) => m.screens }],
+    id: "sec-cabin",
+    title: "Kabin dan teknologi",
+    rows: [{ label: "Layar", value: (_, m) => m.screens }],
   },
 ];
 
@@ -110,14 +115,14 @@ export default function CompareTool() {
     <div className={s.root}>
       <div className={`wrap ${s.intro}`}>
         <div>
-          <h1 className="headline">Compare models</h1>
+          <h1 className="headline">Bandingkan model</h1>
           <p className="lede">
-            Pick up to three variants. Bars show how each one measures against the others in the same row.
+            Letakkan hingga tiga varian berdampingan. Bilah di tiap baris memperlihatkan selisihnya dalam sekali lihat.
           </p>
         </div>
         <label className={s.diffToggle}>
           <input type="checkbox" role="switch" checked={diffOnly} onChange={(e) => setDiffOnly(e.target.checked)} />
-          <span>Only show differences</span>
+          <span>Sembunyikan yang sama</span>
         </label>
       </div>
 
@@ -136,7 +141,7 @@ export default function CompareTool() {
               {slots.length > 2 && (
                 <button type="button" className={s.remove} onClick={() => remove(i)}>
                   <span aria-hidden>×</span>
-                  <span className="sr-only">Remove {v.fullName}</span>
+                  <span className="sr-only">Hapus {v.fullName}</span>
                 </button>
               )}
               <p className={s.slotModel} aria-hidden>
@@ -144,7 +149,7 @@ export default function CompareTool() {
               </p>
               <div className={s.selectWrap}>
                 <label className="sr-only" htmlFor={`slot-${i}`}>
-                  Car {i + 1}
+                  Pilihan {i + 1}
                 </label>
                 <select id={`slot-${i}`} value={v.id} onChange={(e) => setSlot(i, e.target.value as VariantId)}>
                   {modelList.map((mm) => (
@@ -163,10 +168,10 @@ export default function CompareTool() {
               <p className={s.slotPrice}>{rupiah(v.price)}</p>
               <div className={s.slotCtas}>
                 <Link href={`/order/?model=${v.model}&variant=${v.id}`} className="btn btn-sm">
-                  Order
+                  Pesan
                 </Link>
                 <Link href={`/models/${v.model}/`} className={`link small ${s.explore}`}>
-                  Explore
+                  Jelajahi
                 </Link>
               </div>
             </div>
@@ -175,7 +180,7 @@ export default function CompareTool() {
             <div className={`${s.slot} ${s.addSlot}`}>
               <button type="button" className={s.add} onClick={add}>
                 <span aria-hidden className={s.plus}>+</span>
-                Add a car
+                Tambah varian
               </button>
             </div>
           )}
@@ -195,15 +200,15 @@ export default function CompareTool() {
           });
           if (!rows.length) return null;
           return (
-            <section key={sec.title} className={s.section} aria-labelledby={`sec-${sec.title}`}>
-              <h2 id={`sec-${sec.title}`} className={s.sectionTitle}>
+            <section key={sec.id} className={s.section} aria-labelledby={sec.id}>
+              <h2 id={sec.id} className={s.sectionTitle}>
                 {sec.title}
               </h2>
               <table className={s.table} style={cols}>
                 <caption className="sr-only">{sec.title}</caption>
                 <thead className="sr-only">
                   <tr>
-                    <th scope="col">Specification</th>
+                    <th scope="col">Spesifikasi</th>
                     {picked.map(({ v }, i) => (
                       <th key={i} scope="col">
                         {v.fullName}
@@ -226,7 +231,7 @@ export default function CompareTool() {
                           return (
                             <td key={i} className={isBest ? s.best : undefined}>
                               <span className={r.est ? "est" : undefined}>{r.value(v, m)}</span>
-                              {isBest && <span className="sr-only"> (best in this comparison)</span>}
+                              {isBest && <span className="sr-only"> (paling unggul di perbandingan ini)</span>}
                               {n !== undefined && (
                                 <span className={s.bar} aria-hidden>
                                   <span
@@ -253,9 +258,9 @@ export default function CompareTool() {
 
         {diffOnly && hidden > 0 && (
           <p className={s.hiddenNote}>
-            {hidden} identical {hidden === 1 ? "row is" : "rows are"} hidden.{" "}
+            {hidden} baris yang sama disembunyikan.{" "}
             <button type="button" className="link" onClick={() => setDiffOnly(false)}>
-              Show all
+              Tampilkan semua
             </button>
           </p>
         )}
@@ -264,12 +269,12 @@ export default function CompareTool() {
         <>
         <section className={s.section} aria-labelledby="sec-signature">
           <h2 id="sec-signature" className={s.sectionTitle}>
-            Signature features
+            Fitur khas
           </h2>
           <div className={s.featureGrid} style={cols}>
             <span aria-hidden />
             {picked.map(({ m }, i) => (
-              <ul key={i} className={s.features} aria-label={`${m.name} signature features`}>
+              <ul key={i} className={s.features} aria-label={`Fitur khas ${m.name}`}>
                 {m.signature.map((f) => (
                   <li key={f}>{f}</li>
                 ))}
@@ -280,7 +285,7 @@ export default function CompareTool() {
 
         <section className={s.section} aria-labelledby="sec-fit">
           <h2 id="sec-fit" className={s.sectionTitle}>
-            Best suited to
+            Paling cocok untuk
           </h2>
           <div className={s.featureGrid} style={cols}>
             <span aria-hidden />
@@ -295,8 +300,8 @@ export default function CompareTool() {
         )}
 
         <p className="fine">
-          Prices OTR Jakarta and specifications as published on xpeng.co.id, October 2026. Finance figures are a
-          simulation with 30% down over 36 months at an illustrative rate. Silhouettes are drawn to scale.
+          Harga OTR Jakarta dan spesifikasi mengacu pada xpeng.co.id, Oktober 2026. Angka cicilan adalah simulasi
+          dengan DP 30% dan tenor 36 bulan pada suku bunga ilustratif. Siluet mobil digambar sesuai skala.
         </p>
       </div>
     </div>

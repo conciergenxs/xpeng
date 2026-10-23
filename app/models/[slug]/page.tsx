@@ -8,7 +8,7 @@ import HighlightsRail from "@/components/model/HighlightsRail";
 import PaintStage from "@/components/model/PaintStage";
 import PaymentPlans, { PaymentPlansButton } from "@/components/model/PaymentPlans";
 import { models, variantsFor, fromPrice, type ModelSlug, type Variant } from "@/lib/vehicles";
-import { rupiah, rupiahShort, mm } from "@/lib/format";
+import { rupiah, rupiahShort, mm, num } from "@/lib/format";
 import s from "./model.module.css";
 
 type Params = { slug: string };
@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   if (!model) return {};
   return {
     title: `${model.name}, ${model.bodyType}`,
-    description: `${model.intro} From ${rupiah(fromPrice(model.slug))} OTR Jakarta.`,
+    description: `${model.intro} Mulai ${rupiah(fromPrice(model.slug))} OTR Jakarta.`,
   };
 }
 
@@ -39,27 +39,27 @@ export default async function ModelPage({ params }: { params: Promise<Params> })
   const minAccel = Math.min(...vs.map((v) => v.accel));
 
   const specRows: SpecRow[] = [
-    { label: "Range (NEDC)", value: (v) => v.rangeLabel },
-    { label: "0–100 km/h", value: (v) => `${v.accel} s` },
-    { label: "Drivetrain", value: (v) => v.drivetrain },
-    { label: "DC fast charging, peak", value: (v) => `${v.dcKw} kW` },
-    { label: "Charging 10–80%", value: () => "12 min" },
-    { label: "Length × width × height", value: () => `${model.lengthMm} × ${model.widthMm} × ${model.heightMm} mm` },
-    { label: "Wheelbase", value: () => mm(model.wheelbaseMm) },
-    { label: "Seats", value: () => String(model.seats) },
-    { label: "Cargo", value: () => model.cargo },
-    { label: "Screens", value: () => model.screens },
+    { label: "Jarak tempuh (NEDC)", value: (v) => v.rangeLabel },
+    { label: "0–100 km/jam", value: (v) => `${num(v.accel)} dtk` },
+    { label: "Penggerak", value: (v) => v.drivetrain },
+    { label: "Pengisian cepat DC, puncak", value: (v) => `${v.dcKw} kW` },
+    { label: "Pengisian 10–80%", value: () => "12 menit" },
+    { label: "Panjang × lebar × tinggi", value: () => `${num(model.lengthMm)} × ${num(model.widthMm)} × ${num(model.heightMm)} mm` },
+    { label: "Jarak sumbu roda", value: () => mm(model.wheelbaseMm) },
+    { label: "Kursi", value: () => String(model.seats) },
+    { label: "Bagasi", value: () => model.cargo },
+    { label: "Layar", value: () => model.screens },
   ];
 
   // Consecutive light chapters alternate which side the picture sits on.
   const lightIndex = (i: number) => model.chapters.slice(0, i).filter((c) => c.tone === "light").length;
 
   const links = [
-    { id: "highlights", label: "Highlights" },
-    { id: "colours", label: "Colours" },
+    { id: "highlights", label: "Keunggulan" },
+    { id: "colours", label: "Warna" },
     ...model.chapters.map((c) => ({ id: c.id, label: c.nav })),
-    { id: "prices", label: "Prices" },
-    { id: "specs", label: "Specs" },
+    { id: "prices", label: "Harga" },
+    { id: "specs", label: "Spesifikasi" },
   ];
 
   return (
@@ -77,7 +77,7 @@ export default async function ModelPage({ params }: { params: Promise<Params> })
             <h1 id="model-title" className={`display ${s.heroName}`}>
               {model.name}
             </h1>
-            <p className={s.heroPrice}>From {rupiah(fromPrice(model.slug))}</p>
+            <p className={s.heroPrice}>Mulai {rupiah(fromPrice(model.slug))}</p>
           </div>
         </div>
       </section>
@@ -90,27 +90,27 @@ export default async function ModelPage({ params }: { params: Promise<Params> })
           <p className={s.introText}>{model.intro}</p>
           <dl className={s.readouts}>
             <div>
-              <dt>Range, NEDC</dt>
+              <dt>Jarak tempuh NEDC</dt>
               <dd>
                 {maxRange}
                 <span>km</span>
               </dd>
             </div>
             <div>
-              <dt>0–100 km/h from</dt>
+              <dt>0–100 km/jam, tercepat</dt>
               <dd>
-                {minAccel}
-                <span>s</span>
+                {num(minAccel)}
+                <span>dtk</span>
               </dd>
             </div>
             <div>
-              <dt>Charging 10–80%</dt>
+              <dt>Pengisian 10–80%</dt>
               <dd>
-                12<span>min</span>
+                12<span>mnt</span>
               </dd>
             </div>
             <div>
-              <dt>Seats</dt>
+              <dt>Kursi</dt>
               <dd>{model.seats}</dd>
             </div>
           </dl>
@@ -118,7 +118,7 @@ export default async function ModelPage({ params }: { params: Promise<Params> })
       </section>
 
       <section id="highlights" className={s.highlights}>
-        <HighlightsRail title={`Get to know the ${model.shortName}.`} items={model.highlights} />
+        <HighlightsRail title={`Mengenal ${model.shortName} lebih dekat.`} items={model.highlights} />
       </section>
 
       <PaintStage id="colours" title={model.paintTitle} modelName={model.name} slug={model.slug} paints={model.paints} body={model.paintBody} />
@@ -174,7 +174,7 @@ export default async function ModelPage({ params }: { params: Promise<Params> })
         <div className="wrap">
           <div className={`${s.sectionHead} ${s.pricesHead}`}>
             <h2 id="prices-title" className="headline">
-              Choose your {model.name}.
+              Pilih {model.name} Anda.
             </h2>
             <p className="lede">{model.pricesIntro}</p>
           </div>
@@ -189,15 +189,15 @@ export default async function ModelPage({ params }: { params: Promise<Params> })
                   </div>
                   <dl className={s.vSpecs}>
                     <div>
-                      <dt>Range</dt>
+                      <dt>Jarak tempuh</dt>
                       <dd>{v.rangeLabel}</dd>
                     </div>
                     <div>
-                      <dt>0–100 km/h</dt>
-                      <dd>{v.accel} s</dd>
+                      <dt>0–100 km/jam</dt>
+                      <dd>{num(v.accel)} dtk</dd>
                     </div>
                     <div>
-                      <dt>Drive</dt>
+                      <dt>Penggerak</dt>
                       <dd>{v.drivetrain}</dd>
                     </div>
                   </dl>
@@ -217,15 +217,15 @@ export default async function ModelPage({ params }: { params: Promise<Params> })
         <div className="wrap">
           <div className={s.specHead}>
             <h2 id="specs-title" className="headline">
-              Specifications
+              Spesifikasi
             </h2>
-            <p className="lede">Explore the key specifications of the {model.shortName}, across all available configurations.</p>
+            <p className="lede">Semua angka penting {model.shortName}, untuk setiap varian.</p>
           </div>
           <div className={s.specCard}>
             <table className={s.specTable} style={{ "--n": vs.length } as React.CSSProperties}>
               <thead>
                 <tr>
-                  <th scope="col">Specification</th>
+                  <th scope="col">Spesifikasi</th>
                   {vs.map((v) => (
                     <th key={v.id} scope="col">
                       {v.name}
@@ -244,7 +244,7 @@ export default async function ModelPage({ params }: { params: Promise<Params> })
                       {values.map((x, i) => (
                         <td key={vs[i].id} className={same ? (i === 0 ? s.shared : s.repeat) : undefined}>
                           {/* A dash only where a figure is genuinely missing from the data. */}
-                          {x || <span aria-label="Not available">—</span>}
+                          {x || <span aria-label="Tidak tersedia">—</span>}
                         </td>
                       ))}
                     </tr>
@@ -261,14 +261,14 @@ export default async function ModelPage({ params }: { params: Promise<Params> })
         <div className={`wrap ${s.closeInner}`}>
           <Img src={model.silhouette} alt="" sizes="(max-width: 760px) 90vw, 720px" className={s.closeCar} />
           <h2 id="close-title" className="headline">
-            The {model.name}, from {rupiahShort(fromPrice(model.slug))}.
+            Bawa pulang {model.name}, mulai {rupiahShort(fromPrice(model.slug))}.
           </h2>
           <div className={s.closeCtas}>
             <Link href={`/order/?model=${model.slug}`} className="btn">
-              Order now
+              Pesan sekarang
             </Link>
             <a href="https://xpeng.co.id/en/book-now" className="btn btn-ghost">
-              Book a test drive
+              Jadwalkan test drive
             </a>
           </div>
         </div>

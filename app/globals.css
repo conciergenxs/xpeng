@@ -18,6 +18,12 @@
   --on-dark-muted: #a7acb4;
   --on-dark-line: rgba(242, 243, 245, 0.18);
 
+  /* Dark glass: the header and the floating controls, with white content. Used with blur(20px) saturate(1.6). */
+  --glass-dark: rgba(22, 27, 36, 0.72);
+  --glass-dark-soft: rgba(22, 27, 36, 0.3); /* over the hero films only */
+  --glass-dark-line: rgba(255, 255, 255, 0.16);
+  --glass-dark-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 10px 30px -12px rgba(0, 0, 0, 0.35);
+
   --font: var(--font-archivo), "Helvetica Neue", Arial, sans-serif;
 
   /* Type scale: 13 / 15 / 17 / 21 / 28 / fluid display steps */

@@ -6,16 +6,17 @@ import Img from "@/components/Img";
 import InViewVideo from "@/components/InViewVideo";
 import { RotateIcon } from "@/components/model/PaintStage";
 import type { GalleryItem, GalleryTab, Model, Paint, Variant } from "@/lib/vehicles";
+import { num } from "@/lib/format";
 import s from "./OrderStage.module.css";
 
 type Tab = "overview" | "exterior" | GalleryTab;
 
 const TABS: { id: Tab; label: string }[] = [
-  { id: "overview", label: "Overview" },
-  { id: "exterior", label: "Exterior" },
+  { id: "overview", label: "Ringkasan" },
+  { id: "exterior", label: "Eksterior" },
   { id: "interior", label: "Interior" },
-  { id: "tech", label: "Tech" },
-  { id: "comfort", label: "Ride Comfort" },
+  { id: "tech", label: "Teknologi" },
+  { id: "comfort", label: "Kenyamanan" },
 ];
 const GALLERY: GalleryTab[] = ["interior", "tech", "comfort"];
 const isGallery = (t: Tab): t is GalleryTab => (GALLERY as Tab[]).includes(t);
@@ -60,7 +61,7 @@ export default function OrderStage({ model, variant, paint, onPaint }: Props) {
   const simulated = paint.turntable?.simulated;
 
   return (
-    <aside className={s.stage} aria-label="Your car">
+    <aside className={s.stage} aria-label="Mobil Anda">
       <div id={`${ids}-panel`} role="tabpanel" aria-labelledby={`${ids}-tab-${tab}`} className={s.media}>
         <div className={`${s.view} ${s.view360} ${is360 ? s.viewOn : ""}`} aria-hidden={!is360} inert={!is360}>
           <div className={s.carWrap}>
@@ -83,9 +84,9 @@ export default function OrderStage({ model, variant, paint, onPaint }: Props) {
           </div>
           <p className={`${s.cue} ${carReady ? "" : s.cueHidden}`} aria-hidden={!carReady}>
             <RotateIcon />
-            <span>{tab === "exterior" ? paint.name : "Drag to explore 360°"}</span>
+            <span>{tab === "exterior" ? paint.name : "Geser untuk memutar 360°"}</span>
             {/* Recoloured from the official sequence: said plainly, so it is never taken for XPENG imagery. */}
-            {simulated && <span className={s.simulated}>Simulated colour</span>}
+            {simulated && <span className={s.simulated}>Warna simulasi</span>}
           </p>
         </div>
 
@@ -113,19 +114,19 @@ export default function OrderStage({ model, variant, paint, onPaint }: Props) {
           {tab === "overview" && (
             <dl key="facts" className={s.facts}>
               <div className={s.factVariant}>
-                <dt>Variant</dt>
+                <dt>Varian</dt>
                 <dd>{variant.name}</dd>
               </div>
               <div>
-                <dt>Range</dt>
+                <dt>Jarak tempuh</dt>
                 <dd>{variant.rangeLabel}</dd>
               </div>
               <div>
-                <dt>0–100 km/h</dt>
-                <dd>{variant.accel} s</dd>
+                <dt>0–100 km/jam</dt>
+                <dd>{num(variant.accel)} dtk</dd>
               </div>
               <div>
-                <dt>Seats</dt>
+                <dt>Kursi</dt>
                 <dd>{model.seats}</dd>
               </div>
             </dl>
@@ -133,7 +134,7 @@ export default function OrderStage({ model, variant, paint, onPaint }: Props) {
 
           {tab === "exterior" && (
             <fieldset key="paint" className={s.swatches}>
-              <legend className="sr-only">Paint colour</legend>
+              <legend className="sr-only">Warna</legend>
               {model.paints.map((p) => (
                 <label key={p.id} className={s.swatch} title={p.name} onPointerEnter={() => car.current?.warm(p.id)}>
                   <input
@@ -152,13 +153,13 @@ export default function OrderStage({ model, variant, paint, onPaint }: Props) {
           )}
 
           {isGallery(tab) && (
-            <div key={tab} className={s.pager} role="group" aria-label="Slides">
+            <div key={tab} className={s.pager} role="group" aria-label="Slide">
               {model.gallery[tab].map((it, i) => (
                 <button
                   key={it.title}
                   type="button"
                   className={`${s.page} ${i === slides[tab] ? s.pageOn : ""}`}
-                  aria-label={`${i + 1} of ${model.gallery[tab].length}: ${it.title}`}
+                  aria-label={`${i + 1} dari ${model.gallery[tab].length}: ${it.title}`}
                   aria-current={i === slides[tab] ? "true" : undefined}
                   onClick={() => go(tab, i)}
                 />
@@ -210,7 +211,7 @@ function MediaTabs({ ids, tab, onChange }: { ids: string; tab: Tab; onChange: (t
   };
 
   return (
-    <div ref={track} role="tablist" aria-label="Media" className={s.tabs} onKeyDown={onKeyDown}>
+    <div ref={track} role="tablist" aria-label="Galeri" className={s.tabs} onKeyDown={onKeyDown}>
       <span
         className={s.thumb}
         style={thumb ? { transform: `translateX(${thumb.x}px)`, width: thumb.w } : { opacity: 0 }}
@@ -253,14 +254,14 @@ function Gallery({ items, index, active, label, onIndex }: GalleryProps) {
   };
 
   return (
-    <div className={s.frame} role="group" aria-roledescription="carousel" aria-label={label} onPointerDown={onPointerDown} onPointerUp={onPointerUp}>
+    <div className={s.frame} role="group" aria-roledescription="korsel" aria-label={label} onPointerDown={onPointerDown} onPointerUp={onPointerUp}>
       {items.map((it, i) => (
         <div
           key={it.title}
           className={`${s.slide} ${i === index ? s.slideOn : ""}`}
           role="group"
           aria-roledescription="slide"
-          aria-label={`${i + 1} of ${items.length}`}
+          aria-label={`${i + 1} dari ${items.length}`}
           aria-hidden={i !== index}
           inert={i !== index}
         >
@@ -277,10 +278,10 @@ function Gallery({ items, index, active, label, onIndex }: GalleryProps) {
       ))}
       {items.length > 1 && (
         <>
-          <button type="button" className={`${s.arrow} ${s.prev}`} aria-label="Previous slide" onClick={() => onIndex(index - 1)}>
+          <button type="button" className={`${s.arrow} ${s.prev}`} aria-label="Slide sebelumnya" onClick={() => onIndex(index - 1)}>
             <Chevron flip />
           </button>
-          <button type="button" className={`${s.arrow} ${s.next}`} aria-label="Next slide" onClick={() => onIndex(index + 1)}>
+          <button type="button" className={`${s.arrow} ${s.next}`} aria-label="Slide berikutnya" onClick={() => onIndex(index + 1)}>
             <Chevron />
           </button>
         </>

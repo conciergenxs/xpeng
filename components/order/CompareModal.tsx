@@ -4,20 +4,20 @@ import { useState } from "react";
 import Img from "@/components/Img";
 import Select from "@/components/Select";
 import { fromPrice, getVariant, modelList, variantsFor, type Model, type ModelSlug, type Variant, type VariantId } from "@/lib/vehicles";
-import { mm, rupiah } from "@/lib/format";
+import { mm, num, rupiah } from "@/lib/format";
 import s from "./order.module.css";
 
 type Props = { current: ModelSlug; ref: React.RefObject<HTMLDialogElement | null> };
 
 /** All from the official data in lib/vehicles. With a variant chosen, its own figures; until then, the
  *  model's span across its variants. */
-const n = (x: number) => x.toLocaleString("en-US");
-const span = (lo: number, hi: number, unit: string) => (lo === hi ? `${lo} ${unit}` : `${lo}–${hi} ${unit}`);
+const n = (x: number) => num(x);
+const span = (lo: number, hi: number, unit: string) => (lo === hi ? `${n(lo)} ${unit}` : `${n(lo)}–${n(hi)} ${unit}`);
 const ROWS: { label: string; value: (m: Model, v?: Variant) => string }[] = [
-  { label: "Price, OTR Jakarta", value: (m, v) => (v ? rupiah(v.price) : `From ${rupiah(fromPrice(m.slug))}`) },
-  { label: "Variants", value: (m) => String(variantsFor(m.slug).length) },
+  { label: "Harga OTR Jakarta", value: (m, v) => (v ? rupiah(v.price) : `Mulai ${rupiah(fromPrice(m.slug))}`) },
+  { label: "Pilihan varian", value: (m) => String(variantsFor(m.slug).length) },
   {
-    label: "Range (NEDC)",
+    label: "Jarak tempuh (NEDC)",
     value: (m, v) => {
       if (v) return v.rangeLabel;
       const r = variantsFor(m.slug).map((x) => x.rangeKm);
@@ -25,19 +25,19 @@ const ROWS: { label: string; value: (m: Model, v?: Variant) => string }[] = [
     },
   },
   {
-    label: "0–100 km/h",
-    value: (m, v) => (v ? `${v.accel} s` : `From ${Math.min(...variantsFor(m.slug).map((x) => x.accel))} s`),
+    label: "0–100 km/jam",
+    value: (m, v) => (v ? `${n(v.accel)} dtk` : `Tercepat ${n(Math.min(...variantsFor(m.slug).map((x) => x.accel)))} dtk`),
   },
   {
-    label: "Drivetrain",
-    value: (m, v) => v?.drivetrain ?? [...new Set(variantsFor(m.slug).map((x) => x.drivetrain))].join(" or "),
+    label: "Penggerak",
+    value: (m, v) => v?.drivetrain ?? [...new Set(variantsFor(m.slug).map((x) => x.drivetrain))].join(" atau "),
   },
-  { label: "DC charging", value: (m) => m.charge },
-  { label: "Seats", value: (m) => String(m.seats) },
-  { label: "Length × width × height", value: (m) => `${n(m.lengthMm)} × ${n(m.widthMm)} × ${mm(m.heightMm)}` },
-  { label: "Wheelbase", value: (m) => mm(m.wheelbaseMm) },
-  { label: "Cargo, maximum", value: (m) => `${n(m.cargoMaxL)} L` },
-  { label: "Screens", value: (m) => m.screens },
+  { label: "Pengisian cepat DC", value: (m) => m.charge },
+  { label: "Kursi", value: (m) => String(m.seats) },
+  { label: "Panjang × lebar × tinggi", value: (m) => `${n(m.lengthMm)} × ${n(m.widthMm)} × ${mm(m.heightMm)}` },
+  { label: "Jarak sumbu roda", value: (m) => mm(m.wheelbaseMm) },
+  { label: "Bagasi maksimum", value: (m) => `${n(m.cargoMaxL)} L` },
+  { label: "Layar", value: (m) => m.screens },
 ];
 
 /**
@@ -58,9 +58,9 @@ export default function CompareModal({ current, ref }: Props) {
     >
       <div className={s.modalHead}>
         <h2 id="compare-models-title" className={s.modalTitle}>
-          Compare models
+          X9 atau G6?
         </h2>
-        <button type="button" className={s.modalClose} onClick={close} aria-label="Close comparison">
+        <button type="button" className={s.modalClose} onClick={close} aria-label="Tutup perbandingan">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden>
             <path d="M6 6l12 12M18 6 6 18" />
           </svg>
@@ -69,7 +69,7 @@ export default function CompareModal({ current, ref }: Props) {
 
       <div className={s.modalBody}>
         <table className={s.cmp}>
-          <caption className="sr-only">New X9 and G6 compared</caption>
+          <caption className="sr-only">Perbandingan New X9 dan G6</caption>
           <thead>
             <tr>
               <td />
@@ -82,8 +82,8 @@ export default function CompareModal({ current, ref }: Props) {
                   <span className={s.cmpType}>{m.bodyType}</span>
                   <Select
                     className={s.cmpSelect}
-                    label={`${m.name} variant`}
-                    placeholder="Select variant"
+                    label={`Varian ${m.name}`}
+                    placeholder="Pilih varian"
                     value={picked[m.slug] ?? null}
                     onChange={(id) => setPicked((p) => ({ ...p, [m.slug]: id }))}
                     options={variantsFor(m.slug).map((v) => ({ value: v.id, label: v.name, detail: rupiah(v.price) }))}

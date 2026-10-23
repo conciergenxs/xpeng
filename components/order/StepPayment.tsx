@@ -13,7 +13,7 @@ import {
   type PlanKind,
   type PlanState,
 } from "@/lib/payment";
-import { rupiah, rupiahShort } from "@/lib/format";
+import { num, rupiah, rupiahShort } from "@/lib/format";
 import type { OrderState } from "@/lib/order";
 import s from "./order.module.css";
 
@@ -36,16 +36,16 @@ export default function StepPayment({ order, update }: Props) {
   return (
     <>
       <h2 id="step-title" className="headline">
-        Choose how to pay
+        Pilih cara bayar.
       </h2>
       <fieldset className={s.group}>
-        <legend className="sr-only">Payment plan</legend>
+        <legend className="sr-only">Cara bayar</legend>
         <div className={s.plans}>
           {(
             [
-              { kind: "cash", label: "Cash", figure: rupiahShort(cash.total), est: false },
-              { kind: "finance", label: "Finance", figure: `${rupiahShort(fin.monthly)}/mo`, est: true },
-              { kind: "lease", label: "Lease", figure: `${rupiahShort(lease.monthly)}/mo`, est: true },
+              { kind: "cash", label: "Tunai", figure: rupiahShort(cash.total), est: false },
+              { kind: "finance", label: "Kredit", figure: `${rupiahShort(fin.monthly)}/bln`, est: true },
+              { kind: "lease", label: "Sewa", figure: `${rupiahShort(lease.monthly)}/bln`, est: true },
             ] as { kind: PlanKind; label: string; figure: string; est: boolean }[]
           ).map((o) => (
             <label key={o.kind} className={`${s.plan} ${plan.kind === o.kind ? s.selected : ""}`}>
@@ -68,18 +68,18 @@ export default function StepPayment({ order, update }: Props) {
       {plan.kind === "cash" && (
         <div className={s.planBody}>
           <div className={s.figureBlock}>
-            <p className={s.bigEyebrow}>Cash total</p>
+            <p className={s.bigEyebrow}>Total tunai</p>
             <p className={s.bigFigure}>
               <Tween value={cash.total} format={rupiah} />
             </p>
-            <p className={s.bigLabel}>Total to pay before delivery</p>
+            <p className={s.bigLabel}>Dilunasi sebelum mobil diserahkan</p>
           </div>
 
           <label className={s.toggleRow}>
             <span>
-              <span className={s.toggleTitle}>Add first-year comprehensive insurance</span>
+              <span className={s.toggleTitle}>Sertakan asuransi all risk tahun pertama</span>
               <span className={s.toggleHint}>
-                Estimated at {(ASSUMPTIONS.insuranceRate * 100).toFixed(1)}% of the vehicle price. You can also arrange your own.
+                Kira-kira {num(ASSUMPTIONS.insuranceRate * 100, 1)}% dari harga mobil. Bisa juga memakai asuransi pilihan Anda sendiri.
               </span>
             </span>
             <input
@@ -91,15 +91,15 @@ export default function StepPayment({ order, update }: Props) {
             />
           </label>
 
-          <h3 className={`${s.groupLabel} ${s.breakdownHead}`}>Breakdown</h3>
+          <h3 className={`${s.groupLabel} ${s.breakdownHead}`}>Rinciannya</h3>
           <dl className={s.breakdown}>
             <div>
-              <dt>Vehicle price, OTR Jakarta</dt>
+              <dt>Harga mobil, OTR Jakarta</dt>
               <dd>{rupiah(cash.price)}</dd>
             </div>
             {plan.cash.insurance && (
               <div>
-                <dt>Comprehensive insurance, year one</dt>
+                <dt>Asuransi all risk, tahun pertama</dt>
                 <dd className="est">{rupiah(cash.insurance)}</dd>
               </div>
             )}
@@ -108,17 +108,17 @@ export default function StepPayment({ order, update }: Props) {
               <dd>{rupiah(cash.total)}</dd>
             </div>
             <div>
-              <dt>Reservation deposit, due today</dt>
+              <dt>Uang tanda jadi, dibayar hari ini</dt>
               <dd className="est">{rupiah(cash.dueToday)}</dd>
             </div>
             <div>
-              <dt>Balance, due before delivery</dt>
+              <dt>Sisa pelunasan, sebelum serah terima</dt>
               <dd>{rupiah(cash.balance)}</dd>
             </div>
           </dl>
           <p className={s.hint}>
-            OTR prices outside Jakarta differ because of regional vehicle tax (BBNKB). Your advisor will confirm the
-            figure for your city.
+            Di luar Jakarta, harga OTR bisa berbeda karena pajak daerah (BBNKB). Konsultan kami akan menyampaikan angka
+            pasti untuk kota Anda.
           </p>
         </div>
       )}
@@ -126,20 +126,20 @@ export default function StepPayment({ order, update }: Props) {
       {plan.kind === "finance" && (
         <div className={s.planBody}>
           <div className={s.figureBlock}>
-            <p className={s.bigEyebrow}>Monthly instalment</p>
+            <p className={s.bigEyebrow}>Cicilan per bulan</p>
             <p className={s.bigFigure}>
               <span className="est">
                 <Tween value={fin.monthly} format={rupiah} />
               </span>
             </p>
             <p className={s.bigLabel}>
-              per month for {plan.finance.tenor} months <span className="sim-tag">Simulation</span>
+              selama {plan.finance.tenor} bulan <span className="sim-tag">Simulasi</span>
             </p>
           </div>
 
           <div className={s.controls}>
             <RangeField
-              label="Down payment (DP)"
+              label="Uang muka (DP)"
               value={plan.finance.dpPct}
               min={F.dpMin}
               max={F.dpMax}
@@ -150,7 +150,7 @@ export default function StepPayment({ order, update }: Props) {
                   {plan.finance.dpPct}% <span className={s.valueSub}>{rupiahShort(fin.dp)}</span>
                 </>
               }
-              valueText={`${plan.finance.dpPct} percent, ${rupiah(fin.dp)}`}
+              valueText={`${plan.finance.dpPct} persen, ${rupiah(fin.dp)}`}
               minLabel={`${F.dpMin}%`}
               maxLabel={`${F.dpMax}%`}
             />
@@ -158,55 +158,55 @@ export default function StepPayment({ order, update }: Props) {
               label="Tenor"
               value={plan.finance.tenor}
               onChange={(tenor: number) => setPlan({ finance: { ...plan.finance, tenor } })}
-              options={F.tenors.map((t) => ({ value: t, label: `${t / 12} yr`, hint: `${t} mo` }))}
+              options={F.tenors.map((t) => ({ value: t, label: `${t / 12} thn`, hint: `${t} bln` }))}
             />
             <RangeField
-              label="Interest rate, flat per year"
+              label="Bunga flat per tahun"
               value={plan.finance.rate}
               min={F.rateMin}
               max={F.rateMax}
               step={0.25}
               onChange={(rate) => setPlan({ finance: { ...plan.finance, rate } })}
-              display={`${plan.finance.rate.toFixed(2)}%`}
-              valueText={`${plan.finance.rate.toFixed(2)} percent flat per year`}
+              display={`${num(plan.finance.rate, 2)}%`}
+              valueText={`${num(plan.finance.rate, 2)} persen flat per tahun`}
               minLabel={`${F.rateMin}%`}
               maxLabel={`${F.rateMax}%`}
             />
           </div>
 
-          <h3 className={`${s.groupLabel} ${s.breakdownHead}`}>Breakdown</h3>
+          <h3 className={`${s.groupLabel} ${s.breakdownHead}`}>Rinciannya</h3>
           <dl className={s.breakdown}>
             <div>
-              <dt>Down payment</dt>
+              <dt>Uang muka</dt>
               <dd>{rupiah(fin.dp)}</dd>
             </div>
             <div>
-              <dt>Loan amount</dt>
+              <dt>Pokok pinjaman</dt>
               <dd>{rupiah(fin.principal)}</dd>
             </div>
             <div>
-              <dt>Total interest over {plan.finance.tenor} months</dt>
+              <dt>Total bunga selama {plan.finance.tenor} bulan</dt>
               <dd className="est">{rupiah(fin.interest)}</dd>
             </div>
             <div>
-              <dt>Admin fee</dt>
+              <dt>Biaya administrasi</dt>
               <dd className="est">{rupiah(fin.admin)}</dd>
             </div>
             <div className={s.total}>
               <dt>
-                Total first payment (TDP)
-                <span className={s.dtHint}>Down payment, admin fee and first instalment paid in advance (ADDM)</span>
+                Total pembayaran pertama (TDP)
+                <span className={s.dtHint}>Uang muka, biaya administrasi, dan cicilan pertama yang dibayar di depan (ADDM)</span>
               </dt>
               <dd className="est">{rupiah(fin.tdp)}</dd>
             </div>
             <div>
-              <dt>Total paid over the loan</dt>
+              <dt>Total dibayar sampai lunas</dt>
               <dd className="est">{rupiah(fin.totalPaid)}</dd>
             </div>
           </dl>
           <p className={s.hint}>
-            Subject to approval by a financing partner. You&rsquo;ll typically need your KTP, KK, NPWP and proof of
-            income. Rates shown are illustrative, not an offer.
+            Kredit diajukan melalui mitra pembiayaan dan perlu disetujui lebih dulu. Umumnya Anda perlu menyiapkan KTP,
+            KK, NPWP, dan bukti penghasilan. Bunga di sini hanya ilustrasi, bukan penawaran.
           </p>
         </div>
       )}
@@ -214,86 +214,86 @@ export default function StepPayment({ order, update }: Props) {
       {plan.kind === "lease" && (
         <div className={s.planBody}>
           <div className={s.figureBlock}>
-            <p className={s.bigEyebrow}>Monthly rent</p>
+            <p className={s.bigEyebrow}>Sewa per bulan</p>
             <p className={s.bigFigure}>
               <span className="est">
                 <Tween value={lease.monthly} format={rupiah} />
               </span>
             </p>
             <p className={s.bigLabel}>
-              per month for {plan.lease.term} months <span className="sim-tag">Simulation</span>
+              selama {plan.lease.term} bulan <span className="sim-tag">Simulasi</span>
             </p>
           </div>
 
           <div className={s.controls}>
             <Segmented
-              label="Contract length"
+              label="Masa kontrak"
               value={plan.lease.term}
               onChange={(term: number) => setPlan({ lease: { ...plan.lease, term } })}
-              options={L.terms.map((t) => ({ value: t, label: `${t} months` }))}
+              options={L.terms.map((t) => ({ value: t, label: `${t} bulan` }))}
             />
             <Segmented
-              label="Distance per year"
+              label="Jarak tempuh per tahun"
               value={plan.lease.mileage}
               onChange={(mileage: number) => setPlan({ lease: { ...plan.lease, mileage } })}
-              options={L.mileages.map((m) => ({ value: m, label: `${m / 1000}k km` }))}
+              options={L.mileages.map((m) => ({ value: m, label: `${num(m)} km` }))}
             />
           </div>
 
-          <h3 className={`${s.groupLabel} ${s.breakdownHead}`}>Breakdown</h3>
+          <h3 className={`${s.groupLabel} ${s.breakdownHead}`}>Rinciannya</h3>
           <dl className={s.breakdown}>
             <div>
               <dt>
-                Security deposit
-                <span className={s.dtHint}>{L.depositMonths} months&rsquo; rent, refunded at the end</span>
+                Deposit jaminan
+                <span className={s.dtHint}>Senilai {L.depositMonths} bulan sewa, dikembalikan di akhir kontrak</span>
               </dt>
               <dd className="est">{rupiah(lease.deposit)}</dd>
             </div>
             <div>
-              <dt>First month&rsquo;s rent</dt>
+              <dt>Sewa bulan pertama</dt>
               <dd className="est">{rupiah(lease.monthly)}</dd>
             </div>
             <div className={s.total}>
-              <dt>Initial payment</dt>
+              <dt>Pembayaran awal</dt>
               <dd className="est">{rupiah(lease.initial)}</dd>
             </div>
             <div>
-              <dt>Total rent over {plan.lease.term} months</dt>
+              <dt>Total sewa selama {plan.lease.term} bulan</dt>
               <dd className="est">{rupiah(lease.totalPaid)}</dd>
             </div>
           </dl>
 
           <div className={s.includes}>
-            <h3 className={s.groupLabel}>Included in the monthly rent</h3>
+            <h3 className={s.groupLabel}>Sudah termasuk dalam sewa bulanan</h3>
             <ul>
-              <li>Scheduled maintenance at XPENG service centres</li>
-              <li>Comprehensive insurance</li>
-              <li>Annual STNK renewal and vehicle tax</li>
-              <li>24-hour roadside assistance</li>
+              <li>Servis berkala di bengkel resmi XPENG</li>
+              <li>Asuransi all risk</li>
+              <li>Perpanjangan STNK dan pajak kendaraan tahunan</li>
+              <li>Bantuan darurat di jalan, 24 jam</li>
             </ul>
           </div>
           <p className={s.hint}>
-            Hand the car back at the end, extend, or upgrade to a new XPENG. Distance above your allowance is charged at{" "}
-            {rupiah(L.excessKm)}/km. Lease is shown as a concept: availability, terms and eligibility for individual
-            and company customers are to be confirmed by XPENG Indonesia.
+            Di akhir kontrak, Anda bisa mengembalikan mobil, memperpanjang, atau beralih ke XPENG baru. Kelebihan jarak
+            tempuh dikenakan {rupiah(L.excessKm)}/km. Skema sewa ini masih berupa konsep: ketersediaan, syarat, dan
+            kelayakan untuk pelanggan perorangan maupun perusahaan akan dikonfirmasi oleh XPENG Indonesia.
           </p>
         </div>
       )}
 
       {/* Side-by-side: every plan, same car, same moment */}
       <div className={s.compareWrap}>
-        <h3 className={s.groupLabel}>Compare plans for this car</h3>
+        <h3 className={s.groupLabel}>Tiga cara bayar, mobil yang sama</h3>
         <div className={s.compareScroll}>
           <table className={s.compareTable}>
             <thead>
               <tr>
                 <th scope="col">
-                  <span className="sr-only">Measure</span>
+                  <span className="sr-only">Aspek</span>
                 </th>
                 {(["cash", "finance", "lease"] as const).map((k) => (
                   <th key={k} scope="col" className={plan.kind === k ? s.colOn : undefined}>
                     <button type="button" onClick={() => setPlan({ kind: k })} aria-pressed={plan.kind === k}>
-                      {k === "cash" ? "Cash" : k === "finance" ? "Finance" : "Lease"}
+                      {k === "cash" ? "Tunai" : k === "finance" ? "Kredit" : "Sewa"}
                     </button>
                   </th>
                 ))}
@@ -301,7 +301,7 @@ export default function StepPayment({ order, update }: Props) {
             </thead>
             <tbody>
               <tr>
-                <th scope="row">Paid upfront</th>
+                <th scope="row">Dibayar di awal</th>
                 <td className={plan.kind === "cash" ? s.colOn : undefined}>{rupiahShort(sum.cash.upfront)}</td>
                 <td className={plan.kind === "finance" ? s.colOn : undefined}>
                   <span className="est">{rupiahShort(sum.finance.upfront)}</span>
@@ -311,8 +311,8 @@ export default function StepPayment({ order, update }: Props) {
                 </td>
               </tr>
               <tr>
-                <th scope="row">Monthly</th>
-                <td className={plan.kind === "cash" ? s.colOn : undefined}>None</td>
+                <th scope="row">Per bulan</th>
+                <td className={plan.kind === "cash" ? s.colOn : undefined}>Tidak ada</td>
                 <td className={plan.kind === "finance" ? s.colOn : undefined}>
                   <span className="est">{rupiahShort(sum.finance.monthly)}</span>
                 </td>
@@ -321,13 +321,13 @@ export default function StepPayment({ order, update }: Props) {
                 </td>
               </tr>
               <tr>
-                <th scope="row">Commitment</th>
-                <td className={plan.kind === "cash" ? s.colOn : undefined}>One payment</td>
-                <td className={plan.kind === "finance" ? s.colOn : undefined}>{sum.finance.months} months</td>
-                <td className={plan.kind === "lease" ? s.colOn : undefined}>{sum.lease.months} months</td>
+                <th scope="row">Jangka waktu</th>
+                <td className={plan.kind === "cash" ? s.colOn : undefined}>Sekali bayar</td>
+                <td className={plan.kind === "finance" ? s.colOn : undefined}>{sum.finance.months} bulan</td>
+                <td className={plan.kind === "lease" ? s.colOn : undefined}>{sum.lease.months} bulan</td>
               </tr>
               <tr>
-                <th scope="row">Total over the period</th>
+                <th scope="row">Total selama periode</th>
                 <td className={plan.kind === "cash" ? s.colOn : undefined}>{rupiahShort(sum.cash.total)}</td>
                 <td className={plan.kind === "finance" ? s.colOn : undefined}>
                   <span className="est">{rupiahShort(sum.finance.total)}</span>
@@ -337,16 +337,16 @@ export default function StepPayment({ order, update }: Props) {
                 </td>
               </tr>
               <tr>
-                <th scope="row">At the end</th>
-                <td className={plan.kind === "cash" ? s.colOn : undefined}>You own it</td>
-                <td className={plan.kind === "finance" ? s.colOn : undefined}>You own it</td>
-                <td className={plan.kind === "lease" ? s.colOn : undefined}>Return or upgrade</td>
+                <th scope="row">Di akhir periode</th>
+                <td className={plan.kind === "cash" ? s.colOn : undefined}>Mobil milik Anda</td>
+                <td className={plan.kind === "finance" ? s.colOn : undefined}>Mobil milik Anda</td>
+                <td className={plan.kind === "lease" ? s.colOn : undefined}>Kembalikan atau ganti baru</td>
               </tr>
               <tr>
-                <th scope="row">Suits</th>
-                <td className={plan.kind === "cash" ? s.colOn : undefined}>Lowest total cost</td>
-                <td className={plan.kind === "finance" ? s.colOn : undefined}>Spreading the cost, owning it</td>
-                <td className={plan.kind === "lease" ? s.colOn : undefined}>Predictable costs, no resale worry</td>
+                <th scope="row">Cocok bila</th>
+                <td className={plan.kind === "cash" ? s.colOn : undefined}>Ingin total biaya paling rendah</td>
+                <td className={plan.kind === "finance" ? s.colOn : undefined}>Ingin mencicil, lalu memiliki</td>
+                <td className={plan.kind === "lease" ? s.colOn : undefined}>Ingin biaya pasti, tanpa urusan jual kembali</td>
               </tr>
             </tbody>
           </table>

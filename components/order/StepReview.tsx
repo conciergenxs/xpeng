@@ -16,7 +16,7 @@ type Props = {
   errors: Errors;
 };
 
-const CONTACT = { whatsapp: "WhatsApp", phone: "Phone call", email: "Email" };
+const CONTACT = { whatsapp: "WhatsApp", phone: "Telepon", email: "Email" };
 
 export default function StepReview({ order, update, goTo, errors }: Props) {
   const terms = useRef<HTMLDialogElement>(null);
@@ -29,15 +29,15 @@ export default function StepReview({ order, update, goTo, errors }: Props) {
   return (
     <>
       <h2 id="step-title" className="headline">
-        Review and reserve
+        Periksa sekali lagi.
       </h2>
-      <p className={s.stepIntro}>Check everything once more. You can change any part before you reserve.</p>
+      <p className={s.stepIntro}>Pastikan semuanya sesuai; setiap bagian masih bisa diubah. Reservasi ini belum mengikat — pesanan baru final setelah SPK ditandatangani di showroom.</p>
 
       <section className={s.review} aria-labelledby="rv-car">
         <div className={s.reviewHead}>
-          <h3 id="rv-car">Your car</h3>
+          <h3 id="rv-car">Mobil Anda</h3>
           <button type="button" className="link small" onClick={() => goTo(0)}>
-            Change<span className="sr-only"> car</span>
+            Ubah<span className="sr-only"> mobil</span>
           </button>
         </div>
         <dl className={s.summaryList}>
@@ -48,11 +48,11 @@ export default function StepReview({ order, update, goTo, errors }: Props) {
             </dd>
           </div>
           <div>
-            <dt>Colour</dt>
+            <dt>Warna</dt>
             <dd>{paint.name}</dd>
           </div>
           <div>
-            <dt>Price, OTR Jakarta</dt>
+            <dt>Harga OTR Jakarta</dt>
             <dd>{rupiah(variant.price)}</dd>
           </div>
         </dl>
@@ -60,9 +60,9 @@ export default function StepReview({ order, update, goTo, errors }: Props) {
 
       <section className={s.review} aria-labelledby="rv-pay">
         <div className={s.reviewHead}>
-          <h3 id="rv-pay">Payment</h3>
+          <h3 id="rv-pay">Pembayaran</h3>
           <button type="button" className="link small" onClick={() => goTo(1)}>
-            Change<span className="sr-only"> payment</span>
+            Ubah<span className="sr-only"> pembayaran</span>
           </button>
         </div>
         <PlanSummary variantId={order.variantId} plan={order.plan} />
@@ -70,21 +70,21 @@ export default function StepReview({ order, update, goTo, errors }: Props) {
 
       <section className={s.review} aria-labelledby="rv-you">
         <div className={s.reviewHead}>
-          <h3 id="rv-you">Your details</h3>
+          <h3 id="rv-you">Data diri</h3>
           <button type="button" className="link small" onClick={() => goTo(2)}>
-            Change<span className="sr-only"> details</span>
+            Ubah<span className="sr-only"> data diri</span>
           </button>
         </div>
         <dl className={s.summaryList}>
           <div>
-            <dt>Name</dt>
+            <dt>Nama</dt>
             <dd>
               {c.firstName} {c.lastName}
               {c.buyerType === "company" && `, ${c.company}`}
             </dd>
           </div>
           <div>
-            <dt>Contact</dt>
+            <dt>Kontak</dt>
             <dd>
               {c.email}
               <br />
@@ -96,10 +96,10 @@ export default function StepReview({ order, update, goTo, errors }: Props) {
             <dd>{showroom?.name}</dd>
           </div>
           <div>
-            <dt>Reach me by</dt>
+            <dt>Dihubungi lewat</dt>
             <dd>
               {CONTACT[c.contact]}
-              {c.tradeIn && ", has a trade-in"}
+              {c.tradeIn && ", ada mobil untuk tukar tambah"}
             </dd>
           </div>
         </dl>
@@ -107,15 +107,15 @@ export default function StepReview({ order, update, goTo, errors }: Props) {
 
       <div className={s.deposit}>
         <div>
-          <p className={s.depositLabel}>Reservation deposit</p>
+          <p className={s.depositLabel}>Uang tanda jadi</p>
           <p className={s.depositValue}>
             <span className="est">{rupiah(ASSUMPTIONS.reservationDeposit)}</span>
           </p>
         </div>
         <p className={s.hint}>
-          After you reserve, you&rsquo;d receive a bank virtual account number to pay the deposit within 24 hours. It
-          comes off your final price and is refundable if your financing isn&rsquo;t approved. No payment is taken in
-          this prototype; the deposit amount is illustrative.
+          Setelah reservasi, Anda akan menerima nomor virtual account untuk membayar uang tanda jadi dalam 24 jam.
+          Jumlah ini nantinya mengurangi harga akhir, dan dikembalikan bila pengajuan pembiayaan tidak disetujui. Prototipe
+          ini tidak menagih pembayaran apa pun; nominalnya hanya ilustrasi.
         </p>
       </div>
 
@@ -130,13 +130,13 @@ export default function StepReview({ order, update, goTo, errors }: Props) {
             aria-describedby={errors.terms ? "e-terms" : undefined}
           />
           <span>
-            I agree to the{" "}
+            Saya menyetujui{" "}
             <button type="button" className="link" onClick={() => terms.current?.showModal()}>
-              reservation terms
+              syarat reservasi
             </button>{" "}
-            and to XPENG Indonesia processing my details to handle this order, as described in the{" "}
+            dan mengizinkan XPENG Indonesia memproses data saya untuk pesanan ini, sesuai{" "}
             <a className="link" href="https://xpeng.co.id/en/privacy-policy" target="_blank" rel="noreferrer">
-              privacy policy
+              kebijakan privasi
             </a>
             .
           </span>
@@ -152,23 +152,23 @@ export default function StepReview({ order, update, goTo, errors }: Props) {
             checked={order.consent.marketing}
             onChange={(e) => update({ consent: { ...order.consent, marketing: e.target.checked } })}
           />
-          <span>Send me XPENG news and offers. Optional.</span>
+          <span>Kirimi saya kabar terbaru dan penawaran dari XPENG. Opsional.</span>
         </label>
       </div>
 
       <dialog ref={terms} className={s.dialog} aria-labelledby="terms-title" onClick={(e) => e.target === terms.current && terms.current?.close()}>
         <div className={s.dialogBody}>
-          <h3 id="terms-title">Reservation terms (illustrative)</h3>
+          <h3 id="terms-title">Syarat reservasi (ilustrasi)</h3>
           <ol>
-            <li>A reservation holds your chosen specification while your advisor confirms availability, final OTR price for your city and delivery timing.</li>
-            <li>The reservation deposit is deducted from the vehicle price at settlement.</li>
-            <li>If financing or lease approval is declined, the deposit is refunded in full.</li>
-            <li>Finance and lease figures shown online are estimates. The binding offer comes from the financing partner.</li>
-            <li>The order becomes binding only once you sign the purchase agreement (SPK) with your showroom.</li>
+            <li>Reservasi menahan spesifikasi pilihan Anda selama konsultan memastikan ketersediaan, harga OTR final untuk kota Anda, dan jadwal pengiriman.</li>
+            <li>Uang tanda jadi dipotongkan dari harga mobil saat pelunasan.</li>
+            <li>Bila pengajuan kredit atau sewa ditolak, uang tanda jadi dikembalikan utuh.</li>
+            <li>Angka kredit dan sewa di situs ini adalah perkiraan. Penawaran yang mengikat datang dari mitra pembiayaan.</li>
+            <li>Pesanan baru mengikat setelah Anda menandatangani Surat Pesanan Kendaraan (SPK) di showroom.</li>
           </ol>
-          <p className="fine">These terms are written for this prototype and are not XPENG Indonesia&rsquo;s commercial terms.</p>
+          <p className="fine">Syarat ini disusun untuk prototipe dan bukan ketentuan komersial XPENG Indonesia.</p>
           <form method="dialog">
-            <button className="btn">Close</button>
+            <button className="btn">Tutup</button>
           </form>
         </div>
       </dialog>
