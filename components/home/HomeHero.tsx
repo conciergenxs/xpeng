@@ -139,7 +139,7 @@ export default function HomeHero() {
 
       <div className={`wrap ${s.inner}`}>
         <div className={s.copy} key={current.slug}>
-          <p className={s.eyebrow}>New {current.shortName}</p>
+          <p className={s.eyebrow}>{current.name}</p>
           <h2 className={s.headline}>{sentence(current.tagline)}</h2>
         </div>
 
