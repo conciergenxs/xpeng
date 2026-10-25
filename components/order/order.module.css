@@ -1097,6 +1097,13 @@
   }
 }
 
+/* Phones: the stage ends with its own row, so no hairline before the panel. */
+@media (max-width: 760px) {
+  .panel {
+    border-top: 0;
+  }
+}
+
 @media (max-width: 640px) {
   /* Model comparison: each row's label above the two values. */
   .cmp thead td {
