@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     template: "%s | XPENG Indonesia",
   },
   description:
-    "Kenali New X9 dan G6, bandingkan setiap varian, hitung simulasi tunai, kredit, atau sewa dalam rupiah, lalu amankan unit Anda secara online.",
+    "Kenali New X9 dan G6 Pro, bandingkan setiap varian, hitung simulasi tunai, kredit, atau sewa dalam rupiah, lalu amankan unit Anda secara online.",
   icons: { icon: "/media/brand/xpeng-mark-white.svg" },
 };
 

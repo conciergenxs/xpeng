@@ -32,7 +32,7 @@ export default function StepVehicle({ order, update }: Props) {
             Model
           </span>
           <button type="button" className={`link ${s.groupAction}`} onClick={() => compare.current?.showModal()}>
-            Bandingkan New X9 dan G6
+            Bandingkan New X9 dan G6 Pro
           </button>
         </div>
         <div className={s.modelCards}>

@@ -35,7 +35,7 @@ const FEATURES: Feature[] = [
     id: "ota",
     name: "PEMBARUAN OTA",
     copy: "Sistem dan fitur yang didukung bisa terus disempurnakan lewat pembaruan perangkat lunak nirkabel, tanpa harus datang ke bengkel.",
-    media: { kind: "image", src: "/media/home/why/ota", alt: "XPENG G6 dikelilingi garis digital yang menggambarkan pembaruan perangkat lunak" },
+    media: { kind: "image", src: "/media/home/why/ota", alt: "XPENG G6 Pro dikelilingi garis digital yang menggambarkan pembaruan perangkat lunak" },
   },
   {
     id: "safety",

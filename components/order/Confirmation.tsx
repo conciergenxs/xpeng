@@ -46,7 +46,7 @@ export default function Confirmation({ order, onNew }: { order: OrderState; onNe
             title: "Konfirmasi program sewa",
             text: "Skema sewa masih berupa ilustrasi konsep. Konsultan akan memastikan apakah program, mitra, tarif, dan ketentuannya tersedia sebelum ada pengajuan.",
           },
-    { title: "Tanda tangan, lalu bawa pulang", text: `Tandatangani SPK, lalu jemput ${model.name} Anda di ${showroom?.name ?? "showroom"}.` },
+    { title: "Tanda tangan, lalu bawa pulang", text: `Tandatangani SPK, lalu jemput ${variant.fullName} Anda di ${showroom?.name ?? "showroom"}.` },
   ];
 
   return (
@@ -60,7 +60,7 @@ export default function Confirmation({ order, onNew }: { order: OrderState; onNe
             {order.customer.firstName}, reservasi Anda sudah kami terima.
           </h1>
           <p className="lede">
-            {model.name} {variant.name} warna {paint.name} kini tertahan atas nama Anda. Pada layanan sebenarnya,
+            {variant.fullName} warna {paint.name} kini tertahan atas nama Anda. Pada layanan sebenarnya,
             ringkasannya dikirim ke {order.customer.email}.
           </p>
 
@@ -105,11 +105,11 @@ export default function Confirmation({ order, onNew }: { order: OrderState; onNe
 
         <aside className={s.card} aria-label="Ringkasan pesanan">
           <div className={s.cardCar} style={{ background: paint.stage }}>
-            <Img src={paint.image} alt={`${model.name} warna ${paint.name}`} sizes="480px" />
+            <Img src={paint.image} alt={`${variant.fullName} warna ${paint.name}`} sizes="480px" />
           </div>
           <div className={s.cardBody}>
             <p className={s.cardName}>
-              {model.name} {variant.name}
+              {variant.fullName}
             </p>
             <p className="muted small">
               {paint.name}, jarak tempuh {variant.rangeLabel.charAt(0).toLowerCase() + variant.rangeLabel.slice(1)}

@@ -27,7 +27,7 @@ export function PaymentPlansButton({ variantId }: { variantId: VariantId }) {
       <span>Lihat skema pembayaran</span>
       <span className="sr-only">
         {" "}
-        untuk {models[v.model].name} {v.name}
+        untuk {v.fullName}
       </span>
       <svg
         width="16"
@@ -270,7 +270,7 @@ function Column({ id, base, plan, onChange, onRemove }: ColumnProps) {
     const b = getVariant(base)!;
     const bs = planSummary(b.price, plan)[kind];
     const diff = lead - (kind === "cash" ? bs.total : bs.monthly);
-    const name = `${models[b.model].name} ${b.name}`;
+    const name = b.fullName;
     const gap = rupiahShort(Math.abs(diff));
     delta =
       Math.abs(diff) < 1
@@ -287,13 +287,13 @@ function Column({ id, base, plan, onChange, onRemove }: ColumnProps) {
   }[kind];
 
   return (
-    <section className={s.column} aria-label={`${m.name} ${v.name}`}>
+    <section className={s.column} aria-label={v.fullName}>
       <div className={s.colHead}>
         <span className={s.car}>
           <Img src={m.silhouette} alt="" sizes="240px" />
         </span>
         {onRemove && (
-          <button type="button" className={s.remove} onClick={onRemove} aria-label={`Hapus ${m.name} ${v.name}`}>
+          <button type="button" className={s.remove} onClick={onRemove} aria-label={`Hapus ${v.fullName}`}>
             <svg
               width="14"
               height="14"

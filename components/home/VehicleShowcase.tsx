@@ -141,7 +141,7 @@ export default function VehicleShowcase() {
             XPENG mana yang cocok untuk Anda?
           </h2>
           <p className={s.sub}>
-            New X9 yang lega untuk tujuh orang, atau G6 yang sporty. Putar mobilnya, lalu lihat detailnya.
+            New X9 yang lega untuk tujuh orang, atau G6 Pro yang sporty. Putar mobilnya, lalu lihat detailnya.
           </p>
           <div className={s.toggle}>
             <Segmented
@@ -151,7 +151,7 @@ export default function VehicleShowcase() {
               onChange={setSlug}
               options={[
                 { value: "x9", label: "New X9" },
-                { value: "g6", label: "G6" },
+                { value: "g6", label: "G6 Pro" },
               ]}
             />
           </div>

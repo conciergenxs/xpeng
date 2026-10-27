@@ -314,7 +314,7 @@ export const models: Record<ModelSlug, Model> = {
   },
   g6: {
     slug: "g6",
-    name: "G6",
+    name: "G6 Pro",
     shortName: "G6",
     bodyType: "SUV coupe listrik 5 kursi",
     tagline: "Sigap melaju, cepat terisi",
@@ -354,7 +354,7 @@ export const models: Record<ModelSlug, Model> = {
     paintTitle: "Lima warna untuk Pro, Black Edition untuk Pro AWD.",
     officialUrl: "https://xpeng.co.id/en/c/g6",
     highlights: [
-      { title: "Wajah yang langsung dikenali", text: "Terinspirasi desain Starship: overhang depan yang panjang, atap fastback, dan lampu strip selebar bodi membentuk wajah robot khas G6.", image: m("g6/hl-exterior") },
+      { title: "Wajah yang langsung dikenali", text: "Terinspirasi desain Starship: overhang depan yang panjang, atap fastback, dan lampu strip selebar bodi membentuk wajah robot khas G6 Pro.", image: m("g6/hl-exterior") },
       { title: "Kabin rasa lounge", text: "Kursi kulit nappa yang bisa direbahkan secara elektrik, dengan ruang kaki dan kepala yang lega di kedua baris.", image: m("g6/interior-front") },
       { title: "XPILOT Assist", text: "Bantuan mengemudi yang menyesuaikan diri, dari jalan tol, jalanan kota, sampai saat parkir.", image: m("g6/xpilot-sense") },
       { title: "Platform 800V SiC", text: "Baterai 5C menyatu dengan struktur bodi, jadi rangka lebih kaku, lebih aman, dan kabin lebih lega.", image: m("g6/platform") },
@@ -363,7 +363,7 @@ export const models: Record<ModelSlug, Model> = {
       {
         id: "performance",
         nav: "Performa",
-        title: "G6 tercepat yang pernah ada.",
+        title: "G6 Pro tercepat yang pernah ada.",
         text: "Dua motor menggerakkan keempat roda, membawa G6 Pro AWD dari diam ke 100 km/jam dalam 4,13 detik.",
         image: m("g6/performance"),
         tone: "dark",

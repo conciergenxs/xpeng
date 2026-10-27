@@ -4,7 +4,7 @@ import CompareTool from "@/components/compare/CompareTool";
 
 export const metadata: Metadata = {
   title: "Bandingkan model",
-  description: "Bandingkan varian XPENG New X9 dan G6 berdampingan: harga, jarak tempuh, performa, pengisian daya, dan ruang.",
+  description: "Bandingkan varian XPENG New X9 dan G6 Pro berdampingan: harga, jarak tempuh, performa, pengisian daya, dan ruang.",
 };
 
 export default function ComparePage() {

@@ -44,7 +44,7 @@ export default function StepReview({ order, update, goTo, errors }: Props) {
           <div>
             <dt>Model</dt>
             <dd>
-              {model.name} {variant.name}
+              {variant.fullName}
             </dd>
           </div>
           <div>

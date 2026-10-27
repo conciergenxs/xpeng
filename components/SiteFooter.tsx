@@ -58,7 +58,7 @@ export default function SiteFooter() {
               <h2 className={s.colTitle}>Model</h2>
               <ul>
                 <li><Link href="/models/x9/">New X9</Link></li>
-                <li><Link href="/models/g6/">G6</Link></li>
+                <li><Link href="/models/g6/">G6 Pro</Link></li>
                 <li><Link href="/compare/">Bandingkan model</Link></li>
               </ul>
             </div>
