@@ -1,5 +1,5 @@
 import { defaultPlan, type PlanKind, type PlanState } from "./payment";
-import { getVariant, models, variantsFor, type ModelSlug, type VariantId } from "./vehicles";
+import { getVariant, paintsFor, variantsFor, type ModelSlug, type VariantId } from "./vehicles";
 
 export const STEPS = ["Mobil", "Pembayaran", "Data diri", "Tinjau"] as const;
 export const CONFIRMED = STEPS.length;
@@ -47,7 +47,7 @@ export function initialOrder(model: ModelSlug = "x9"): OrderState {
     step: 0,
     model,
     variantId: variantsFor(model)[0].id,
-    paintId: models[model].paints[0].id,
+    paintId: paintsFor(variantsFor(model)[0].id)[0].id,
     plan: defaultPlan,
     customer: emptyCustomer,
     consent: { terms: false, marketing: false },
@@ -56,7 +56,13 @@ export function initialOrder(model: ModelSlug = "x9"): OrderState {
 
 const STEP_PARAM: Record<string, number> = { vehicle: 0, payment: 1, details: 2, review: 3 };
 
-/** Deep links: /order/?model=g6&variant=g6-pro-awd&paint=stellar-purple&plan=lease&step=payment */
+/** Keeps the paint to one the chosen variant is offered in, else that variant's first. */
+export function withAvailablePaint(state: OrderState): OrderState {
+  const paints = paintsFor(state.variantId);
+  return paints.some((p) => p.id === state.paintId) ? state : { ...state, paintId: paints[0].id };
+}
+
+/** Deep links: /order/?model=g6&variant=g6-pro&paint=stellar-purple&plan=lease&step=payment */
 export function fromSearchParams(params: URLSearchParams, stored?: OrderState): OrderState {
   // A refresh on the confirmation keeps it; any deep link starts a new order but keeps the customer's details.
   if (![...params.keys()].length && stored) return stored;
@@ -71,7 +77,7 @@ export function fromSearchParams(params: URLSearchParams, stored?: OrderState): 
   if (variant) state = { ...state, variantId: variant.id };
 
   const paint = params.get("paint");
-  if (paint && models[state.model].paints.some((p) => p.id === paint)) state = { ...state, paintId: paint };
+  if (paint && paintsFor(state.variantId).some((p) => p.id === paint)) state = { ...state, paintId: paint };
 
   const plan = params.get("plan");
   if (plan === "cash" || plan === "finance" || plan === "lease") state = { ...state, plan: { ...state.plan, kind: plan as PlanKind } };
@@ -79,7 +85,7 @@ export function fromSearchParams(params: URLSearchParams, stored?: OrderState): 
   const step = params.get("step");
   if (step && step in STEP_PARAM) state = { ...state, step: STEP_PARAM[step] };
   else if (model || variant) state = { ...state, step: 0 };
-  return state;
+  return withAvailablePaint(state);
 }
 
 export type Errors = Partial<Record<keyof Customer | "terms", string>>;

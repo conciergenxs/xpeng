@@ -37,10 +37,15 @@ export default function Confirmation({ order, onNew }: { order: OrderState; onNe
     },
     order.plan.kind === "cash"
       ? { title: "Lunasi sisanya", text: "Transfer sisa pembayaran sebelum tanggal serah terima." }
-      : {
-          title: order.plan.kind === "finance" ? "Ajukan kredit" : "Ajukan sewa",
-          text: "Konsultan meneruskan pengajuan Anda ke mitra dan mendampingi sampai disetujui, biasanya dalam beberapa hari kerja.",
-        },
+      : order.plan.kind === "finance"
+        ? {
+            title: "Ajukan kredit",
+            text: "Konsultan meneruskan pengajuan Anda ke mitra dan mendampingi sampai disetujui, biasanya dalam beberapa hari kerja.",
+          }
+        : {
+            title: "Konfirmasi program sewa",
+            text: "Skema sewa masih berupa ilustrasi konsep. Konsultan akan memastikan apakah program, mitra, tarif, dan ketentuannya tersedia sebelum ada pengajuan.",
+          },
     { title: "Tanda tangan, lalu bawa pulang", text: `Tandatangani SPK, lalu jemput ${model.name} Anda di ${showroom?.name ?? "showroom"}.` },
   ];
 

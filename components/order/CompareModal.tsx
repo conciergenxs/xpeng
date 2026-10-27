@@ -58,7 +58,7 @@ export default function CompareModal({ current, ref }: Props) {
     >
       <div className={s.modalHead}>
         <h2 id="compare-models-title" className={s.modalTitle}>
-          X9 atau G6?
+          New X9 atau G6?
         </h2>
         <button type="button" className={s.modalClose} onClick={close} aria-label="Tutup perbandingan">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden>

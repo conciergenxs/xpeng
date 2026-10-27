@@ -106,5 +106,5 @@ export const monthlyFrom = (price: number) => financeQuote(price, defaultPlan.fi
 export const planLabel: Record<PlanKind, string> = {
   cash: "Tunai",
   finance: "Kredit",
-  lease: "Sewa",
+  lease: "Sewa (konsep)",
 };

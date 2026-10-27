@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { preloadTurntable } from "@/components/CarTurntable";
 import Img from "@/components/Img";
-import { modelList, models, variantsFor, fromPrice, type ModelSlug } from "@/lib/vehicles";
+import { modelList, models, variantsFor, paintsFor, fromPrice, type ModelSlug } from "@/lib/vehicles";
 import { num, rupiah } from "@/lib/format";
 import type { OrderState } from "@/lib/order";
 import CompareModal from "./CompareModal";
@@ -17,7 +17,7 @@ export default function StepVehicle({ order, update }: Props) {
   const compare = useRef<HTMLDialogElement>(null);
 
   const chooseModel = (slug: ModelSlug) =>
-    update({ model: slug, variantId: variantsFor(slug)[0].id, paintId: models[slug].paints[0].id });
+    update({ model: slug, variantId: variantsFor(slug)[0].id, paintId: paintsFor(variantsFor(slug)[0].id)[0].id });
 
   return (
     <>
@@ -32,7 +32,7 @@ export default function StepVehicle({ order, update }: Props) {
             Model
           </span>
           <button type="button" className={`link ${s.groupAction}`} onClick={() => compare.current?.showModal()}>
-            Bandingkan X9 dan G6
+            Bandingkan New X9 dan G6
           </button>
         </div>
         <div className={s.modelCards}>
@@ -96,7 +96,7 @@ export default function StepVehicle({ order, update }: Props) {
           Warna <span className={s.groupValue}>{model.paints.find((p) => p.id === order.paintId)?.name}</span>
         </legend>
         <div className={s.swatches}>
-          {model.paints.map((p) => (
+          {paintsFor(order.variantId).map((p) => (
             <label key={p.id} className={s.swatch} title={p.name}>
               <input
                 type="radio"

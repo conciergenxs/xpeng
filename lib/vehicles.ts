@@ -20,6 +20,8 @@ export type Paint = {
   /** 360° sprite (36 frames, 10° apart, frame 0 = the studio shot's angle). `simulated`: not an XPENG asset but
    *  the official sprite recoloured by scripts/recolor-360.py, labelled as a simulation on the page. */
   turntable?: { sprite: string; mobile: string; body: CarBody; simulated?: boolean };
+  /** Variants offered in this paint, per the official brochures; omitted when every variant is. */
+  variants?: VariantId[];
 };
 
 export type Variant = {
@@ -33,6 +35,8 @@ export type Variant = {
   accel: number;
   drivetrain: "FWD" | "RWD" | "AWD";
   dcKw: number;
+  /** Second-row seat adjustment, per the official brochure; X9 only. */
+  secondRowSeats?: string;
   note?: string;
 };
 
@@ -67,6 +71,8 @@ export type Model = {
   cargoMaxL: number;
   charge: string;
   screens: string;
+  /** The variants behind the intro's best range and acceleration, named beside those figures. */
+  topVariant: { range: string; accel: string };
   paints: Paint[];
   /** Outline of the car in the studio shots; every paint of a model shares the same framing. */
   paintBody: CarBody;
@@ -115,6 +121,7 @@ export const variants: Variant[] = [
     accel: 8.2,
     drivetrain: "FWD",
     dcKw: 537,
+    secondRowSeats: "14 arah",
   },
   {
     id: "x9-lr-pro",
@@ -127,6 +134,7 @@ export const variants: Variant[] = [
     accel: 7.75,
     drivetrain: "FWD",
     dcKw: 542,
+    secondRowSeats: "14 arah",
   },
   {
     id: "x9-lr-pro-plus",
@@ -139,7 +147,8 @@ export const variants: Variant[] = [
     accel: 7.75,
     drivetrain: "FWD",
     dcKw: 452,
-    note: "Rincian perlengkapan tambahannya ada di daftar harga resmi.",
+    secondRowSeats: "18 arah, Grand Sofa tanpa lorong",
+    note: "Kursi baris kedua 18 arah dengan Grand Sofa tanpa lorong. Perlengkapan lainnya ada di daftar harga resmi.",
   },
   {
     id: "g6-pro",
@@ -164,6 +173,7 @@ export const variants: Variant[] = [
     accel: 4.13,
     drivetrain: "AWD",
     dcKw: 451,
+    note: "Tersedia dalam warna Black Edition.",
   },
 ];
 
@@ -175,7 +185,7 @@ export const models: Record<ModelSlug, Model> = {
     bodyType: "MPV listrik 7 kursi",
     tagline: "Cerdas di jalan, lega untuk tujuh orang",
     intro:
-      "Kenyamanan kelas satu untuk tujuh orang. Roda belakangnya ikut berbelok di jalan sempit, dan baris ketiga terlipat rata secara elektrik. Bersama X9, urusan keluarga terasa jauh lebih ringan.",
+      "Kenyamanan kelas satu untuk tujuh orang. Roda belakangnya ikut berbelok di jalan sempit, dan baris ketiga terlipat rata secara elektrik. Bersama New X9, urusan keluarga terasa jauh lebih ringan.",
     pricesIntro: "Tiga varian, berbeda di jarak tempuh dan perlengkapan.",
     silhouette: m("x9/featured"),
     hero: { image: m("x9/space"), position: "60% 70%" },
@@ -188,6 +198,7 @@ export const models: Record<ModelSlug, Model> = {
     cargoMaxL: 2554,
     charge: "10–80% dalam 12 menit",
     screens: '10,25" pengemudi, 17,3" tengah, 21,4" hiburan belakang',
+    topVariant: { range: "Long Range", accel: "Long Range" },
     paints: [
       { id: "silver-frost", name: "Silver Frost", description: "Perak terang yang sejuk dipandang.", swatch: "#c0c4cc", stage: "#e9ebee", image: m("x9/color-silver-frost"), turntable: x9Spin("silver-frost") },
       { id: "midnight-black", name: "Midnight Black", description: "Hitam pekat yang tegas tanpa berlebihan.", swatch: "#282c30", stage: "#dfe1e4", image: m("x9/color-midnight-black"), turntable: x9Spin("midnight-black") },
@@ -221,14 +232,14 @@ export const models: Record<ModelSlug, Model> = {
         points: [
           { title: '21,4"', text: "Layar hiburan untuk penumpang belakang" },
           { title: "27", text: "Speaker dengan suara surround XOpera" },
-          { title: "14 arah", text: "Pengaturan kursi zero-gravity" },
+          { title: "14–18 arah", text: "Kursi zero-gravity baris kedua, 18 arah di Pro+" },
         ],
         tone: "light",
       },
       {
         id: "technology",
         nav: "Teknologi",
-        title: "Terjebak di gang buntu? X9 bisa mundur sendiri.",
+        title: "Terjebak di gang buntu? New X9 bisa mundur sendiri.",
         text: "Reversing Assist menelusuri kembali jalur yang tadi Anda lewati, persis seperti saat masuk. Di jalan dan saat parkir, XPILOT Assist dengan chip XP5 ikut membantu: adaptive cruise, menjaga mobil di tengah lajur, pindah lajur, parkir otomatis, parkir jarak jauh, hingga straight summon.",
         image: m("x9/xpilot"),
         video: { mp4: m("x9/film.mp4"), webm: m("x9/film.webm"), poster: m("x9/film-poster.jpg") },
@@ -297,7 +308,7 @@ export const models: Record<ModelSlug, Model> = {
           text: "Kursi dengan ventilasi, pemanas, dan fungsi pijat, cukup diatur dengan satu sentuhan.",
           video: { mp4: m("x9/config-seats.mp4"), poster: m("x9/config-seats-poster.jpg") },
         },
-        { title: "Kursi zero-gravity", text: "Bisa diatur ke 14 arah untuk perjalanan senyaman kelas satu.", image: m("x9/hl-comfort") },
+        { title: "Kursi zero-gravity", text: "Kursi baris kedua bisa diatur ke 14 arah, atau 18 arah dengan Grand Sofa pada Long Range Pro+.", image: m("x9/hl-comfort") },
       ],
     },
   },
@@ -321,6 +332,7 @@ export const models: Record<ModelSlug, Model> = {
     cargoMaxL: 1374,
     charge: "10–80% dalam 12 menit",
     screens: '10,2" pengemudi, 14,96" tengah',
+    topVariant: { range: "Pro", accel: "Pro AWD" },
     paints: [
       {
         id: "stellar-purple",
@@ -330,15 +342,16 @@ export const models: Record<ModelSlug, Model> = {
         stage: "#ece8ef",
         image: m("g6/color-stellar-purple"),
         turntable: g6Spin(),
+        variants: ["g6-pro"],
       },
-      { id: "arctic-white", name: "Arctic White", description: "Putih bersih yang selalu tampak segar.", swatch: "#e7e9ec", stage: "#eef0f2", image: m("g6/color-arctic-white"), turntable: g6Spin("arctic-white") },
-      { id: "graphite-gray", name: "Graphite Gray", description: "Abu-abu gelap yang tenang dan berwibawa.", swatch: "#686b72", stage: "#e3e4e6", image: m("g6/color-graphite-gray"), turntable: g6Spin("graphite-gray") },
-      { id: "silver-frost", name: "Silver Frost", description: "Perak terang yang sejuk dipandang.", swatch: "#99a0a7", stage: "#e7e9ec", image: m("g6/color-silver-frost"), turntable: g6Spin("silver-frost") },
-      { id: "midnight-black", name: "Midnight Black", description: "Hitam pekat yang tegas tanpa berlebihan.", swatch: "#282b2f", stage: "#dfe1e4", image: m("g6/color-midnight-black"), turntable: g6Spin("midnight-black") },
-      { id: "black-edition", name: "Black Edition", description: "Serba hitam, sampai ke pelek dan emblemnya.", swatch: "#222326", stage: "#dcdddf", image: m("g6/color-black-edition"), turntable: g6Spin("black-edition") },
+      { id: "arctic-white", name: "Arctic White", description: "Putih bersih yang selalu tampak segar.", swatch: "#e7e9ec", stage: "#eef0f2", image: m("g6/color-arctic-white"), turntable: g6Spin("arctic-white"), variants: ["g6-pro"] },
+      { id: "graphite-gray", name: "Graphite Gray", description: "Abu-abu gelap yang tenang dan berwibawa.", swatch: "#686b72", stage: "#e3e4e6", image: m("g6/color-graphite-gray"), turntable: g6Spin("graphite-gray"), variants: ["g6-pro"] },
+      { id: "silver-frost", name: "Silver Frost", description: "Perak terang yang sejuk dipandang.", swatch: "#99a0a7", stage: "#e7e9ec", image: m("g6/color-silver-frost"), turntable: g6Spin("silver-frost"), variants: ["g6-pro"] },
+      { id: "midnight-black", name: "Midnight Black", description: "Hitam pekat yang tegas tanpa berlebihan.", swatch: "#282b2f", stage: "#dfe1e4", image: m("g6/color-midnight-black"), turntable: g6Spin("midnight-black"), variants: ["g6-pro"] },
+      { id: "black-edition", name: "Black Edition", description: "Serba hitam, sampai ke pelek dan emblemnya. Khusus G6 Pro AWD.", swatch: "#222326", stage: "#dcdddf", image: m("g6/color-black-edition"), turntable: g6Spin("black-edition"), variants: ["g6-pro-awd"] },
     ],
     paintBody: { l: 0.0744, r: 0.9283, b: 0.8476 },
-    paintTitle: "Enam warna, dari kedalaman angkasa.",
+    paintTitle: "Lima warna untuk Pro, Black Edition untuk Pro AWD.",
     officialUrl: "https://xpeng.co.id/en/c/g6",
     highlights: [
       { title: "Wajah yang langsung dikenali", text: "Terinspirasi desain Starship: overhang depan yang panjang, atap fastback, dan lampu strip selebar bodi membentuk wajah robot khas G6.", image: m("g6/hl-exterior") },
@@ -359,7 +372,7 @@ export const models: Record<ModelSlug, Model> = {
         id: "interior",
         nav: "Interior",
         title: "Langit seluas 2,12 m², tepat di atas kepala.",
-        text: "Skylight panorama untuk segala cuaca ini memakai kaca berlapis perak yang menahan 99,99% sinar UV. Semua jendelanya berlaminasi ganda, jadi kabin tetap senyap.",
+        text: "Skylight panorama untuk segala cuaca ini memakai kaca berlapis perak yang menahan 99,99% sinar UV. Kaca depan dan jendela baris pertama kedap suara, jadi kabin lebih senyap.",
         image: m("g6/skylight"),
         points: [
           { title: "12 arah", text: "Kursi depan berlapis kulit nappa" },
@@ -393,7 +406,7 @@ export const models: Record<ModelSlug, Model> = {
       "Audio XOPERA 2.0 dengan 18 speaker",
       "Baterai struktural dengan pelindung tiga lapis",
       "Giga-casting depan dan belakang",
-      "Pilihan tampilan Black Edition",
+      "Tampilan Black Edition (Pro AWD)",
     ],
     bestFor: "Pengemudi yang menginginkan performa sekaligus gaya, pasangan dan keluarga muda, serta pemakaian harian di kota dengan pengisian cepat.",
     gallery: {
@@ -423,7 +436,7 @@ export const models: Record<ModelSlug, Model> = {
           text: "Sandaran kursi belakang bisa direbahkan hingga 11,4°, lengkap dengan pemanas.",
           video: { mp4: m("g6/config-rear-recline.mp4"), poster: m("g6/config-rear-recline-poster.jpg") },
         },
-        { title: "Kabin yang senyap", text: "Kaca laminasi ganda di semua jendela meredam bising dari luar.", image: m("g6/config-quiet-glass") },
+        { title: "Kabin yang senyap", text: "Kaca kedap suara di kaca depan dan jendela baris pertama meredam bising dari luar.", image: m("g6/config-quiet-glass") },
       ],
     },
   },
@@ -434,5 +447,11 @@ export const modelList = [models.x9, models.g6];
 export const variantsFor = (slug: ModelSlug) => variants.filter((v) => v.model === slug);
 
 export const getVariant = (id: string | null | undefined) => variants.find((v) => v.id === id);
+
+/** Paints the variant is offered in. */
+export const paintsFor = (id: VariantId) => {
+  const v = getVariant(id)!;
+  return models[v.model].paints.filter((p) => !p.variants || p.variants.includes(id));
+};
 
 export const fromPrice = (slug: ModelSlug) => Math.min(...variantsFor(slug).map((v) => v.price));

@@ -22,14 +22,14 @@ const FEATURES: Feature[] = [
       kind: "video",
       mp4: "/media/home/why/xpilot.mp4",
       poster: "/media/home/why/xpilot-poster.jpg",
-      label: "XPENG X9 mundur keluar dari jalan sempit dengan bantuan reverse track assist",
+      label: "XPENG New X9 mundur keluar dari jalan sempit dengan bantuan reverse track assist",
     },
   },
   {
     id: "xmart",
     name: "XMART OS",
     copy: "Navigasi, hiburan, dan kontrol penting kendaraan berkumpul di satu kokpit digital. Semuanya mudah dijangkau, tanpa perlu mencari-cari.",
-    media: { kind: "image", src: "/media/home/why/xmart-os", alt: "Pengemudi menggunakan layar sentuh tengah di kokpit XPENG X9" },
+    media: { kind: "image", src: "/media/home/why/xmart-os", alt: "Pengemudi menggunakan layar sentuh tengah di kokpit XPENG New X9" },
   },
   {
     id: "ota",

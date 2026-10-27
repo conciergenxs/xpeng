@@ -13,6 +13,7 @@ import {
   fromSearchParams,
   makeReference,
   validateCustomer,
+  withAvailablePaint,
   type Errors,
   type OrderState,
 } from "@/lib/order";
@@ -67,7 +68,7 @@ export default function OrderFlow() {
   const variant = getVariant(order.variantId)!;
   const paint = model.paints.find((p) => p.id === order.paintId) ?? model.paints[0];
 
-  const update = (patch: Partial<OrderState>) => setOrder((o) => (o ? { ...o, ...patch } : o));
+  const update = (patch: Partial<OrderState>) => setOrder((o) => (o ? withAvailablePaint({ ...o, ...patch }) : o));
 
   const goTo = (step: number) => {
     setOrder((o) => (o ? { ...o, step } : o));

@@ -50,13 +50,6 @@ export default function SiteFooter() {
                 </svg>
                 <a className="link" href="mailto:customercare@erajaya.com">customercare@erajaya.com</a>
               </li>
-              <li>
-                <svg {...icon}>
-                  <path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z" />
-                  <circle cx="12" cy="9.5" r="2.5" />
-                </svg>
-                <span>Showroom buka setiap hari, 09.00–18.00</span>
-              </li>
             </ul>
           </div>
 

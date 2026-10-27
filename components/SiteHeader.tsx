@@ -120,7 +120,7 @@ export default function SiteHeader() {
           {logo}
 
           <nav ref={nav} className={s.nav} aria-label="Menu utama">
-            <Link href="/models/x9/" aria-current={isActive("/models/x9") ? "page" : undefined}>X9</Link>
+            <Link href="/models/x9/" aria-current={isActive("/models/x9") ? "page" : undefined}>New X9</Link>
             <Link href="/models/g6/" aria-current={isActive("/models/g6") ? "page" : undefined}>G6</Link>
             {/* Official xpeng.com pages, in a new tab. Discover is a menu there; "About XPENG" is its page. */}
             <a href={DISCOVER_URL} target="_blank" rel="noopener">Tentang XPENG</a>

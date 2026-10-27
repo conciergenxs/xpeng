@@ -239,6 +239,7 @@ export default function PaymentPlans({ children }: { children: React.ReactNode }
           <p className={s.note}>
             Harga yang tercantum adalah harga OTR resmi untuk Jakarta. Angka bertanda <span className="est">seperti ini</span>{" "}
             hanyalah simulasi dengan bunga ilustratif — bukan penawaran dari XPENG, Erajaya, maupun mitra pembiayaan.
+            Skema sewa adalah ilustrasi konsep: program, mitra, tarif, dan ketentuannya belum resmi.
           </p>
         </div>
       </dialog>
@@ -269,7 +270,7 @@ function Column({ id, base, plan, onChange, onRemove }: ColumnProps) {
     const b = getVariant(base)!;
     const bs = planSummary(b.price, plan)[kind];
     const diff = lead - (kind === "cash" ? bs.total : bs.monthly);
-    const name = `${models[b.model].shortName} ${b.name}`;
+    const name = `${models[b.model].name} ${b.name}`;
     const gap = rupiahShort(Math.abs(diff));
     delta =
       Math.abs(diff) < 1
@@ -331,7 +332,7 @@ function Column({ id, base, plan, onChange, onRemove }: ColumnProps) {
 
       <div className={s.lead}>
         <p className={s.leadLabel}>
-          {kind === "cash" ? "Harga total" : kind === "finance" ? "Cicilan per bulan" : "Sewa per bulan"}
+          {kind === "cash" ? "Harga total" : kind === "finance" ? "Cicilan per bulan" : "Sewa per bulan (konsep)"}
         </p>
         <p className={s.leadFigure}>
           <span className={sim ? "est" : undefined}>

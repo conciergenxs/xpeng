@@ -47,6 +47,7 @@ export default async function ModelPage({ params }: { params: Promise<Params> })
     { label: "Panjang × lebar × tinggi", value: () => `${num(model.lengthMm)} × ${num(model.widthMm)} × ${num(model.heightMm)} mm` },
     { label: "Jarak sumbu roda", value: () => mm(model.wheelbaseMm) },
     { label: "Kursi", value: () => String(model.seats) },
+    ...(vs.some((v) => v.secondRowSeats) ? [{ label: "Kursi baris kedua", value: (v: Variant) => v.secondRowSeats ?? "" }] : []),
     { label: "Bagasi", value: () => model.cargo },
     { label: "Layar", value: () => model.screens },
   ];
@@ -77,7 +78,7 @@ export default async function ModelPage({ params }: { params: Promise<Params> })
             <h1 id="model-title" className={`display ${s.heroName}`}>
               {model.name}
             </h1>
-            <p className={s.heroPrice}>Mulai {rupiah(fromPrice(model.slug))}</p>
+            <p className={s.heroPrice}>Mulai {rupiah(fromPrice(model.slug))} OTR Jakarta</p>
           </div>
         </div>
       </section>
@@ -90,14 +91,14 @@ export default async function ModelPage({ params }: { params: Promise<Params> })
           <p className={s.introText}>{model.intro}</p>
           <dl className={s.readouts}>
             <div>
-              <dt>Jarak tempuh NEDC</dt>
+              <dt>Jarak NEDC, {model.topVariant.range}</dt>
               <dd>
                 {maxRange}
                 <span>km</span>
               </dd>
             </div>
             <div>
-              <dt>0–100 km/jam, tercepat</dt>
+              <dt>0–100 km/jam, {model.topVariant.accel}</dt>
               <dd>
                 {num(minAccel)}
                 <span>dtk</span>
@@ -118,7 +119,7 @@ export default async function ModelPage({ params }: { params: Promise<Params> })
       </section>
 
       <section id="highlights" className={s.highlights}>
-        <HighlightsRail title={`Mengenal ${model.shortName} lebih dekat.`} items={model.highlights} />
+        <HighlightsRail title={`Mengenal ${model.name} lebih dekat.`} items={model.highlights} />
       </section>
 
       <PaintStage id="colours" title={model.paintTitle} modelName={model.name} slug={model.slug} paints={model.paints} body={model.paintBody} />
@@ -176,7 +177,7 @@ export default async function ModelPage({ params }: { params: Promise<Params> })
             <h2 id="prices-title" className="headline">
               Pilih {model.name} Anda.
             </h2>
-            <p className="lede">{model.pricesIntro}</p>
+            <p className="lede">{model.pricesIntro} Harga OTR Jakarta, syarat dan ketentuan berlaku.</p>
           </div>
 
           <PaymentPlans>
@@ -219,7 +220,7 @@ export default async function ModelPage({ params }: { params: Promise<Params> })
             <h2 id="specs-title" className="headline">
               Spesifikasi
             </h2>
-            <p className="lede">Semua angka penting {model.shortName}, untuk setiap varian.</p>
+            <p className="lede">Semua angka penting {model.name}, untuk setiap varian.</p>
           </div>
           <div className={s.specCard}>
             <table className={s.specTable} style={{ "--n": vs.length } as React.CSSProperties}>

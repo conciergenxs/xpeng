@@ -5,7 +5,7 @@ import CarTurntable, { type CarTurntableHandle } from "@/components/CarTurntable
 import Img from "@/components/Img";
 import InViewVideo from "@/components/InViewVideo";
 import { RotateIcon } from "@/components/model/PaintStage";
-import type { GalleryItem, GalleryTab, Model, Paint, Variant } from "@/lib/vehicles";
+import { paintsFor, type GalleryItem, type GalleryTab, type Model, type Paint, type Variant } from "@/lib/vehicles";
 import { num } from "@/lib/format";
 import s from "./OrderStage.module.css";
 
@@ -135,7 +135,7 @@ export default function OrderStage({ model, variant, paint, onPaint }: Props) {
           {tab === "exterior" && (
             <fieldset key="paint" className={s.swatches}>
               <legend className="sr-only">Warna</legend>
-              {model.paints.map((p) => (
+              {paintsFor(variant.id).map((p) => (
                 <label key={p.id} className={s.swatch} title={p.name} onPointerEnter={() => car.current?.warm(p.id)}>
                   <input
                     type="radio"

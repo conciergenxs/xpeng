@@ -45,7 +45,7 @@ export default function StepPayment({ order, update }: Props) {
             [
               { kind: "cash", label: "Tunai", figure: rupiahShort(cash.total), est: false },
               { kind: "finance", label: "Kredit", figure: `${rupiahShort(fin.monthly)}/bln`, est: true },
-              { kind: "lease", label: "Sewa", figure: `${rupiahShort(lease.monthly)}/bln`, est: true },
+              { kind: "lease", label: "Sewa (konsep)", figure: `${rupiahShort(lease.monthly)}/bln`, est: true },
             ] as { kind: PlanKind; label: string; figure: string; est: boolean }[]
           ).map((o) => (
             <label key={o.kind} className={`${s.plan} ${plan.kind === o.kind ? s.selected : ""}`}>
@@ -221,7 +221,7 @@ export default function StepPayment({ order, update }: Props) {
               </span>
             </p>
             <p className={s.bigLabel}>
-              selama {plan.lease.term} bulan <span className="sim-tag">Simulasi</span>
+              selama {plan.lease.term} bulan <span className="sim-tag">Ilustrasi konsep</span>
             </p>
           </div>
 
@@ -264,7 +264,7 @@ export default function StepPayment({ order, update }: Props) {
           </dl>
 
           <div className={s.includes}>
-            <h3 className={s.groupLabel}>Sudah termasuk dalam sewa bulanan</h3>
+            <h3 className={s.groupLabel}>Contoh cakupan sewa bulanan</h3>
             <ul>
               <li>Servis berkala di bengkel resmi XPENG</li>
               <li>Asuransi all risk</li>
@@ -273,9 +273,9 @@ export default function StepPayment({ order, update }: Props) {
             </ul>
           </div>
           <p className={s.hint}>
-            Di akhir kontrak, Anda bisa mengembalikan mobil, memperpanjang, atau beralih ke XPENG baru. Kelebihan jarak
-            tempuh dikenakan {rupiah(L.excessKm)}/km. Skema sewa ini masih berupa konsep: ketersediaan, syarat, dan
-            kelayakan untuk pelanggan perorangan maupun perusahaan akan dikonfirmasi oleh XPENG Indonesia.
+            Seluruh skema sewa ini adalah ilustrasi konsep, bukan penawaran. Program, mitra, tarif, pembayaran awal,
+            opsi mengembalikan atau mengganti mobil di akhir kontrak, serta biaya kelebihan jarak tempuh (contoh:{" "}
+            {rupiah(L.excessKm)}/km) belum resmi dan masih perlu divalidasi oleh XPENG Indonesia.
           </p>
         </div>
       )}
@@ -293,7 +293,7 @@ export default function StepPayment({ order, update }: Props) {
                 {(["cash", "finance", "lease"] as const).map((k) => (
                   <th key={k} scope="col" className={plan.kind === k ? s.colOn : undefined}>
                     <button type="button" onClick={() => setPlan({ kind: k })} aria-pressed={plan.kind === k}>
-                      {k === "cash" ? "Tunai" : k === "finance" ? "Kredit" : "Sewa"}
+                      {k === "cash" ? "Tunai" : k === "finance" ? "Kredit" : "Sewa (konsep)"}
                     </button>
                   </th>
                 ))}

@@ -141,7 +141,7 @@ export default function VehicleShowcase() {
             XPENG mana yang cocok untuk Anda?
           </h2>
           <p className={s.sub}>
-            X9 yang lega untuk tujuh orang, atau G6 yang sporty. Putar mobilnya, lalu lihat detailnya.
+            New X9 yang lega untuk tujuh orang, atau G6 yang sporty. Putar mobilnya, lalu lihat detailnya.
           </p>
           <div className={s.toggle}>
             <Segmented
@@ -150,7 +150,7 @@ export default function VehicleShowcase() {
               value={slug}
               onChange={setSlug}
               options={[
-                { value: "x9", label: "X9" },
+                { value: "x9", label: "New X9" },
                 { value: "g6", label: "G6" },
               ]}
             />
@@ -207,7 +207,7 @@ export default function VehicleShowcase() {
 
         <div className={s.foot} key={`foot-${slug}`}>
           <div className={s.ident}>
-            <h3 className={s.name}>{model.shortName}</h3>
+            <h3 className={s.name}>{model.name}</h3>
             <p className={s.type}>{model.bodyType}</p>
           </div>
           <dl className={s.specs}>
@@ -232,7 +232,7 @@ export default function VehicleShowcase() {
               Pesan sekarang
             </Link>
             <Link href={`/models/${slug}/`} className={`btn btn-ghost ${s.cta}`}>
-              Jelajahi {model.shortName}
+              Jelajahi {model.name}
             </Link>
           </div>
         </div>
